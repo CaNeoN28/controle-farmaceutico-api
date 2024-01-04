@@ -95,3 +95,23 @@ describe("Rota para exibição de entidade", () => {
 		expect(resposta).toBe("Não foi possível encontrar a entidade");
 	});
 });
+
+describe("Rota para atualização de entidade", () => {
+	it("deve alterar os dados de uma entidade", async () => {
+		const resposta = await request(app)
+			.put(`/entidade/${entidade_id}`)
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.send({
+				...entidade,
+				municipio: "Ji-Paraná"
+			})
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta).toEqual({
+			...entidade,
+			municipio: "Ji-Paraná"
+		});
+	});
+});
