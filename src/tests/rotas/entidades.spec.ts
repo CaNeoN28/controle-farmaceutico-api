@@ -143,3 +143,16 @@ describe("Rota para atualização de entidade", () => {
 		expect(resposta).toBe("Não autenticado")
 	})
 });
+
+describe("Rota para exclusão de entidade", () => {
+	it("deve retornar erro ao tentar excluir uma entidade não existente", async () => {
+		const resposta = await request(app)
+			.delete(`/entidade/${new Types.ObjectId()}`)
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.expect(404)
+			.then((res) => res.body);
+
+		expect(resposta).toBe("Não foi possível encontrar a entidade");
+	})
+})
