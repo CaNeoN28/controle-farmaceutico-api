@@ -10,6 +10,8 @@ const entidade = new Entidade({
 	nome_entidade: "Ministério da Saúde",
 });
 
+let entidade_id = ""
+
 describe("Rota de cadastro de entidades", () => {
 	it("deve cadastrar uma entidade", async () => {
 		const resposta = await request(app)
@@ -17,7 +19,10 @@ describe("Rota de cadastro de entidades", () => {
 			.set("Authorization", `Bearer ${token}`)
 			.set("Accept", "application/json")
 			.send(entidade)
-			.expect(201);
+			.expect(201)
+			.then(res => res.body);
+
+		entidade_id = resposta._id
 
 		expect(resposta).toEqual(entidade);
 	});
@@ -57,3 +62,15 @@ describe("Rota de listagem de entidades", () => {
 		expect(resposta).toContainEqual(entidade)
 	});
 });
+
+describe("Rota para exibição de entidade", () => {
+	it("deve retornar a entidade cadastrada anteriormente", async () => {
+		const resposta = await request(app)
+			.get(`/entidade/${entidade_id}`)
+			.set("Accept", "aplication/json")
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta).toEqual(entidade)
+	})
+})
