@@ -28,6 +28,20 @@ describe("Rota de login", () => {
 			.expect(401)
 			.then((res) => res.body);
 
-		expect(resposta).toBe("Não foi possível realizar autenticação")
-	})
+		expect(resposta).toBe("Não foi possível realizar autenticação");
+	});
+
+	it("deve retornar erro de usuário inativo na tentativa de login com usuário não validado", async () => {
+		const resposta = await request(app)
+			.post("/login")
+			.set("Accept", "application/json")
+			.send({
+				nome_usuario: "usuarioinativo",
+				senha: "12345678",
+			})
+			.expect(201)
+			.then((res) => res.body);
+
+		expect(resposta).toBe("O usuário ainda não foi verificado");
+	});
 });
