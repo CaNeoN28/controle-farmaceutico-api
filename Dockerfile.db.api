@@ -1,0 +1,3 @@
+FROM mongo:latest as database-controle-farmaceutico
+EXPOSE 27017
+VOLUME [ "/data/db" ]
