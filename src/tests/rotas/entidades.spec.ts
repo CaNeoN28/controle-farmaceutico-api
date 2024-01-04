@@ -104,14 +104,29 @@ describe("Rota para atualização de entidade", () => {
 			.set("Accept", "application/json")
 			.send({
 				...entidade,
-				municipio: "Ji-Paraná"
+				municipio: "Ji-Paraná",
 			})
 			.expect(200)
 			.then((res) => res.body);
 
 		expect(resposta).toEqual({
 			...entidade,
-			municipio: "Ji-Paraná"
+			municipio: "Ji-Paraná",
 		});
 	});
+
+	it("deve validar os atributos informados", async () => {
+		const resposta = await request(app)
+			.put(`/entidade/${entidade_id}`)
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.send({
+				...entidade,
+				nome_entidade: ""
+			})
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta).toBe("Não foi possível atualizar a entidade: Nome da entidade inválido")
+	})
 });
