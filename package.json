@@ -128,7 +128,7 @@
   "main": "src/server.ts",
   "scripts": {
     "dev": "nodemon src/server.ts",
-    "test": "jest --watchAll"
+    "test": "jest --verbose --watchAll"
   },
   "author": "",
   "license": "ISC",
