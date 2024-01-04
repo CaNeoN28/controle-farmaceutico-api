@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 import app from "../../app/app";
 import Usuario, { Funcao } from "../../types/Usuario";
 
-const entidade_id = new Types.ObjectId()
+const entidade_id = new Types.ObjectId();
 
 const usuario = new Usuario({
 	cpf: "018.800.900-07",
@@ -25,19 +25,30 @@ describe("Rota de cadastro de usuário", () => {
 			.set("Accept", "application/json")
 			.send(usuario)
 			.expect(201)
-			.then(res => res.body)
+			.then((res) => res.body);
 
 		expect(resposta).toEqual({
 			cpf: "018.800.900-07",
 			dados_administrativos: {
 				entidade_relacionada: entidade_id,
-				funcao: Funcao.ADMINISTRADOR
+				funcao: Funcao.ADMINISTRADOR,
 			},
 			email: usuario.email,
 			imagem_url: usuario.imagem_url,
 			nome_completo: usuario.nome_completo,
 			nome_usuario: usuario.nome_usuario,
-			numero_registro: usuario.numero_registro
-		})
+			numero_registro: usuario.numero_registro,
+		});
+	});
+
+	it("deve retornar erro ao usar um email já existente", async () => {
+		const resposta = await request(app)
+			.post("/cadastro")
+			.set("Accept", "application/json")
+			.send(usuario)
+			.expect(409)
+			.then((res) => res.body);
+
+		expect(resposta).toBe("Não foi possível cadastrar o usuário: Email já utilizado")
 	});
 });
