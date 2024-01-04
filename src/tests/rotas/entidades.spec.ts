@@ -95,3 +95,51 @@ describe("Rota para exibição de entidade", () => {
 		expect(resposta).toBe("Não foi possível encontrar a entidade");
 	});
 });
+
+describe("Rota para atualização de entidade", () => {
+	it("deve alterar os dados de uma entidade", async () => {
+		const resposta = await request(app)
+			.put(`/entidade/${entidade_id}`)
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.send({
+				...entidade,
+				municipio: "Ji-Paraná",
+			})
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta).toEqual({
+			...entidade,
+			municipio: "Ji-Paraná",
+		});
+	});
+
+	it("deve validar os atributos informados", async () => {
+		const resposta = await request(app)
+			.put(`/entidade/${entidade_id}`)
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.send({
+				...entidade,
+				nome_entidade: ""
+			})
+			.expect(400)
+			.then((res) => res.body);
+
+		expect(resposta).toBe("Não foi possível atualizar a entidade: Nome da entidade inválido")
+	})
+
+	it("deve retornar erro caso o usuário não esteja autenticado", async () => {
+		const resposta = await request(app)
+			.put(`/entidade/${entidade_id}`)
+			.set("Accept", "application/json")
+			.send({
+				...entidade
+			})
+			.expect(401)
+			.then((res) => res.body);
+
+		expect(resposta).toBe("Não autenticado")
+	})
+});
