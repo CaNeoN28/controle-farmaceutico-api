@@ -166,4 +166,14 @@ describe("Rota para exclusão de entidade", () => {
 
 		expect(resposta).toBe("Id inválido");
 	})
+
+	it("deve retornar erro de não autentiacação", async () => {
+		const resposta = await request(app)
+			.delete(`/entidade/${entidade_id}`)
+			.set("Accept", "application/json")
+			.expect(401)
+			.then((res) => res.body);
+
+		expect(resposta).toBe("Não auntenticado");
+	})
 })
