@@ -176,4 +176,15 @@ describe("Rota para exclusão de entidade", () => {
 
 		expect(resposta).toBe("Não auntenticado");
 	})
+
+	it("deve realizar uma exclusão bem sucedida", async () => {
+		const resposta = await request(app)
+			.delete(`/entidade/${entidade_id}`)
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.expect(204)
+			.then((res) => res.body);
+
+		expect(resposta).toBe(undefined);
+	})
 })
