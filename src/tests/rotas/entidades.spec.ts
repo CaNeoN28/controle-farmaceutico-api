@@ -155,4 +155,15 @@ describe("Rota para exclusão de entidade", () => {
 
 		expect(resposta).toBe("Não foi possível encontrar a entidade");
 	})
+
+	it("deve retornar erro de Id Inválido", async () => {
+		const resposta = await request(app)
+			.delete("/entidade/idinvalido")
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.expect(400)
+			.then((res) => res.body);
+
+		expect(resposta).toBe("Id inválido");
+	})
 })
