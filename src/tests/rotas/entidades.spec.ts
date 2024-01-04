@@ -143,3 +143,48 @@ describe("Rota para atualização de entidade", () => {
 		expect(resposta).toBe("Não autenticado")
 	})
 });
+
+describe("Rota para exclusão de entidade", () => {
+	it("deve retornar erro ao tentar excluir uma entidade não existente", async () => {
+		const resposta = await request(app)
+			.delete(`/entidade/${new Types.ObjectId()}`)
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.expect(404)
+			.then((res) => res.body);
+
+		expect(resposta).toBe("Não foi possível encontrar a entidade");
+	})
+
+	it("deve retornar erro de Id Inválido", async () => {
+		const resposta = await request(app)
+			.delete("/entidade/idinvalido")
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.expect(400)
+			.then((res) => res.body);
+
+		expect(resposta).toBe("Id inválido");
+	})
+
+	it("deve retornar erro de não autentiacação", async () => {
+		const resposta = await request(app)
+			.delete(`/entidade/${entidade_id}`)
+			.set("Accept", "application/json")
+			.expect(401)
+			.then((res) => res.body);
+
+		expect(resposta).toBe("Não auntenticado");
+	})
+
+	it("deve realizar uma exclusão bem sucedida", async () => {
+		const resposta = await request(app)
+			.delete(`/entidade/${entidade_id}`)
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.expect(204)
+			.then((res) => res.body);
+
+		expect(resposta).toBe(undefined);
+	})
+})
