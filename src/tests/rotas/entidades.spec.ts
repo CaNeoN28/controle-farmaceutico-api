@@ -1,4 +1,5 @@
 import request from "supertest";
+import { Types } from "mongoose";
 import app from "../../app/app";
 import Entidade from "../../types/Entidade";
 
@@ -10,7 +11,7 @@ const entidade = new Entidade({
 	nome_entidade: "Ministério da Saúde",
 });
 
-let entidade_id = ""
+let entidade_id = "";
 
 describe("Rota de cadastro de entidades", () => {
 	it("deve cadastrar uma entidade", async () => {
@@ -20,9 +21,9 @@ describe("Rota de cadastro de entidades", () => {
 			.set("Accept", "application/json")
 			.send(entidade)
 			.expect(201)
-			.then(res => res.body);
+			.then((res) => res.body);
 
-		entidade_id = resposta._id
+		entidade_id = resposta._id;
 
 		expect(resposta).toEqual(entidade);
 	});
@@ -59,7 +60,7 @@ describe("Rota de listagem de entidades", () => {
 			.expect(200)
 			.then((res) => res.body);
 
-		expect(resposta).toContainEqual(entidade)
+		expect(resposta).toContainEqual(entidade);
 	});
 });
 
@@ -71,6 +72,16 @@ describe("Rota para exibição de entidade", () => {
 			.expect(200)
 			.then((res) => res.body);
 
-		expect(resposta).toEqual(entidade)
-	})
-})
+		expect(resposta).toEqual(entidade);
+	});
+
+	it("deve retornar erro de entidade não encontrado", async () => {
+		const resposta = await request(app)
+			.get(`/entidade/${new Types.ObjectId()}`)
+			.set("Accept", "aplication/json")
+			.expect(404)
+			.then((res) => res.body);
+
+		expect(resposta).toBe("Não foi possível encontrar a entidade")
+	});
+});
