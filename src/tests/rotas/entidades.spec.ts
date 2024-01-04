@@ -124,9 +124,22 @@ describe("Rota para atualização de entidade", () => {
 				...entidade,
 				nome_entidade: ""
 			})
-			.expect(200)
+			.expect(400)
 			.then((res) => res.body);
 
 		expect(resposta).toBe("Não foi possível atualizar a entidade: Nome da entidade inválido")
+	})
+
+	it("deve retornar erro caso o usuário não esteja autenticado", async () => {
+		const resposta = await request(app)
+			.put(`/entidade/${entidade_id}`)
+			.set("Accept", "application/json")
+			.send({
+				...entidade
+			})
+			.expect(401)
+			.then((res) => res.body);
+
+		expect(resposta).toBe("Não autenticado")
 	})
 });
