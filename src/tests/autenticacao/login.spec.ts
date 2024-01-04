@@ -16,4 +16,18 @@ describe("Rota de login", () => {
 
 		expect(jwt.verify(resposta, process.env.SECRET_KEY || "")).not.toThrow();
 	});
+
+	it("deve retornar erro com dados inválidos", async () => {
+		const resposta = await request(app)
+			.post("/login")
+			.set("Accept", "application/json")
+			.send({
+				nome_usuario: "barrosaugusto",
+				senha: "12345678",
+			})
+			.expect(401)
+			.then((res) => res.body);
+
+		expect(resposta).toBe("Não foi possível realizar autenticação")
+	})
 });
