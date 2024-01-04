@@ -45,3 +45,15 @@ describe("Rota de cadastro de entidades", () => {
 		);
 	});
 });
+
+describe("Rota de listagem de entidades", () => {
+	it("deve retornar uma lista com a entidade recém cadastrada", async () => {
+		const resposta = await request(app)
+			.get("/entidades")
+			.set("Accept", "aplication/json")
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta).toContainEqual(entidade)
+	});
+});
