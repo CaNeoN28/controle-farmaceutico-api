@@ -14,7 +14,7 @@ interface IUsuario {
 	cpf: String;
 	numero_registro: String;
 	senha: String;
-	imagem_url: String;
+	imagem_url?: String;
 	dados_administrativos: {
 		funcao?: Funcao;
 		entidade_relacionada: Types.ObjectId;
@@ -28,7 +28,7 @@ class Usuario implements IUsuario {
 	cpf: String;
 	numero_registro: String;
 	senha: String;
-	imagem_url: String;
+	imagem_url?: String;
 	dados_administrativos: { funcao?: Funcao; entidade_relacionada: Types.ObjectId };
 
 	constructor(usuario: Usuario) {
