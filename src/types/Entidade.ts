@@ -15,3 +15,6 @@ class Entidade implements IEntidade {
 		this.nome_entidade = nome_entidade;
 	}
 }
+
+export default Entidade;
+export { IEntidade };

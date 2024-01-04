@@ -39,7 +39,7 @@ describe("Rota de login", () => {
 				nome_usuario: "usuarioinativo",
 				senha: "12345678",
 			})
-			.expect(201)
+			.expect(403)
 			.then((res) => res.body);
 
 		expect(resposta).toBe("O usuário ainda não foi verificado");

@@ -1,5 +1,6 @@
 import request from "supertest";
 import app from "../../app/app";
+import Entidade from "../../types/Entidade";
 
 const token = process.env.TEST_TOKEN;
 
@@ -13,11 +14,34 @@ describe("Rota de cadastro de entidades", () => {
 	it("deve cadastrar uma entidade", async () => {
 		const resposta = await request(app)
 			.post("/entidade")
-			.set("Authorizatin", `Bearer ${token}`)
+			.set("Authorization", `Bearer ${token}`)
 			.set("Accept", "application/json")
 			.send(entidade)
 			.expect(201);
 
 		expect(resposta).toEqual(entidade);
+	});
+
+	it("deve retornar erro ao não informar o token de autorização", async () => {
+		const resposta = await request(app)
+			.post("/entidade")
+			.set("Accept", "application/json")
+			.send(entidade)
+			.expect(401);
+
+		expect(resposta).toEqual("Não autenticado");
+	});
+
+	it("deve retornar erro ao tentar cadastrar entidade inválida", async () => {
+		const resposta = await request(app)
+			.post("/entidade")
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.send({})
+			.expect(400);
+
+		expect(resposta).toBe(
+			"Não foi possível cadastrar entidade: Estado é obrigatório, Município é obrigatório, Nome da entidade é obrigatório"
+		);
 	});
 });
