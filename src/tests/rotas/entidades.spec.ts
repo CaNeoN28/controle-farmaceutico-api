@@ -75,6 +75,16 @@ describe("Rota para exibição de entidade", () => {
 		expect(resposta).toEqual(entidade);
 	});
 
+	it("deve retornar erro ao informar um Id Inválido", async () => {
+		const resposta = await request(app)
+			.get("/entidade/idinvalido")
+			.set("Accept", "application/json")
+			.expect(400)
+			.then((res) => res.body);
+
+		expect(resposta).toBe("Id Inválido");
+	});
+
 	it("deve retornar erro de entidade não encontrado", async () => {
 		const resposta = await request(app)
 			.get(`/entidade/${new Types.ObjectId()}`)
@@ -82,6 +92,6 @@ describe("Rota para exibição de entidade", () => {
 			.expect(404)
 			.then((res) => res.body);
 
-		expect(resposta).toBe("Não foi possível encontrar a entidade")
+		expect(resposta).toBe("Não foi possível encontrar a entidade");
 	});
 });
