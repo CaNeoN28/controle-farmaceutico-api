@@ -1,7 +1,7 @@
 import express, { Application } from "express";
 import autenticacaoRoutes from "./autenticacaoRoutes";
 import usuarioRoutes from "./usuarioRoutes";
-import entidadesRoutes from "./entidades";
+import entidadesRoutes from "./entidadesRoutes";
 
 const route = (app: Application) => {
 	app.route("/").get((req, res) => {
