@@ -4,9 +4,9 @@ import * as dotenv from "dotenv";
 
 async function start() {
 	dotenv.config();
-	const { PORT } = process.env
+	const { DB_URL, PORT } = process.env
 
-	await ConnectDB();
+	await ConnectDB(DB_URL || "");
 
 	app.listen(PORT, () => {
 		console.log(`Servidor escutando em localhost:${PORT}`)
