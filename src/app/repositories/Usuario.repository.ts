@@ -1,10 +1,10 @@
 class UsuarioRepository {
-	static FindUsuarioId(id: any) {}
-	static FindUsuario(params: any) {}
-	static FindUsuarios(params: any) {}
-	static CreateUsuario(data: any) {}
-	static UpdateUsuario(id: string, data: any) {}
-	static DeleteUsuario(id: string) {}
+	static findUsuarioId(id: string) {}
+	static findUsuario(params: any) {}
+	static findUsuarios(params: any) {}
+	static createUsuario(data: any) {}
+	static updateUsuario(id: string, data: any) {}
+	static deleteUsuario(id: string) {}
 }
 
-export default UsuarioRepository
+export default UsuarioRepository;
