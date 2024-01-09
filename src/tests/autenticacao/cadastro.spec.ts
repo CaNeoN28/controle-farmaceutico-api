@@ -47,10 +47,10 @@ describe("Rota de cadastro de usuário", () => {
 			.set("Accept", "application/json")
 			.send(usuario)
 			.expect(409)
-			.then((res) => res.body);
+			.then((res) => res.text);
 
 		expect(resposta).toBe(
-			"Email já utilizado"
+			"Email já cadastrado"
 		);
 	});
 
@@ -60,7 +60,7 @@ describe("Rota de cadastro de usuário", () => {
 			.set("Accept", "application/json")
 			.send({})
 			.expect(400)
-			.then((res) => res.body);
+			.then((res) => res.text);
 
 		expect(resposta).toBe(
 			"CPF é obrigatório, Entidade relacionada de dados administrativos é obrigatório, Email é obrigatório, Nome completo é obrigatório, Nome de usuário é obrigatório, Número de registro é obrigatório"
