@@ -1,6 +1,6 @@
 interface Erro {
 	codigo: number;
-	erro: string[];
+	erro: any;
 }
 
 export default Erro

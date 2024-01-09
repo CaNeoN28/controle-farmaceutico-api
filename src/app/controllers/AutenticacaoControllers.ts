@@ -15,7 +15,6 @@ class AutenticacaoControllers {
 			return res.status(201).send(resposta);
 		} catch (error: any) {
 			const {codigo, erro} = error as Erro
-			
 			return res.status(codigo).send(erro);
 		}
 	};
