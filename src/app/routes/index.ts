@@ -1,4 +1,4 @@
-import express, { Application } from "express";
+import { Application } from "express";
 import autenticacaoRoutes from "./autenticacaoRoutes";
 import usuarioRoutes from "./usuarioRoutes";
 import entidadesRoutes from "./entidadesRoutes";
@@ -10,7 +10,6 @@ const route = (app: Application) => {
 	});
 
 	app.use(
-		express.json(),
 		autenticacaoRoutes,
 		farmaciaRoutes,
 		entidadesRoutes,
