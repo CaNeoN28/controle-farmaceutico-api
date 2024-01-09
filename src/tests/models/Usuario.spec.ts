@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Usuario from "../../app/models/Usuario";
+import UsuarioModel from "../../app/models/Usuario";
 
 const dadosUsuario = {
 	_id: new mongoose.Types.ObjectId(),
@@ -18,13 +18,13 @@ const dadosUsuario = {
 
 describe("O modelo de usuário", () => {
 	it("deve cadastrar um usuário com os dados informados", () => {
-		const usuario = new Usuario(dadosUsuario);
+		const usuario = new UsuarioModel(dadosUsuario);
 
 		expect(usuario).toMatchObject(dadosUsuario);
 	});
 
 	it("deve realizar validação dos atributos obrigatórios", async () => {
-		const usuario = new Usuario({});
+		const usuario = new UsuarioModel({});
 
 		try {
 			await usuario.validate();
@@ -62,7 +62,7 @@ describe("O modelo de usuário", () => {
 	});
 
 	it("deve realizar validação dos atributos", async () => {
-		const usuario = new Usuario({
+		const usuario = new UsuarioModel({
 			cpf: "123456789021",
 			dados_administrativos: {
 				entidade_relacionada: "Entidade falsa",
