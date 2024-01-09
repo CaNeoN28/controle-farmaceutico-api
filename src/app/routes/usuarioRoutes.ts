@@ -11,3 +11,5 @@ usuarioRoutes
 
 usuarioRoutes.get("/usuarios", UsuariosControllers.ListarUsuarios);
 usuarioRoutes.post("/usuario", UsuariosControllers.CriarUsuario);
+
+export default usuarioRoutes
