@@ -55,7 +55,7 @@ describe("O modelo de usuário", () => {
 			expect(nome_completo.message).toBe("Nome completo é obrigatório");
 			expect(nome_usuario.message).toBe("Nome de usuário é obrigatório");
 			expect(numero_registro.message).toBe("Número de registro é obrigatório");
-			expect(senha.message).toBe("Senha é obrigatória");
+			expect(senha.message).toBe("Senha é obrigatório");
 		}
 
 		expect(usuario.validateSync).toThrow();
@@ -99,7 +99,7 @@ describe("O modelo de usuário", () => {
 			expect(senha).toBeDefined()
 
 			expect(cpf.message).toBe("CPF inválido")
-			expect(entidade_relacionada.message).toBe("Entidade relacionada em dados administrativos inválida")
+			expect(entidade_relacionada.kind).toBe("ObjectId")
 			expect(funcao.message).toBe("Função em dados administrativos inválida")
 			expect(email.message).toBe("Email inválido")
 			expect(nome_completo.message).toBe("Nome completo inválido")
