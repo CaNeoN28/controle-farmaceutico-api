@@ -4,7 +4,7 @@ import UsuariosControllers from "../controllers/UsuariosControllers";
 const usuarioRoutes = Router();
 
 usuarioRoutes
-	.route("/usuario/{id}")
+	.route("/usuario/:id")
 	.get(UsuariosControllers.PegarUsuarioPorId)
 	.put(UsuariosControllers.AtualizarUsuario)
 	.delete(UsuariosControllers.RemoverUsuário);
