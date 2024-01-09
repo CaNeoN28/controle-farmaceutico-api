@@ -2,6 +2,7 @@ import request from "supertest";
 import { Types } from "mongoose";
 import app from "../../app/app";
 import Usuario from "../../types/Usuario";
+import UsuarioModel from "../../app/models/Usuario";
 
 const entidade_id = new Types.ObjectId();
 
@@ -10,13 +11,17 @@ const usuario = new Usuario({
 	dados_administrativos: {
 		entidade_relacionada: entidade_id,
 	},
-	email: "email@gmail.com",
+	email: `antoniobandeira@gmail.com`,
 	imagem_url: ".jpg",
 	nome_completo: "Antônio José Bandeira",
-	nome_usuario: "antoniojose10",
+	nome_usuario: `antoniobandeira10`,
 	numero_registro: "0000000",
 	senha: "12345678",
 });
+
+afterAll(async () => {
+	await UsuarioModel.deleteMany()
+})
 
 describe("Rota de cadastro de usuário", () => {
 	it("deve criar um novo usuário no banco de dados", async () => {
