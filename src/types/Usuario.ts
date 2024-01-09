@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 
-type Funcao = "ADMINISTRADOR" | "GERENTE" | "USUARIO" | "INATIVO"
+type Funcao = "ADMINISTRADOR" | "GERENTE" | "USUARIO" | "INATIVO";
 interface IUsuario {
 	nome_completo: String;
 	nome_usuario: String;
@@ -9,7 +9,7 @@ interface IUsuario {
 	numero_registro: String;
 	senha: String;
 	imagem_url?: String;
-	dados_administrativos: {
+	dados_administrativos?: {
 		funcao?: Funcao;
 		entidade_relacionada: Types.ObjectId;
 	};
@@ -23,7 +23,10 @@ class Usuario implements IUsuario {
 	numero_registro: String;
 	senha: String;
 	imagem_url?: String;
-	dados_administrativos: { funcao?: Funcao; entidade_relacionada: Types.ObjectId };
+	dados_administrativos?: {
+		funcao?: Funcao;
+		entidade_relacionada: Types.ObjectId;
+	};
 
 	constructor(usuario: Usuario) {
 		const {
@@ -38,10 +41,14 @@ class Usuario implements IUsuario {
 		} = usuario;
 
 		this.cpf = cpf;
-		this.dados_administrativos = {
-			entidade_relacionada: dados_administrativos.entidade_relacionada,
-			funcao: dados_administrativos.funcao || "INATIVO",
-		};
+
+		if (dados_administrativos) {
+			this.dados_administrativos = {
+				entidade_relacionada:
+					dados_administrativos && dados_administrativos.entidade_relacionada,
+				funcao: dados_administrativos.funcao || "INATIVO",
+			};
+		}
 		this.email = email;
 		this.imagem_url = imagem_url;
 		this.nome_completo = nome_completo;
@@ -51,5 +58,5 @@ class Usuario implements IUsuario {
 	}
 }
 
-export default Usuario
-export {IUsuario, Funcao}
+export default Usuario;
+export { IUsuario, Funcao };
