@@ -63,7 +63,7 @@ describe("O modelo de usuário", () => {
 
 	it("deve realizar validação dos atributos", async () => {
 		const usuario = new Usuario({
-			cpf: "12345678902",
+			cpf: "123456789021",
 			dados_administrativos: {
 				entidade_relacionada: "Entidade falsa",
 				funcao: "Presidente",
