@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import validarCPF from "../utils/validarCPF";
-import { validarID } from "../utils/validators";
+import { validarEmail, validarID } from "../utils/validators";
 
 const DatosAdministrativosSchema = new mongoose.Schema(
 	{
@@ -44,6 +44,14 @@ const UsuarioSchema = new mongoose.Schema({
 		type: DatosAdministrativosSchema,
 		default: {},
 	},
+	email: {
+		type: String,
+		required: [true, "Email é obrigatório"],
+		validate: {
+			validator: validarEmail,
+			message: "Email inválido"
+		}
+	}
 });
 
 const Usuario = mongoose.model("Usuario", UsuarioSchema);
