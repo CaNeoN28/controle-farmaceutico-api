@@ -31,7 +31,7 @@ describe("Rota de cadastro de usuário", () => {
 			cpf: "018.800.900-07",
 			dados_administrativos: {
 				entidade_relacionada: entidade_id,
-				funcao: Funcao.ADMINISTRADOR,
+				funcao: "ADMINISTRADOR",
 			},
 			email: usuario.email,
 			imagem_url: usuario.imagem_url,

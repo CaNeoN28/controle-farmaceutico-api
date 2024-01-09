@@ -1,12 +1,6 @@
 import { Types } from "mongoose";
 
-enum Funcao {
-	ADMINISTRADOR,
-	GERENTE,
-	USUARIO,
-	INATIVO,
-}
-
+type Funcao = "ADMINISTRADOR" | "GERENTE" | "USUARIO" | "INATIVO"
 interface IUsuario {
 	nome_completo: String;
 	nome_usuario: String;
@@ -46,7 +40,7 @@ class Usuario implements IUsuario {
 		this.cpf = cpf;
 		this.dados_administrativos = {
 			entidade_relacionada: dados_administrativos.entidade_relacionada,
-			funcao: dados_administrativos.funcao || Funcao.INATIVO,
+			funcao: dados_administrativos.funcao || "INATIVO",
 		};
 		this.email = email;
 		this.imagem_url = imagem_url;
