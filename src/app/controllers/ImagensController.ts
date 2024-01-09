@@ -1,15 +1,15 @@
 import { RequestHandler } from "express";
 
 class ImagensControllers {
-	static EncontrarImagemPorId: RequestHandler = function (req, res, next) {
+	static EncontrarImagemPorId: RequestHandler = async function (req, res, next) {
 		res.send("Encontrar imagem por ID");
 	};
 
-	static EnviarImagem: RequestHandler = function (req, res, next) {
+	static EnviarImagem: RequestHandler = async function (req, res, next) {
 		res.send("Enviar imagem");
 	};
 
-	static RemoverImagem: RequestHandler = function (req, res, next) {
+	static RemoverImagem: RequestHandler = async function (req, res, next) {
 		res.send("Remover imagem");
 	};
 }
