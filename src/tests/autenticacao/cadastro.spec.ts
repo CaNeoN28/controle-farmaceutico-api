@@ -50,7 +50,7 @@ describe("Rota de cadastro de usuário", () => {
 			.then((res) => res.body);
 
 		expect(resposta).toBe(
-			"Não foi possível cadastrar o usuário: Email já utilizado"
+			"Email já utilizado"
 		);
 	});
 
@@ -63,7 +63,7 @@ describe("Rota de cadastro de usuário", () => {
 			.then((res) => res.body);
 
 		expect(resposta).toBe(
-			"Não foi possível cadastrar o usuário: CPF é obrigatório, Entidade relacionada de dados administrativos é obrigatório, Email é obrigatório, Nome completo é obrigatório, Nome de usuário é obrigatório, Número de registro é obrigatório"
+			"CPF é obrigatório, Entidade relacionada de dados administrativos é obrigatório, Email é obrigatório, Nome completo é obrigatório, Nome de usuário é obrigatório, Número de registro é obrigatório"
 		);
 	});
 });
