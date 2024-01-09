@@ -18,7 +18,7 @@ class UsuariosControllers {
 	};
 
 	static RemoverUsuário: RequestHandler = async function (req, res, next) {
-		res.send("Remover uma imagem");
+		res.send("Remover um usuário");
 	};
 }
 export default UsuariosControllers;
