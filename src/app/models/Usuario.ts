@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 import validarCPF from "../utils/validarCPF";
-import { validarEmail, validarID } from "../utils/validators";
+import {
+	validarEmail,
+	validarID,
+	validarNomeDeUsuario,
+} from "../utils/validators";
 
 const DatosAdministrativosSchema = new mongoose.Schema(
 	{
@@ -11,13 +15,13 @@ const DatosAdministrativosSchema = new mongoose.Schema(
 				validator: validarID<String>,
 				message: "Entidade relacionada em dados administrativos inválida",
 			},
-			required: [true, "Entidade relacionada é obrigatório"]
+			required: [true, "Entidade relacionada é obrigatório"],
 		},
 		funcao: {
 			type: String,
 			enum: {
 				values: ["ADMINISTRADOR", "GERENTE", "USUARIO", "INATIVO"],
-				message: "Função em dados administrativos é inválida",
+				message: "Função em dados administrativos inválida",
 			},
 			default: "INATIVO",
 		},
@@ -49,16 +53,39 @@ const UsuarioSchema = new mongoose.Schema({
 		required: [true, "Email é obrigatório"],
 		validate: {
 			validator: validarEmail,
-			message: "Email inválido"
-		}
+			message: "Email inválido",
+		},
 	},
 	imagem_url: {
-		type: String
+		type: String,
 	},
 	nome_completo: {
 		type: String,
+		required: [true, "Nome completo é obrigatório"],
 		minlength: [3, "Nome completo inválido"],
-		required: [true, "Nome completo é obrigatório"]
+	},
+	nome_usuario: {
+		type: String,
+		required: [true, "Nome de usuário é obrigatório"],
+		validate: {
+			validator: validarNomeDeUsuario,
+			message: "Nome de usuário inválido",
+		},
+	},
+	numero_registro: {
+		type: String,
+		required: [true, "Número de registro é obrigatório"],
+		validate: {
+			validator: (v: string) => {
+				return !isNaN(Number(v))
+			},
+			message: "Número de registro inválido"
+		}
+	},
+	senha: {
+		type: String,
+		required: [true, "Senha é obrigatório"],
+		minlength: [8, "Senha inválida"]
 	}
 });
 

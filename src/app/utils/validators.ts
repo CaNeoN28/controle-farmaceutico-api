@@ -16,4 +16,4 @@ function validarNomeDeUsuario(v: string) {
 	return regex.test(v);
 }
 
-export { validarID, validarEmail };
+export { validarID, validarEmail, validarNomeDeUsuario };
