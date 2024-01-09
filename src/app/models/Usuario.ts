@@ -51,6 +51,14 @@ const UsuarioSchema = new mongoose.Schema({
 			validator: validarEmail,
 			message: "Email inválido"
 		}
+	},
+	imagem_url: {
+		type: String
+	},
+	nome_completo: {
+		type: String,
+		minlength: [3, "Nome completo inválido"],
+		required: [true, "Nome completo é obrigatório"]
 	}
 });
 
