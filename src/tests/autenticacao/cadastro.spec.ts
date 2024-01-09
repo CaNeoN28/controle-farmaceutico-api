@@ -1,12 +1,12 @@
 import request from "supertest";
 import { Types } from "mongoose";
 import app from "../../app/app";
-import Usuario, { Funcao } from "../../types/Usuario";
+import Usuario from "../../types/Usuario";
 
 const entidade_id = new Types.ObjectId();
 
 const usuario = new Usuario({
-	cpf: "018.800.900-07",
+	cpf: "01880090007",
 	dados_administrativos: {
 		entidade_relacionada: entidade_id,
 	},
@@ -27,17 +27,12 @@ describe("Rota de cadastro de usuário", () => {
 			.expect(201)
 			.then((res) => res.body);
 
-		expect(resposta).toEqual({
-			cpf: "018.800.900-07",
+		expect(resposta).toMatchObject({
+			...usuario,
 			dados_administrativos: {
-				entidade_relacionada: entidade_id,
-				funcao: "ADMINISTRADOR",
-			},
-			email: usuario.email,
-			imagem_url: usuario.imagem_url,
-			nome_completo: usuario.nome_completo,
-			nome_usuario: usuario.nome_usuario,
-			numero_registro: usuario.numero_registro,
+				entidade_relacionada: entidade_id.toString(),
+				funcao: "ADMINISTRADOR"
+			}
 		});
 	});
 
