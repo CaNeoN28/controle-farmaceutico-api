@@ -38,6 +38,14 @@ describe("O modelo de usuário", () => {
 				numero_registro,
 				senha,
 			} = error.errors;
+			
+			expect(cpf).toBeDefined()
+			expect(dados_administrativos).toBeDefined()
+			expect(email).toBeDefined()
+			expect(nome_completo).toBeDefined()
+			expect(nome_usuario).toBeDefined()
+			expect(numero_registro).toBeDefined()
+			expect(senha).toBeDefined()
 
 			expect(cpf.message).toBe("CPF é obrigatório");
 			expect(dados_administrativos.message).toBe(
@@ -55,7 +63,7 @@ describe("O modelo de usuário", () => {
 
 	it("deve realizar validação dos atributos", async () => {
 		const usuario = new Usuario({
-			cpf: "123456789012",
+			cpf: "12345678902",
 			dados_administrativos: {
 				entidade_relacionada: "Entidade falsa",
 				funcao: "Presidente",
@@ -80,6 +88,15 @@ describe("O modelo de usuário", () => {
 				numero_registro,
 				senha
 			} = error.errors;
+
+			expect(cpf).toBeDefined()
+			expect(entidade_relacionada).toBeDefined()
+			expect(funcao).toBeDefined()
+			expect(email).toBeDefined()
+			expect(nome_completo).toBeDefined()
+			expect(nome_usuario).toBeDefined()
+			expect(numero_registro).toBeDefined()
+			expect(senha).toBeDefined()
 
 			expect(cpf.message).toBe("CPF inválido")
 			expect(entidade_relacionada.message).toBe("Entidade relacionada em dados administrativos inválida")
