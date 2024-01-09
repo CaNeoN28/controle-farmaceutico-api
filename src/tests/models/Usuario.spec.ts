@@ -6,7 +6,7 @@ const dadosUsuario = {
 	cpf: "23841067085",
 	dados_administrativos: {
 		entidade_relacionada: new mongoose.Types.ObjectId(),
-		funcao: "ADMINISTRADOR"
+		funcao: "ADMINISTRADOR",
 	},
 	email: "antoniobandeira@email.com",
 	imagem_url: ".jpg",
@@ -20,6 +20,32 @@ describe("O modelo de usuário", () => {
 	it("deve cadastrar um usuário com os dados informados", () => {
 		const usuario = new Usuario(dadosUsuario);
 
-		expect(usuario).toMatchObject(dadosUsuario)
+		expect(usuario).toMatchObject(dadosUsuario);
+	});
+
+	it("deve realizar validação dos atributos", async () => {
+		const usuario = new Usuario({});
+
+		try {
+			await usuario.validate();
+		} catch (error: any) {
+			const {
+				cpf,
+				"dados_administrativos.entidade_relacionada": dados_administrativos,
+				email,
+				nome_completo,
+				nome_usuario,
+				numero_registro,
+				senha,
+			} = error.errors;
+
+			expect(cpf.message).toBe("CPF é obrigatório")
+			expect(dados_administrativos.message).toBe("Dados administrativos são obrigatórios")
+			expect(email.message).toBe("Email é obrigatório")
+			expect(nome_completo.message).toBe("Nome completo é obrigatório")
+			expect(nome_usuario.message).toBe("Nome de usuário é obrigatório")
+			expect(numero_registro.message).toBe("Número de registro é obrigatório")
+			expect(senha.message).toBe("Senha é obrigatória")
+		}
 	});
 });
