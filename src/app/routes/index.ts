@@ -2,18 +2,20 @@ import express, { Application } from "express";
 import autenticacaoRoutes from "./autenticacaoRoutes";
 import usuarioRoutes from "./usuarioRoutes";
 import entidadesRoutes from "./entidadesRoutes";
+import farmaciaRoutes from "./farmaciaRoutes";
 
 const route = (app: Application) => {
 	app.route("/").get((req, res) => {
-		res.send("Bem vindo")
-	})
+		res.send("Bem vindo");
+	});
 
 	app.use(
 		express.json(),
 		autenticacaoRoutes,
-		usuarioRoutes,
-		entidadesRoutes
-	)
-}
+		farmaciaRoutes,
+		entidadesRoutes,
+		usuarioRoutes
+	);
+};
 
-export default route
+export default route;
