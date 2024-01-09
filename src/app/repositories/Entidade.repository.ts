@@ -1,10 +1,9 @@
 class EntidadeRepository {
-	static findUsuarioId(id: string) {}
-	static findUsuario(params: any) {}
-	static findUsuarios(params: any) {}
-	static createUsuario(data: any) {}
-	static updateUsuario(id: string, data: any) {}
-	static deleteUsuario(id: string) {}
+	static findEntidadeId(id: string) {}
+	static findEntidades(params: any) {}
+	static createEntidade(data: any) {}
+	static updateEntidade(id: string, data: any) {}
+	static deleteEntidade(id: string) {}
 }
 
 export default EntidadeRepository;
