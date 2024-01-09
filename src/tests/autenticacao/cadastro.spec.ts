@@ -20,8 +20,8 @@ const usuario = new Usuario({
 });
 
 afterAll(async () => {
-	await UsuarioModel.deleteMany()
-})
+	await UsuarioModel.deleteMany();
+});
 
 describe("Rota de cadastro de usuário", () => {
 	it("deve criar um novo usuário no banco de dados", async () => {
@@ -36,8 +36,8 @@ describe("Rota de cadastro de usuário", () => {
 			...usuario,
 			dados_administrativos: {
 				entidade_relacionada: entidade_id.toString(),
-				funcao: "ADMINISTRADOR"
-			}
+				funcao: "ADMINISTRADOR",
+			},
 		});
 	});
 
@@ -47,11 +47,9 @@ describe("Rota de cadastro de usuário", () => {
 			.set("Accept", "application/json")
 			.send(usuario)
 			.expect(409)
-			.then((res) => res.text);
+			.then((res) => res.body);
 
-		expect(resposta).toBe(
-			"Email já cadastrado"
-		);
+		expect(resposta).toMatchObject({ email: "Email já cadastrado" });
 	});
 
 	it("deve retornar erro ao enviar um usuário inválido", async () => {
@@ -60,10 +58,17 @@ describe("Rota de cadastro de usuário", () => {
 			.set("Accept", "application/json")
 			.send({})
 			.expect(400)
-			.then((res) => res.text);
+			.then((res) => res.body);
 
-		expect(resposta).toBe(
-			"CPF é obrigatório, Entidade relacionada de dados administrativos é obrigatório, Email é obrigatório, Nome completo é obrigatório, Nome de usuário é obrigatório, Número de registro é obrigatório"
-		);
+		expect(resposta).toMatchObject({
+			cpf: "CPF é obrigatório",
+			email: "Email é obrigatório",
+			nome_completo: "Nome completo é obrigatório",
+			nome_usuario: "Nome de usuário é obrigatório",
+			numero_registro: "Número de registro é obrigatório",
+			senha: "Senha é obrigatório",
+			"dados_administrativos.entidade_relacionada":
+				"Entidade relacionada é obrigatório",
+		});
 	});
 });
