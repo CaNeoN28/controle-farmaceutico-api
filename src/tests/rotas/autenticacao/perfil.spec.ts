@@ -48,4 +48,14 @@ describe("A rota de visualização de perfil", () => {
 		expect(resposta).toMatch(usuario);
 		expect(resposta.senha).toBeUndefined()
 	});
+
+	it("deve retornar erro no caso de token inválido", async () => {
+		const resposta = await request(app)
+			.post("/perfil")
+			.set("Accept", "application/json")
+			.expect(401)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("É necessário estar autenticado para usar essa rota")
+	})
 });
