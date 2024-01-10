@@ -16,7 +16,7 @@ const usuario = new Usuario({
 	nome_completo: "Antônio José Bandeira",
 	nome_usuario: `antoniobandeira10`,
 	numero_registro: "0000000",
-	senha: "12345678",
+	senha: "12345678Asdf.",
 });
 
 afterAll(async () => {
@@ -33,12 +33,34 @@ describe("Rota de cadastro de usuário", () => {
 			.then((res) => res.body);
 
 		expect(resposta).toMatchObject({
-			...usuario,
+			cpf: usuario.cpf,
 			dados_administrativos: {
 				entidade_relacionada: entidade_id.toString(),
 				funcao: "ADMINISTRADOR",
 			},
+			email: usuario.email,
+			imagem_url: usuario.imagem_url,
+			nome_completo: usuario.nome_completo,
+			nome_usuario: usuario.nome_usuario,
+			numero_registro: usuario.numero_registro,
 		});
+
+		expect(resposta.senha).toBeUndefined();
+	});
+
+	it("deve retornar erro  de senha inválida", async () => {
+		const resposta = await request(app)
+			.post("/cadastro")
+			.set("Accept", "application/json")
+			.send({
+				...usuario,
+				email: "outroemail@gmail.com",
+				senha: "12345678",
+			})
+			.expect(400)
+			.then((res) => res.body);
+
+		expect(resposta).toHaveProperty("senha", "Senha inválida")
 	});
 
 	it("deve retornar erro ao usar um email já existente", async () => {

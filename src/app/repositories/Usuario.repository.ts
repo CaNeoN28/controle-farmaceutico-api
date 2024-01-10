@@ -49,7 +49,7 @@ class UsuarioRepository {
 			}
 		}
 
-		return { usuario, erro };
+		return { usuario: usuario.toObject(), erro };
 	}
 	static updateUsuario(id: string, data: any) {}
 	static deleteUsuario(id: string) {}
