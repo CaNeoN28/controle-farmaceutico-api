@@ -16,4 +16,10 @@ function validarNomeDeUsuario(v: string) {
 	return regex.test(v);
 }
 
-export { validarID, validarEmail, validarNomeDeUsuario };
+function validarSenha(v: string) {
+	const regex = /^(?=.*[A-Z])(?=.*[!@#$&*.])(?=.*[0-9])(?=.*[a-z]).{8,}$/;
+
+	return regex.test(v);
+}
+
+export { validarID, validarEmail, validarNomeDeUsuario, validarSenha };
