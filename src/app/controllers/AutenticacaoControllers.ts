@@ -24,7 +24,7 @@ class AutenticacaoControllers {
 		try {
 			const { nome_usuario, senha } = req.body;
 
-			const resposta = loginService({ nome_usuario, senha });
+			const resposta = await loginService({ nome_usuario, senha });
 
 			res.status(200).send(resposta);
 		} catch (error: any) {

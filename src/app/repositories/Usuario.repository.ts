@@ -15,7 +15,7 @@ interface FiltrosUsuario {
 
 class UsuarioRepository {
 	static async findUsuario(params: FiltrosUsuario) {
-		const usuario = await UsuarioModel.findOne(params);
+		const usuario = await UsuarioModel.findOne(params, {senha: false});
 
 		return usuario;
 	}
