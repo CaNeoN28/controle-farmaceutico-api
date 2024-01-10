@@ -1,25 +1,28 @@
 import jwt from "jsonwebtoken";
 import request from "supertest";
 import app from "../../app/app";
-import criarUsuarioAdm from "../../app/utils/criarUsuarioAdm";
+import { criarUsuarioAdm } from "../../app/utils/gerarDadosDiversos";
 import limparBanco from "../../app/utils/limparBanco";
 import Usuario from "../../types/Usuario";
 
-let {administrador, senha}: {
-	administrador?: string,
-	senha?: string
-} = {}
+let {
+	administrador,
+	senha,
+}: {
+	administrador?: string;
+	senha?: string;
+} = {};
 
-beforeAll(async() => {
-	const resposta = await criarUsuarioAdm()
+beforeAll(async () => {
+	const resposta = await criarUsuarioAdm();
 
-	administrador = resposta.usuario
-	senha = resposta.senha
-})
+	administrador = resposta.usuario;
+	senha = resposta.senha;
+});
 
-afterAll(async() => {
-	await limparBanco()
-})
+afterAll(async () => {
+	await limparBanco();
+});
 
 describe("Rota de login", () => {
 	it("deve realizar login e retornar um token", async () => {
@@ -33,24 +36,24 @@ describe("Rota de login", () => {
 			.expect(200)
 			.then((res) => res.body);
 
-		const {token, usuario} = resposta as {
-			token: string,
-			usuario: Usuario
-		}
+		const { token, usuario } = resposta as {
+			token: string;
+			usuario: Usuario;
+		};
 
 		const verificarToken = () => {
-			const payload = jwt.verify(token, process.env.SECRET_KEY || "")
+			const payload = jwt.verify(token, process.env.SECRET_KEY || "");
 
-			return payload
-		}
+			return payload;
+		};
 
-		expect(usuario).toHaveProperty("nome_usuario", administrador)
-		expect(usuario.senha).toBeUndefined()
+		expect(usuario).toHaveProperty("nome_usuario", administrador);
+		expect(usuario.senha).toBeUndefined();
 		expect(verificarToken).not.toThrow();
 
-		const payload = verificarToken()
+		const payload = verificarToken();
 
-		expect(payload).toHaveProperty("nome_usuario", administrador)
+		expect(payload).toHaveProperty("nome_usuario", administrador);
 	});
 
 	it("deve retornar erro com dados inválidos", async () => {
