@@ -1,4 +1,3 @@
-import Usuario from "../../types/Usuario";
 import jwt from "jsonwebtoken";
 
 interface Data {

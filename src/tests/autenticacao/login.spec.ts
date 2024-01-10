@@ -38,9 +38,19 @@ describe("Rota de login", () => {
 			usuario: Usuario
 		}
 
+		const verificarToken = () => {
+			const payload = jwt.verify(token, process.env.SECRET_KEY || "")
+
+			return payload
+		}
+
 		expect(usuario).toHaveProperty("nome_usuario", administrador)
 		expect(usuario.senha).toBeUndefined()
-		expect(jwt.verify(token, process.env.SECRET_KEY || "")).not.toThrow();
+		expect(verificarToken).not.toThrow();
+
+		const payload = verificarToken()
+
+		expect(payload).toHaveProperty("nome_usuario", administrador)
 	});
 
 	it("deve retornar erro com dados inválidos", async () => {
