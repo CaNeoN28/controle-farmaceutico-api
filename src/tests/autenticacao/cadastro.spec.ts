@@ -32,8 +32,6 @@ describe("Rota de cadastro de usuário", () => {
 			.expect(201)
 			.then((res) => res.body);
 
-		expect(resposta.senha).toBeUndefined()
-
 		expect(resposta).toMatchObject({
 			...usuario,
 			dados_administrativos: {
@@ -41,6 +39,8 @@ describe("Rota de cadastro de usuário", () => {
 				funcao: "ADMINISTRADOR",
 			},
 		});
+
+		expect(resposta.senha).toBeUndefined();
 	});
 
 	it("deve retornar erro ao usar um email já existente", async () => {
