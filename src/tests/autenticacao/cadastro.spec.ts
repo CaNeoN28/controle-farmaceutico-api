@@ -33,11 +33,16 @@ describe("Rota de cadastro de usuário", () => {
 			.then((res) => res.body);
 
 		expect(resposta).toMatchObject({
-			...usuario,
+			cpf: usuario.cpf,
 			dados_administrativos: {
 				entidade_relacionada: entidade_id.toString(),
 				funcao: "ADMINISTRADOR",
 			},
+			email: usuario.email,
+			imagem_url: usuario.imagem_url,
+			nome_completo: usuario.nome_completo,
+			nome_usuario: usuario.nome_usuario,
+			numero_registro: usuario.numero_registro
 		});
 
 		expect(resposta.senha).toBeUndefined();
