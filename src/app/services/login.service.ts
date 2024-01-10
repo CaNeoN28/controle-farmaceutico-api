@@ -1,3 +1,4 @@
+import Erro from "../../types/Erro";
 import UsuarioRepository from "../repositories/Usuario.repository";
 import { generateToken } from "../utils/jwt";
 
@@ -7,11 +8,9 @@ interface Data {
 }
 
 async function loginService(data: Data) {
-	const usuario = await UsuarioRepository.findUsuario({
-		nome_usuario: data.nome_usuario,
-	});
+	const {usuario, senhaCorreta} = await UsuarioRepository.login(data);
 
-	if (usuario) {
+	if (usuario && senhaCorreta) {
 		const token = generateToken({
 			email: usuario.email,
 			funcao: usuario.dados_administrativos.funcao,
@@ -20,10 +19,15 @@ async function loginService(data: Data) {
 		});
 
 		return {
-			usuario,
+			usuario: {
+				...usuario,
+				senha: undefined
+			},
 			token: token,
 		};
 	}
+
+	throw {codigo: 401, erro: "Não foi possível autenticar"} as Erro
 }
 
 export default loginService;

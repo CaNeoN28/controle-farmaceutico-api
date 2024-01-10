@@ -29,10 +29,7 @@ class UsuarioRepository {
 		}
 
 		return {
-			usuario: {
-				...usuario,
-				senha: undefined
-			},
+			usuario: usuario?.toObject(),
 			senhaCorreta
 		}
 	}
