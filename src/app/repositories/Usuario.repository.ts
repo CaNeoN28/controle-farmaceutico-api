@@ -1,9 +1,24 @@
 import Erro from "../../types/Erro";
-import Usuario from "../../types/Usuario";
+import Usuario, { Funcao } from "../../types/Usuario";
 import UsuarioModel from "../models/Usuario";
-import mongoose from "mongoose";
+
+interface FiltrosUsuario {
+	dados_administrativos?: {
+		entidade_relacionada?: string;
+		funcao?: Funcao;
+	};
+	email?: string;
+	nome_completo?: string;
+	nome_usuario?: string;
+	numero_registro?: string;
+}
 
 class UsuarioRepository {
+	static async findUsuario(params: FiltrosUsuario) {
+		const usuario = await UsuarioModel.findOne(params);
+
+		return usuario;
+	}
 	static findUsuarioId(id: any) {}
 	static findUsuarios(params: any) {}
 	static async createUsuario(data: Usuario) {
