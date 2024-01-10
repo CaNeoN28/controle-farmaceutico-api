@@ -62,7 +62,7 @@ describe("Rota de login", () => {
 				senha: "12345678",
 			})
 			.expect(401)
-			.then((res) => res.body);
+			.then((res) => res.text);
 
 		expect(resposta).toBe("Não foi possível realizar autenticação");
 	});
@@ -76,7 +76,7 @@ describe("Rota de login", () => {
 				senha: "12345678",
 			})
 			.expect(403)
-			.then((res) => res.body);
+			.then((res) => res.text);
 
 		expect(resposta).toBe("O usuário ainda não foi verificado");
 	});
