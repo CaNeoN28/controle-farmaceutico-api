@@ -1,9 +1,43 @@
 import Erro from "../../types/Erro";
-import Usuario from "../../types/Usuario";
+import Usuario, { Funcao } from "../../types/Usuario";
 import UsuarioModel from "../models/Usuario";
-import mongoose from "mongoose";
+import { compararSenha } from "../utils/senhas";
+
+interface FiltrosUsuario {
+	dados_administrativos?: {
+		entidade_relacionada?: string;
+		funcao?: Funcao;
+	};
+	email?: string;
+	nome_completo?: string;
+	nome_usuario?: string;
+	numero_registro?: string;
+}
+
+interface Login{
+	nome_usuario: string,
+	senha: string
+}
 
 class UsuarioRepository {
+	static async login(data: Login){
+		const usuario = await UsuarioModel.findOne({nome_usuario: data.nome_usuario})
+		let senhaCorreta = false
+
+		if(usuario) {
+			senhaCorreta = await compararSenha(data.senha, usuario.senha)
+		}
+
+		return {
+			usuario: usuario?.toObject(),
+			senhaCorreta
+		}
+	}
+	static async findUsuario(params: FiltrosUsuario) {
+		const usuario = await UsuarioModel.findOne(params, {senha: false});
+
+		return usuario;
+	}
 	static findUsuarioId(id: any) {}
 	static findUsuarios(params: any) {}
 	static async createUsuario(data: Usuario) {

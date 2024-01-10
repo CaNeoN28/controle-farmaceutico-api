@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import Usuario, { IUsuario } from "../../types/Usuario";
 import createUsuarioService from "../services/create.usuario.service";
 import Erro from "../../types/Erro";
+import loginService from "../services/login.service";
 
 class AutenticacaoControllers {
 	static Cadastro: RequestHandler = async function (req, res, next) {
@@ -11,16 +12,26 @@ class AutenticacaoControllers {
 			const usuario = new Usuario(data);
 
 			const resposta = await createUsuarioService(usuario);
-			
+
 			return res.status(201).send(resposta);
 		} catch (error: any) {
-			const {codigo, erro} = error as Erro
+			const { codigo, erro } = error as Erro;
 			return res.status(codigo).send(erro);
 		}
 	};
 
 	static Login: RequestHandler = async function (req, res, next) {
-		res.send("Login");
+		try {
+			const { nome_usuario, senha } = req.body;
+
+			const resposta = await loginService({ nome_usuario, senha });
+
+			res.status(200).send(resposta);
+		} catch (error: any) {
+			const erro = error as Erro;
+
+			res.status(erro.codigo).send(erro.erro);
+		}
 	};
 
 	static VisualizarPerfil: RequestHandler = async function (req, res, next) {

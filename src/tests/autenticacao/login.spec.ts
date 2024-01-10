@@ -1,6 +1,33 @@
 import jwt from "jsonwebtoken";
 import request from "supertest";
 import app from "../../app/app";
+import { criarUsuarioAdm, criarUsuarioInativo } from "../../app/utils/gerarDadosDiversos";
+import limparBanco from "../../app/utils/limparBanco";
+import Usuario from "../../types/Usuario";
+
+interface Login {
+	usuario: string,
+	senha: string
+}
+
+let administrador: Login = {
+	usuario: "",
+	senha: ""
+}
+
+let inativo: Login = {
+	usuario: "",
+	senha: ""
+}
+
+beforeAll(async () => {
+	administrador = await criarUsuarioAdm();
+	inativo = await criarUsuarioInativo()
+});
+
+afterAll(async () => {
+	await limparBanco();
+});
 
 describe("Rota de login", () => {
 	it("deve realizar login e retornar um token", async () => {
@@ -8,13 +35,30 @@ describe("Rota de login", () => {
 			.post("/login")
 			.set("Accept", "application/json")
 			.send({
-				nome_usuario: "administrador2024",
-				senha: "12345678",
+				nome_usuario: administrador.usuario,
+				senha: administrador.senha,
 			})
-			.expect(201)
+			.expect(200)
 			.then((res) => res.body);
 
-		expect(jwt.verify(resposta, process.env.SECRET_KEY || "")).not.toThrow();
+		const { token, usuario } = resposta as {
+			token: string;
+			usuario: Usuario;
+		};
+
+		const verificarToken = () => {
+			const payload = jwt.verify(token, process.env.SECRET_KEY || "");
+
+			return payload;
+		};
+
+		expect(usuario).toHaveProperty("nome_usuario", administrador.usuario);
+		expect(usuario.senha).toBeUndefined();
+		expect(verificarToken).not.toThrow();
+
+		const payload = verificarToken();
+
+		expect(payload).toHaveProperty("nome_usuario", administrador.usuario);
 	});
 
 	it("deve retornar erro com dados inválidos", async () => {
@@ -26,7 +70,7 @@ describe("Rota de login", () => {
 				senha: "12345678",
 			})
 			.expect(401)
-			.then((res) => res.body);
+			.then((res) => res.text);
 
 		expect(resposta).toBe("Não foi possível realizar autenticação");
 	});
@@ -36,11 +80,11 @@ describe("Rota de login", () => {
 			.post("/login")
 			.set("Accept", "application/json")
 			.send({
-				nome_usuario: "usuarioinativo",
-				senha: "12345678",
+				nome_usuario: inativo.usuario,
+				senha: inativo.senha,
 			})
 			.expect(403)
-			.then((res) => res.body);
+			.then((res) => res.text);
 
 		expect(resposta).toBe("O usuário ainda não foi verificado");
 	});
