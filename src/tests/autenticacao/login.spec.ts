@@ -33,8 +33,6 @@ describe("Rota de login", () => {
 			.expect(200)
 			.then((res) => res.body);
 
-		console.log(resposta)
-
 		const {token, usuario} = resposta as {
 			token: string,
 			usuario: Usuario

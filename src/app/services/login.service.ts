@@ -1,4 +1,5 @@
 import UsuarioRepository from "../repositories/Usuario.repository";
+import { generateToken } from "../utils/jwt";
 
 interface Data {
 	nome_usuario: string;
@@ -10,9 +11,18 @@ async function loginService(data: Data) {
 		nome_usuario: data.nome_usuario,
 	});
 
-	return {
-		usuario,
-		token: ""
+	if (usuario) {
+		const token = generateToken({
+			email: usuario.email,
+			funcao: usuario.dados_administrativos.funcao,
+			nome_usuario: usuario.nome_usuario,
+			numero_registro: usuario.numero_registro,
+		});
+
+		return {
+			usuario,
+			token: token,
+		};
 	}
 }
 
