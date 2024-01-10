@@ -1,21 +1,26 @@
 import request from "supertest";
 import { Types } from "mongoose";
 import app from "../../app/app";
-import Usuario, { Funcao } from "../../types/Usuario";
+import Usuario from "../../types/Usuario";
+import UsuarioModel from "../../app/models/Usuario";
 
 const entidade_id = new Types.ObjectId();
 
 const usuario = new Usuario({
-	cpf: "018.800.900-07",
+	cpf: "01880090007",
 	dados_administrativos: {
 		entidade_relacionada: entidade_id,
 	},
-	email: "email@gmail.com",
+	email: `antoniobandeira@gmail.com`,
 	imagem_url: ".jpg",
 	nome_completo: "Antônio José Bandeira",
-	nome_usuario: "antoniojose10",
+	nome_usuario: `antoniobandeira10`,
 	numero_registro: "0000000",
 	senha: "12345678",
+});
+
+afterAll(async () => {
+	await UsuarioModel.deleteMany();
 });
 
 describe("Rota de cadastro de usuário", () => {
@@ -27,17 +32,12 @@ describe("Rota de cadastro de usuário", () => {
 			.expect(201)
 			.then((res) => res.body);
 
-		expect(resposta).toEqual({
-			cpf: "018.800.900-07",
+		expect(resposta).toMatchObject({
+			...usuario,
 			dados_administrativos: {
-				entidade_relacionada: entidade_id,
-				funcao: Funcao.ADMINISTRADOR,
+				entidade_relacionada: entidade_id.toString(),
+				funcao: "ADMINISTRADOR",
 			},
-			email: usuario.email,
-			imagem_url: usuario.imagem_url,
-			nome_completo: usuario.nome_completo,
-			nome_usuario: usuario.nome_usuario,
-			numero_registro: usuario.numero_registro,
 		});
 	});
 
@@ -49,9 +49,7 @@ describe("Rota de cadastro de usuário", () => {
 			.expect(409)
 			.then((res) => res.body);
 
-		expect(resposta).toBe(
-			"Não foi possível cadastrar o usuário: Email já utilizado"
-		);
+		expect(resposta).toMatchObject({ email: "Email já cadastrado" });
 	});
 
 	it("deve retornar erro ao enviar um usuário inválido", async () => {
@@ -62,8 +60,15 @@ describe("Rota de cadastro de usuário", () => {
 			.expect(400)
 			.then((res) => res.body);
 
-		expect(resposta).toBe(
-			"Não foi possível cadastrar o usuário: CPF é obrigatório, Entidade relacionada de dados administrativos é obrigatório, Email é obrigatório, Nome completo é obrigatório, Nome de usuário é obrigatório, Número de registro é obrigatório"
-		);
+		expect(resposta).toMatchObject({
+			cpf: "CPF é obrigatório",
+			email: "Email é obrigatório",
+			nome_completo: "Nome completo é obrigatório",
+			nome_usuario: "Nome de usuário é obrigatório",
+			numero_registro: "Número de registro é obrigatório",
+			senha: "Senha é obrigatório",
+			"dados_administrativos.entidade_relacionada":
+				"Entidade relacionada é obrigatório",
+		});
 	});
 });
