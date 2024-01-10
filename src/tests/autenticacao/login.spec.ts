@@ -1,23 +1,28 @@
 import jwt from "jsonwebtoken";
 import request from "supertest";
 import app from "../../app/app";
-import { criarUsuarioAdm } from "../../app/utils/gerarDadosDiversos";
+import { criarUsuarioAdm, criarUsuarioInativo } from "../../app/utils/gerarDadosDiversos";
 import limparBanco from "../../app/utils/limparBanco";
 import Usuario from "../../types/Usuario";
 
-let {
-	administrador,
-	senha,
-}: {
-	administrador?: string;
-	senha?: string;
-} = {};
+interface Login {
+	usuario: string,
+	senha: string
+}
+
+let administrador: Login = {
+	usuario: "",
+	senha: ""
+}
+
+let inativo: Login = {
+	usuario: "",
+	senha: ""
+}
 
 beforeAll(async () => {
-	const resposta = await criarUsuarioAdm();
-
-	administrador = resposta.usuario;
-	senha = resposta.senha;
+	administrador = await criarUsuarioAdm();
+	inativo = await criarUsuarioInativo()
 });
 
 afterAll(async () => {
@@ -30,8 +35,8 @@ describe("Rota de login", () => {
 			.post("/login")
 			.set("Accept", "application/json")
 			.send({
-				nome_usuario: administrador,
-				senha: senha,
+				nome_usuario: administrador.usuario,
+				senha: administrador.senha,
 			})
 			.expect(200)
 			.then((res) => res.body);
@@ -47,13 +52,13 @@ describe("Rota de login", () => {
 			return payload;
 		};
 
-		expect(usuario).toHaveProperty("nome_usuario", administrador);
+		expect(usuario).toHaveProperty("nome_usuario", administrador.usuario);
 		expect(usuario.senha).toBeUndefined();
 		expect(verificarToken).not.toThrow();
 
 		const payload = verificarToken();
 
-		expect(payload).toHaveProperty("nome_usuario", administrador);
+		expect(payload).toHaveProperty("nome_usuario", administrador.usuario);
 	});
 
 	it("deve retornar erro com dados inválidos", async () => {
@@ -75,8 +80,8 @@ describe("Rota de login", () => {
 			.post("/login")
 			.set("Accept", "application/json")
 			.send({
-				nome_usuario: "usuarioinativo",
-				senha: "12345678",
+				nome_usuario: inativo.usuario,
+				senha: inativo.senha,
 			})
 			.expect(403)
 			.then((res) => res.text);
