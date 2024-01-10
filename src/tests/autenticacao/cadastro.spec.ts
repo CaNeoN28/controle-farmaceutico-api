@@ -32,6 +32,8 @@ describe("Rota de cadastro de usuário", () => {
 			.expect(201)
 			.then((res) => res.body);
 
+		expect(resposta.senha).toBeUndefined()
+
 		expect(resposta).toMatchObject({
 			...usuario,
 			dados_administrativos: {
