@@ -1,8 +1,8 @@
 import request from "supertest";
 import { Types } from "mongoose";
-import app from "../../app/app";
-import Usuario from "../../types/Usuario";
-import UsuarioModel from "../../app/models/Usuario";
+import app from "../../../app/app";
+import Usuario from "../../../types/Usuario";
+import UsuarioModel from "../../../app/models/Usuario";
 
 const entidade_id = new Types.ObjectId();
 
