@@ -27,7 +27,7 @@ async function loginService(data: Data) {
 		};
 	}
 
-	throw {codigo: 401, erro: "Não foi possível autenticar"} as Erro
+	throw {codigo: 401, erro: "Não foi possível realizar autenticação"} as Erro
 }
 
 export default loginService;
