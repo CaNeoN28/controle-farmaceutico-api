@@ -17,6 +17,11 @@ async function criarUsuarioAdm (){
 	})
 
 	await usuario.save()
+
+	return {
+		usuario: usuario.nome_usuario,
+		senha: usuario.senha
+	}
 }
 
 export default criarUsuarioAdm
