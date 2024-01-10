@@ -1,15 +1,22 @@
 import Usuario from "../../types/Usuario";
 import jwt from "jsonwebtoken";
 
-function generateToken(data: Usuario) {
+interface Data {
+	email: string;
+	numero_registro: string;
+	nome_usuario: string;
+	funcao: string;
+}
+
+function generateToken(data: Data) {
 	const { SECRET_KEY } = process.env;
-	const { email, numero_registro, nome_usuario, dados_administrativos } = data;
+	const { email, numero_registro, nome_usuario, funcao } = data;
 	const token = jwt.sign(
 		{
 			email,
-			numero_registro,
+			funcao,
 			nome_usuario,
-			funcao: dados_administrativos?.funcao,
+			numero_registro,
 		},
 		SECRET_KEY || "",
 		{
@@ -17,9 +24,7 @@ function generateToken(data: Usuario) {
 		}
 	);
 
-	return token
+	return token;
 }
 
-export {
-	generateToken
-}
+export { generateToken };
