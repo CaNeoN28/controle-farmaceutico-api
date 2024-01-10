@@ -5,13 +5,12 @@ import { validarSenha } from "../utils/validators";
 import Erro from "../../types/Erro";
 
 async function createUsuarioService(data: Usuario) {
-	const senha = data.senha;
-
-	let { usuario, erro } = await UsuarioRepository.createUsuario(data);
+	const senha = data.senha as string;
+	let erro: Erro | undefined = undefined;
 
 	if (senha) {
-		const senhaValida = validarSenha(senha as string);
-
+		const senhaValida = validarSenha(senha);
+		
 		if (!senhaValida) {
 			if (!erro) {
 				erro = {
@@ -19,8 +18,27 @@ async function createUsuarioService(data: Usuario) {
 					erro: {},
 				};
 			}
+			
+			erro.erro.senha = "Senha inválida";
+		}
+		
+		const salt = await bcrypt.genSalt(6);
+		const hash = await bcrypt.hash(senha, salt);
+		
+		data.senha = senha;
+	}
 
-			erro.erro.senha = "Senha inválida"
+	const resposta = await UsuarioRepository.createUsuario(data);
+
+	const usuario = resposta.usuario
+
+	if(resposta.erro) {
+		erro = {
+			codigo: resposta.erro.codigo,
+			erro: {
+				...erro?.erro,
+				...resposta.erro.erro
+			}
 		}
 	}
 
