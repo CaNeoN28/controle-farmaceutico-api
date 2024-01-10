@@ -25,12 +25,15 @@ async function createUsuarioService(data: Usuario) {
 		const salt = await bcrypt.genSalt(6);
 		const hash = await bcrypt.hash(senha, salt);
 		
-		data.senha = senha;
+		data.senha = hash;
 	}
 
 	const resposta = await UsuarioRepository.createUsuario(data);
 
-	const usuario = resposta.usuario
+	const usuario = {
+		...resposta.usuario,
+		senha: undefined
+	}
 
 	if(resposta.erro) {
 		erro = {
