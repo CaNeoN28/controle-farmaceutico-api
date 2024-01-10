@@ -1,6 +1,24 @@
 import jwt from "jsonwebtoken";
 import request from "supertest";
 import app from "../../app/app";
+import criarUsuarioAdm from "../../app/utils/criarUsuarioAdm";
+import limparBanco from "../../app/utils/limparBanco";
+
+let {usuario, senha}: {
+	usuario?: string,
+	senha?: string
+} = {}
+
+beforeAll(async() => {
+	const resposta = await criarUsuarioAdm()
+
+	usuario = resposta.usuario
+	senha = resposta.senha
+})
+
+afterAll(async() => {
+	await limparBanco()
+})
 
 describe("Rota de login", () => {
 	it("deve realizar login e retornar um token", async () => {
@@ -8,10 +26,10 @@ describe("Rota de login", () => {
 			.post("/login")
 			.set("Accept", "application/json")
 			.send({
-				nome_usuario: "administrador2024",
-				senha: "12345678",
+				nome_usuario: usuario,
+				senha: senha,
 			})
-			.expect(201)
+			.expect(200)
 			.then((res) => res.body);
 
 		expect(jwt.verify(resposta, process.env.SECRET_KEY || "")).not.toThrow();
