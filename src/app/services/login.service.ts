@@ -11,6 +11,13 @@ async function loginService(data: Data) {
 	const {usuario, senhaCorreta} = await UsuarioRepository.login(data);
 
 	if (usuario && senhaCorreta) {
+		if(usuario.dados_administrativos.funcao == "INATIVO"){
+			throw {
+				codigo: 403,
+				erro: "O usuário ainda não foi verificado"
+			} as Erro
+		}
+
 		const token = generateToken({
 			email: usuario.email,
 			funcao: usuario.dados_administrativos.funcao,
