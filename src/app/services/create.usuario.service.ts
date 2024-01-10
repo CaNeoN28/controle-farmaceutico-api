@@ -1,8 +1,8 @@
 import Usuario from "../../types/Usuario";
 import UsuarioRepository from "../repositories/Usuario.repository";
-import bcrypt from "bcrypt";
 import { validarSenha } from "../utils/validators";
 import Erro from "../../types/Erro";
+import { criptografarSenha } from "../utils/senhas";
 
 async function createUsuarioService(data: Usuario) {
 	const senha = data.senha as string;
@@ -22,10 +22,7 @@ async function createUsuarioService(data: Usuario) {
 			erro.erro.senha = "Senha inválida";
 		}
 		
-		const salt = await bcrypt.genSalt(6);
-		const hash = await bcrypt.hash(senha, salt);
-		
-		data.senha = hash;
+		data.senha = await criptografarSenha(senha)
 	}
 
 	const resposta = await UsuarioRepository.createUsuario(data);
