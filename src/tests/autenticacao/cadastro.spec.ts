@@ -16,7 +16,7 @@ const usuario = new Usuario({
 	nome_completo: "Antônio José Bandeira",
 	nome_usuario: `antoniobandeira10`,
 	numero_registro: "0000000",
-	senha: "12345678",
+	senha: "12345678Asdf.",
 });
 
 afterAll(async () => {
