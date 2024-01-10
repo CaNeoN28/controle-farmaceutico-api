@@ -24,4 +24,26 @@ async function criarUsuarioAdm() {
 	};
 }
 
-export { criarUsuarioAdm };
+async function criarUsuarioInativo() {
+	const usuario = new UsuarioModel({
+		cpf: "00790914077",
+		dados_administrativos: {
+			entidade_relacionada: new mongoose.Types.ObjectId(),
+		},
+		email: "usuarioinativo@gmail.com",
+		imagem_url: ".jpg",
+		nome_completo: "Usuário Inativo",
+		nome_usuario: "usuarioinativo",
+		numero_registro: "1",
+		senha: "12345678Asdf.",
+	});
+
+	await usuario.save();
+
+	return {
+		usuario: usuario.nome_usuario,
+		senha: usuario.senha,
+	};
+}
+
+export { criarUsuarioAdm, criarUsuarioInativo };
