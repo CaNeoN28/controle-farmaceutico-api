@@ -19,6 +19,7 @@ async function loginService(data: Data) {
 		}
 
 		const token = generateToken({
+			id: usuario._id.toString(),
 			email: usuario.email,
 			funcao: usuario.dados_administrativos.funcao,
 			nome_usuario: usuario.nome_usuario,

@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 
 interface Data {
+	id: string;
 	email: string;
 	numero_registro: string;
 	nome_usuario: string;
