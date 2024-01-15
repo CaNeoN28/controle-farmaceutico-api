@@ -100,18 +100,26 @@ class UsuarioRepository {
 		return { usuario: usuario.toObject(), erro };
 	}
 	static async updateUsuario(id: string, data: any) {
-		const usuario = await UsuarioModel.findById(id, { senha: false });
+		let usuario = await UsuarioModel.findById(id);
 		const erro: Erro | undefined = undefined;
 
 		if (usuario) {
 			try {
-				usuario.updateOne(data);
+				await usuario.updateOne(data);
 
 				await usuario.save();
+
+				usuario = await UsuarioModel.findById(id, {senha: false})!
+
+				return {
+					usuario,
+					erro: undefined,
+				};
+
 			} catch (err) {}
 		}
 		return {
-			usuario: usuario,
+			usuario,
 			erro: "Usuário não encontrado",
 		};
 	}

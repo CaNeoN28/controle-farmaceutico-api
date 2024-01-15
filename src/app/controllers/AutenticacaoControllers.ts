@@ -5,6 +5,7 @@ import Erro from "../../types/Erro";
 import loginService from "../services/login.service";
 import { AuthenticatedRequest } from "../../types/Requests";
 import findUsuarioService from "../services/find.usuario.service";
+import updateUsuarioService from "../services/update.usuario.service";
 
 class AutenticacaoControllers {
 	static Cadastro: RequestHandler = async function (req, res, next) {
@@ -17,7 +18,7 @@ class AutenticacaoControllers {
 
 			return res.status(201).send(resposta);
 		} catch (error) {
-			next(error)
+			next(error);
 		}
 	};
 
@@ -29,7 +30,7 @@ class AutenticacaoControllers {
 
 			res.status(200).send(resposta);
 		} catch (error: any) {
-			next(error)
+			next(error);
 		}
 	};
 
@@ -45,12 +46,31 @@ class AutenticacaoControllers {
 
 			res.status(200).send(usuario);
 		} catch (error: any) {
-			next(error)
+			next(error);
 		}
 	};
 
-	static AtualizarPerfil: RequestHandler = async function (req, res, next) {
-		res.send("Atualizar Perfil");
+	static AtualizarPerfil: RequestHandler = async function (
+		req: AuthenticatedRequest,
+		res,
+		next
+	) {
+		const user = req.user!;
+
+		try {
+			const { nome_usuario, email, senha, imagem_url } = req.body;
+
+			const resposta = await updateUsuarioService(user.id, {
+				nome_usuario,
+				email,
+				senha,
+				imagem_url,
+			});
+
+			res.status(200).send(resposta)
+		} catch (error) {
+			next(error);
+		}
 	};
 
 	static EsqueceuSenha: RequestHandler = async function (req, res, next) {
