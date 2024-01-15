@@ -3,6 +3,7 @@ import Erro from "../../types/Erro";
 import Usuario, { Funcao } from "../../types/Usuario";
 import UsuarioModel from "../models/Usuario";
 import { compararSenha } from "../utils/senhas";
+import { erroParaDicionario } from "../utils/mongooseErrors";
 
 interface FiltrosUsuario {
 	dados_administrativos?: {
@@ -75,20 +76,7 @@ class UsuarioRepository {
 			try {
 				await usuario.save();
 			} catch (error: any) {
-				const mensagemErro = error.message as string;
-				const errosValidacao = error.errors;
-				const erros: any = {};
-				let codigo = 500;
-
-				if (
-					mensagemErro &&
-					mensagemErro.includes("Usuario validation failed")
-				) {
-					codigo = 400;
-					Object.keys(errosValidacao).map((k) => {
-						erros[k] = errosValidacao[k].message;
-					});
-				}
+				const { erros, codigo } = erroParaDicionario("Usuario", error);
 
 				erro = {
 					codigo,
@@ -109,13 +97,12 @@ class UsuarioRepository {
 
 				await usuario.save();
 
-				usuario = await UsuarioModel.findById(id, {senha: false})!
+				usuario = await UsuarioModel.findById(id, { senha: false })!;
 
 				return {
 					usuario,
 					erro: undefined,
 				};
-
 			} catch (err) {}
 		}
 		return {
