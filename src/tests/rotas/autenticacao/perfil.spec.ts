@@ -39,7 +39,7 @@ afterAll(async () => {
 describe("A rota de visualização de perfil", () => {
 	it("deve retornar o perfil do usuário que estiver logado", async () => {
 		const resposta = await request(app)
-			.post("/perfil")
+			.get("/perfil")
 			.set("Accept", "application/json")
 			.set("Authorization", `Bearer ${token}`)
 			.expect(200)
@@ -51,11 +51,11 @@ describe("A rota de visualização de perfil", () => {
 
 	it("deve retornar erro no caso de token inválido", async () => {
 		const resposta = await request(app)
-			.post("/perfil")
+			.get("/perfil")
 			.set("Accept", "application/json")
 			.expect(401)
 			.then((res) => res.text);
 
-		expect(resposta).toBe("É necessário estar autenticado para usar essa rota")
+		expect(resposta).toBe("É necessário estar autenticado para usar esta rota")
 	})
 });

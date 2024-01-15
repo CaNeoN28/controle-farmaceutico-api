@@ -22,31 +22,34 @@ const AuthenticationMiddleware: RequestHandler = async function (
 			} as Erro;
 		}
 
-		try {
-			token = token.split(" ")[1];
+		token = token.split(" ")[1];
 
-			const decoded = jwt.verify(
-				token,
-				process.env.SECRET_KEY || ""
-			) as TokenData;
+		const decoded = jwt.verify(
+			token,
+			process.env.SECRET_KEY || ""
+		) as TokenData;
 
-			const usuario = await findUsuarioService(decoded.id);
-
-			if (!usuario) {
-				throw {
-					codigo: 401,
-					erro: respostaErro,
-				} as Erro;
-			}
-
-			req.user = decoded;
-		} catch (err: any) {
-			const { codigo, erro } = err as Erro;
-
-			res.status(codigo).send(erro);
+		if (!decoded) {
+			throw {
+				codigo: 401,
+				erro: respostaErro,
+			} as Erro;
 		}
-	} catch {
-		return res.status(500).send(respostaErro);
+
+		const usuario = await findUsuarioService(decoded.id);
+
+		if (!usuario) {
+			throw {
+				codigo: 401,
+				erro: respostaErro,
+			} as Erro;
+		}
+
+		req.user = decoded;
+	} catch (err: any) {
+		const { codigo, erro } = err as Erro;
+
+		res.status(codigo).send(erro);
 	}
 
 	next();
