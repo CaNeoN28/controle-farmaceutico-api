@@ -2,13 +2,13 @@ import { Types } from "mongoose";
 
 type Funcao = "ADMINISTRADOR" | "GERENTE" | "USUARIO" | "INATIVO";
 interface IUsuario {
-	nome_completo: String;
-	nome_usuario: String;
-	email: String;
-	cpf: String;
-	numero_registro: String;
-	senha: String;
-	imagem_url?: String;
+	nome_completo: string;
+	nome_usuario: string;
+	email: string;
+	cpf: string;
+	numero_registro: string;
+	senha: string;
+	imagem_url?: string;
 	dados_administrativos?: {
 		funcao?: Funcao;
 		entidade_relacionada: Types.ObjectId;
@@ -16,13 +16,13 @@ interface IUsuario {
 }
 
 class Usuario implements IUsuario {
-	nome_completo: String;
-	nome_usuario: String;
-	email: String;
-	cpf: String;
-	numero_registro: String;
-	senha: String;
-	imagem_url?: String;
+	nome_completo: string;
+	nome_usuario: string;
+	email: string;
+	cpf: string;
+	numero_registro: string;
+	senha: string;
+	imagem_url?: string;
 	dados_administrativos?: {
 		funcao?: Funcao;
 		entidade_relacionada: Types.ObjectId;
