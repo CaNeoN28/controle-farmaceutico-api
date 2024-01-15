@@ -30,9 +30,7 @@ class AutenticacaoControllers {
 
 			res.status(200).send(resposta);
 		} catch (error: any) {
-			const erro = error as Erro;
-
-			res.status(erro.codigo).send(erro.erro);
+			next(error)
 		}
 	};
 
@@ -48,9 +46,7 @@ class AutenticacaoControllers {
 
 			res.status(200).send(usuario);
 		} catch (error: any) {
-			const { codigo, erro } = error as Erro;
-
-			res.status(codigo).send(erro);
+			next(error)
 		}
 	};
 
