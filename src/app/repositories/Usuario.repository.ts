@@ -3,6 +3,7 @@ import Erro from "../../types/Erro";
 import Usuario, { Funcao } from "../../types/Usuario";
 import UsuarioModel from "../models/Usuario";
 import { compararSenha } from "../utils/senhas";
+import { erroParaDicionario } from "../utils/mongooseErrors";
 
 interface FiltrosUsuario {
 	dados_administrativos?: {
@@ -75,20 +76,7 @@ class UsuarioRepository {
 			try {
 				await usuario.save();
 			} catch (error: any) {
-				const mensagemErro = error.message as string;
-				const errosValidacao = error.errors;
-				const erros: any = {};
-				let codigo = 500;
-
-				if (
-					mensagemErro &&
-					mensagemErro.includes("Usuario validation failed")
-				) {
-					codigo = 400;
-					Object.keys(errosValidacao).map((k) => {
-						erros[k] = errosValidacao[k].message;
-					});
-				}
+				const { erros, codigo } = erroParaDicionario("Usuario", error);
 
 				erro = {
 					codigo,
@@ -99,7 +87,39 @@ class UsuarioRepository {
 
 		return { usuario: usuario.toObject(), erro };
 	}
-	static updateUsuario(id: string, data: any) {}
+	static async updateUsuario(id: string, data: any) {
+		try {
+			const usuario = await UsuarioModel.findByIdAndUpdate(id, data, {
+				fields: { senha: false },
+				new: true,
+				runValidators: true,
+			});
+
+			let erro: Erro | undefined = undefined;
+
+			if (!usuario) {
+				erro = {
+					codigo: 404,
+					erro: "Usuário não encontrado",
+				};
+			}
+
+			return {
+				usuario,
+				erro,
+			};
+		} catch (error) {
+			const { erros, codigo } = erroParaDicionario("Usuario", error);
+
+			return {
+				codigo,
+				erros: {
+					erro: erros,
+					codigo,
+				},
+			};
+		}
+	}
 	static deleteUsuario(id: string) {}
 }
 

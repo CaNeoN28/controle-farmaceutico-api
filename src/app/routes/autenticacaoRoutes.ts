@@ -7,7 +7,7 @@ const autenticacaoRoutes = Router();
 autenticacaoRoutes.post("/login", AutenticacaoControllers.Login);
 autenticacaoRoutes.post("/cadastro", AutenticacaoControllers.Cadastro);
 autenticacaoRoutes.get("/perfil", AuthenticationMiddleware, AutenticacaoControllers.VisualizarPerfil)
-autenticacaoRoutes.put("/perfil/atualizar", AutenticacaoControllers.AtualizarPerfil)
+autenticacaoRoutes.put("/perfil/atualizar", AuthenticationMiddleware, AutenticacaoControllers.AtualizarPerfil)
 autenticacaoRoutes.post("/esqueceu-senha", AutenticacaoControllers.EsqueceuSenha)
 autenticacaoRoutes.put("/recuperar-senha", AutenticacaoControllers.RecuperarSenha)
 

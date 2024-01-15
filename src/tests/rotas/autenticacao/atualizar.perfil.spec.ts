@@ -100,8 +100,8 @@ describe("A rota de atualizar perfil", () => {
 			.set("Accept", "application/json")
 			.send({})
 			.expect(401)
-			.then((res) => res.body);
+			.then((res) => res.text);
 
-		expect(resposta).toBe("É necessário estar autenticado para utilizar esta rota");
+		expect(resposta).toBe("É necessário estar autenticado para usar esta rota");
 	});
 });
