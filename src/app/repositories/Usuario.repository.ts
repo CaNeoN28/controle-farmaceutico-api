@@ -48,8 +48,8 @@ class UsuarioRepository {
 				erro: ["Id inválido"],
 			} as Erro;
 		}
-		
-		const usuario = await UsuarioModel.findById(id);
+
+		const usuario = await UsuarioModel.findById(id, { senha: false });
 
 		return usuario;
 	}
