@@ -41,13 +41,37 @@ describe("A rota de atualizar perfil", () => {
 			.set("Accept", "application/json")
 			.set("Authorization", `Bearer ${token}`)
 			.send({
-				email: "administrador@gmail.com"
+				email: "administrador@gmail.com",
 			})
 			.expect(200)
 			.then((res) => res.body);
-		const atualizado = await UsuarioModel.findById(usuario._id)
+		const atualizado = await UsuarioModel.findById(usuario._id);
 
-		expect(resposta).toHaveProperty("email", "administrador@gmail.com")
-		expect(atualizado).toHaveProperty("email", "administrador@gmail.com")
+		expect(resposta).toHaveProperty("email", "administrador@gmail.com");
+		expect(atualizado).toHaveProperty("email", "administrador@gmail.com");
+	});
+
+	it("não deve alterar dados administrativos", async () => {
+		const resposta = await request(app)
+			.put("/perfil/atualizar")
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${token}`)
+			.send({
+				dados_administrativos: {
+					funcao: "USUARIO",
+				},
+			})
+			.expect(200)
+			.then((res) => res.body);
+		const atualizado = await UsuarioModel.findById(usuario._id);
+
+		expect(resposta.dados_administrativos).toHaveProperty(
+			"funcao",
+			"ADMINISTRADOR"
+		);
+		expect(atualizado!.dados_administrativos).toHaveProperty(
+			"funcao",
+			"ADMINISTRADOR"
+		);
 	});
 });
