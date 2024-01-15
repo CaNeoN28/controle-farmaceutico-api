@@ -3,6 +3,8 @@ import Usuario, { IUsuario } from "../../types/Usuario";
 import createUsuarioService from "../services/create.usuario.service";
 import Erro from "../../types/Erro";
 import loginService from "../services/login.service";
+import { AuthenticatedRequest } from "../../types/Requests";
+import findUsuarioService from "../services/find.usuario.service";
 
 class AutenticacaoControllers {
 	static Cadastro: RequestHandler = async function (req, res, next) {
@@ -34,8 +36,22 @@ class AutenticacaoControllers {
 		}
 	};
 
-	static VisualizarPerfil: RequestHandler = async function (req, res, next) {
-		res.send("Visualizar Perfil");
+	static VisualizarPerfil: RequestHandler = async function (
+		req: AuthenticatedRequest,
+		res,
+		next
+	) {
+		const userData = req.user!;
+
+		try {
+			const usuario = await findUsuarioService(userData.id);
+
+			res.status(200).send(usuario);
+		} catch (error: any) {
+			const { codigo, erro } = error as Erro;
+
+			res.status(codigo).send(erro);
+		}
 	};
 
 	static AtualizarPerfil: RequestHandler = async function (req, res, next) {
