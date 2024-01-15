@@ -11,8 +11,8 @@ ConnectDB()
 app.use(express.json())
 app.use(cors())
 
-app.use(ErrorMiddleware)
-
 route(app)
+
+app.use(ErrorMiddleware)
 
 export default app
