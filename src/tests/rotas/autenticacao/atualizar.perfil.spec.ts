@@ -93,4 +93,15 @@ describe("A rota de atualizar perfil", () => {
 		expect(resposta).toHaveProperty("email", "Email inválido");
 		expect(resposta).toHaveProperty("senha", "Senha inválida");
 	});
+
+	it("deve precisar de autenticação", async () => {
+		const resposta = await request(app)
+			.put("/perfil/atualizar")
+			.set("Accept", "application/json")
+			.send({})
+			.expect(401)
+			.then((res) => res.body);
+
+		expect(resposta).toBe("É necessário estar autenticado para utilizar esta rota");
+	});
 });
