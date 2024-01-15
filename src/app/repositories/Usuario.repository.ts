@@ -92,6 +92,7 @@ class UsuarioRepository {
 			const usuario = await UsuarioModel.findByIdAndUpdate(id, data, {
 				fields: { senha: false },
 				new: true,
+				runValidators: true,
 			});
 
 			let erro: Erro | undefined = undefined;
@@ -112,7 +113,10 @@ class UsuarioRepository {
 
 			return {
 				codigo,
-				erro: erros,
+				erros: {
+					erro: erros,
+					codigo,
+				},
 			};
 		}
 	}
