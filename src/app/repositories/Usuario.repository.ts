@@ -89,24 +89,38 @@ class UsuarioRepository {
 	}
 	static async updateUsuario(id: string, data: any) {
 		try {
-			const usuario = await UsuarioModel.findByIdAndUpdate(id, data, {
-				fields: { senha: false },
-				new: true,
-				runValidators: true,
+			let erros: Erro | undefined = undefined;
+			let usuario: any = undefined;
+			const emailExiste = await UsuarioModel.findOne({
+				email: data.email,
+				id: { $ne: id },
 			});
 
-			let erro: Erro | undefined = undefined;
-
-			if (!usuario) {
-				erro = {
-					codigo: 404,
-					erro: "Usuário não encontrado",
+			if (emailExiste) {
+				erros = {
+					codigo: 409,
+					erro: {
+						email: "Email já utilizado",
+					},
 				};
+			} else {
+				usuario = await UsuarioModel.findByIdAndUpdate(id, data, {
+					fields: { senha: false },
+					new: true,
+					runValidators: true,
+				});
+
+				if (!usuario) {
+					erros = {
+						codigo: 404,
+						erro: "Usuário não encontrado",
+					};
+				}
 			}
 
 			return {
 				usuario,
-				erro,
+				erros,
 			};
 		} catch (error) {
 			const { erros, codigo } = erroParaDicionario("Usuario", error);
@@ -114,8 +128,8 @@ class UsuarioRepository {
 			return {
 				codigo,
 				erros: {
-					erro: erros,
 					codigo,
+					erro: erros,
 				},
 			};
 		}

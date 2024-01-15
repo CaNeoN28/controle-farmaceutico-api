@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import app from "../../../app/app";
 import UsuarioModel from "../../../app/models/Usuario";
 import { criarUsuarioAdm } from "../../../app/utils/gerarDadosDiversos";
@@ -47,7 +48,7 @@ describe("A rota de atualizar perfil", () => {
 			.then((res) => res.body);
 		const atualizado = await UsuarioModel.findById(usuario._id);
 
-		expect(resposta).not.toHaveProperty("senha")
+		expect(resposta).not.toHaveProperty("senha");
 
 		expect(resposta).toHaveProperty("email", "administrador@gmail.com");
 		expect(atualizado).toHaveProperty("email", "administrador@gmail.com");
@@ -103,5 +104,31 @@ describe("A rota de atualizar perfil", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toBe("É necessário estar autenticado para usar esta rota");
+	});
+
+	it("deve retornar erro ao tentar atualizar para um email já utilizado", async () => {
+		await UsuarioModel.create({
+			cpf: "71328893030",
+			dados_administrativos: {
+				funcao: "USUARIO",
+				entidade_relacionada: new mongoose.Types.ObjectId(),
+			},
+			email: "emailjautilizado@email.com",
+			imagem_url: ".jpg",
+			nome_completo: "Email já utilizado",
+			nome_usuario: "emailjautilizado",
+			numero_registro: "000000",
+			senha: "12345678Asdf",
+		});
+
+		const resposta = await request(app)
+			.put("/perfil/atualizar")
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${token}`)
+			.send({ email: "emailjautilizado@email.com" })
+			.expect(409)
+			.then((res) => res.body);
+
+		expect(resposta).toHaveProperty("email", "Email já utilizado")
 	});
 });
