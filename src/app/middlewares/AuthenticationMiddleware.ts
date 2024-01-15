@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { AuthenticatedRequest } from "../../types/custom-typings";
+import { AuthenticatedRequest } from "../../types/Requests";
 import mongoose from "mongoose";
 
 const AuthenticationMiddleware: RequestHandler = function (
