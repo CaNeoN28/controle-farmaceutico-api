@@ -5,6 +5,7 @@ import { generateToken } from "../../../app/utils/jwt";
 import ILogin from "../../../types/ILogin";
 import app from "../../../app/app";
 import Usuario from "../../../types/Usuario";
+import limparBanco from "../../../app/utils/limparBanco";
 
 let admin: ILogin = {
 	senha: "",
@@ -34,7 +35,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-	await UsuarioModel.deleteMany();
+	await limparBanco();
 });
 
 describe("A rota de visualização de perfil", () => {
