@@ -1,14 +1,7 @@
 import jwt from "jsonwebtoken";
+import TokenData from "../../types/TokenData";
 
-interface Data {
-	id: string;
-	email: string;
-	numero_registro: string;
-	nome_usuario: string;
-	funcao: string;
-}
-
-function generateToken(data: Data) {
+function generateToken(data: TokenData) {
 	const { SECRET_KEY } = process.env;
 	const { email, numero_registro, nome_usuario, funcao } = data;
 	const token = jwt.sign(
