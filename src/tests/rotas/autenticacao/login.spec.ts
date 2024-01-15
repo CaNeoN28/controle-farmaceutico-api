@@ -4,18 +4,14 @@ import app from "../../../app/app";
 import { criarUsuarioAdm, criarUsuarioInativo } from "../../../app/utils/gerarDadosDiversos";
 import limparBanco from "../../../app/utils/limparBanco";
 import Usuario from "../../../types/Usuario";
+import ILogin from "../../../types/ILogin";
 
-interface Login {
-	usuario: string,
-	senha: string
-}
-
-let administrador: Login = {
+let administrador: ILogin = {
 	usuario: "",
 	senha: ""
 }
 
-let inativo: Login = {
+let inativo: ILogin = {
 	usuario: "",
 	senha: ""
 }
