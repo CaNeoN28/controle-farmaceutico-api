@@ -3,6 +3,7 @@ import { AuthenticatedRequest } from "../../types/Requests";
 import jwt from "jsonwebtoken";
 import TokenData from "../../types/TokenData";
 import findUsuarioService from "../services/find.usuario.service";
+import Erro from "../../types/Erro";
 
 const AuthenticationMiddleware: RequestHandler = async function (
 	req: AuthenticatedRequest,
@@ -15,7 +16,10 @@ const AuthenticationMiddleware: RequestHandler = async function (
 		let token = req.headers["authorization"];
 
 		if (!token || !token.startsWith("Bearer ")) {
-			return res.status(401).send(respostaErro);
+			throw {
+				codigo: 401,
+				erro: respostaErro,
+			} as Erro;
 		}
 
 		try {
@@ -29,12 +33,17 @@ const AuthenticationMiddleware: RequestHandler = async function (
 			const usuario = await findUsuarioService(decoded.id);
 
 			if (!usuario) {
-				res.status(401).send(respostaErro);
+				throw {
+					codigo: 401,
+					erro: respostaErro,
+				} as Erro;
 			}
 
 			req.user = decoded;
-		} catch {
-			res.status(401).send();
+		} catch (err: any) {
+			const { codigo, erro } = err as Erro;
+
+			res.status(codigo).send(erro);
 		}
 	} catch {
 		return res.status(500).send(respostaErro);
