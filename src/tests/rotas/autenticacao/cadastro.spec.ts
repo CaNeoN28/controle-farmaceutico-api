@@ -3,24 +3,32 @@ import { Types } from "mongoose";
 import app from "../../../app/app";
 import Usuario from "../../../types/Usuario";
 import UsuarioModel from "../../../app/models/Usuario";
+import limparBanco from "../../../app/utils/limparBanco";
 
 const entidade_id = new Types.ObjectId();
 
-const usuario = new Usuario({
-	cpf: "01880090007",
-	dados_administrativos: {
-		entidade_relacionada: entidade_id,
-	},
-	email: `antoniobandeira@gmail.com`,
-	imagem_url: ".jpg",
-	nome_completo: "Antônio José Bandeira",
-	nome_usuario: `antoniobandeira10`,
-	numero_registro: "0000000",
-	senha: "12345678Asdf.",
-});
+let usuario: any = {}
+
+beforeAll(async () => {
+	await limparBanco()
+
+	usuario = new Usuario({
+		cpf: "01880090007",
+		dados_administrativos: {
+			entidade_relacionada: entidade_id,
+		},
+		email: `antoniobandeira@gmail.com`,
+		imagem_url: ".jpg",
+		nome_completo: "Antônio José Bandeira",
+		nome_usuario: `antoniobandeira10`,
+		numero_registro: "0000000",
+		senha: "12345678Asdf.",
+	});
+})
+
 
 afterAll(async () => {
-	await UsuarioModel.deleteMany();
+	await limparBanco();
 });
 
 describe("Rota de cadastro de usuário", () => {
