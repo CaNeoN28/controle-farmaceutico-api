@@ -47,31 +47,50 @@ describe("A rota de atualizar perfil", () => {
 			.then((res) => res.body);
 		const atualizado = await UsuarioModel.findById(usuario._id);
 
+		expect(resposta).not.toHaveProperty("senha")
+
 		expect(resposta).toHaveProperty("email", "administrador@gmail.com");
 		expect(atualizado).toHaveProperty("email", "administrador@gmail.com");
 	});
 
 	it("não deve alterar dados administrativos", async () => {
+		const dadosAlterados = {
+			dados_administrativos: {
+				funcao: "USUARIO",
+			},
+			cpf: "00000000000",
+			nome_completo: "Administrador Júnior",
+			numero_registro: "000",
+		};
+
 		const resposta = await request(app)
 			.put("/perfil/atualizar")
 			.set("Accept", "application/json")
 			.set("Authorization", `Bearer ${token}`)
-			.send({
-				dados_administrativos: {
-					funcao: "USUARIO",
-				},
-			})
+			.send(dadosAlterados)
 			.expect(200)
 			.then((res) => res.body);
 		const atualizado = await UsuarioModel.findById(usuario._id);
 
-		expect(resposta.dados_administrativos).toHaveProperty(
-			"funcao",
-			"ADMINISTRADOR"
-		);
-		expect(atualizado!.dados_administrativos).toHaveProperty(
-			"funcao",
-			"ADMINISTRADOR"
-		);
+		expect(resposta).not.toMatchObject(dadosAlterados);
+		expect(atualizado).not.toMatchObject(dadosAlterados);
+	});
+
+	it("deve realizar validação dos dados", async () => {
+		const dadosAlterados = {
+			senha: "12345678",
+			email: "emailinvalido",
+		};
+
+		const resposta = await request(app)
+			.put("/perfil/atualizar")
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${token}`)
+			.send()
+			.expect(400)
+			.then((res) => res.body);
+
+		expect(resposta).toHaveProperty("email", "Email inválido");
+		expect(resposta).toHaveProperty("senha", "Senha inválida");
 	});
 });
