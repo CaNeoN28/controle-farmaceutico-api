@@ -86,7 +86,7 @@ describe("A rota de atualizar perfil", () => {
 			.put("/perfil/atualizar")
 			.set("Accept", "application/json")
 			.set("Authorization", `Bearer ${token}`)
-			.send()
+			.send(dadosAlterados)
 			.expect(400)
 			.then((res) => res.body);
 
