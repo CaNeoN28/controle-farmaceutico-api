@@ -1,12 +1,21 @@
 import { RequestHandler } from "express";
+import { AuthenticatedRequest } from "../../types/custom-typings";
+import mongoose from "mongoose";
 
-const AuthenticationMiddleware: RequestHandler = function (req, res, next) {
+const AuthenticationMiddleware: RequestHandler = function (
+	req: AuthenticatedRequest,
+	res,
+	next
+) {
 	try {
-		const header = {};
-		next(header);
+		req.user = {
+			id: new mongoose.Types.ObjectId(),
+		};
 	} catch {
-		res.status(500).send();
+		return res.status(500).send();
 	}
+
+	next();
 };
 
 export default AuthenticationMiddleware;
