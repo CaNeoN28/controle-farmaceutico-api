@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Erro from "../../types/Erro";
 import Usuario, { Funcao } from "../../types/Usuario";
 import UsuarioModel from "../models/Usuario";
@@ -14,31 +15,44 @@ interface FiltrosUsuario {
 	numero_registro?: string;
 }
 
-interface Login{
-	nome_usuario: string,
-	senha: string
+interface Login {
+	nome_usuario: string;
+	senha: string;
 }
 
 class UsuarioRepository {
-	static async login(data: Login){
-		const usuario = await UsuarioModel.findOne({nome_usuario: data.nome_usuario})
-		let senhaCorreta = false
+	static async login(data: Login) {
+		const usuario = await UsuarioModel.findOne({
+			nome_usuario: data.nome_usuario,
+		});
+		let senhaCorreta = false;
 
-		if(usuario) {
-			senhaCorreta = await compararSenha(data.senha, usuario.senha)
+		if (usuario) {
+			senhaCorreta = await compararSenha(data.senha, usuario.senha);
 		}
 
 		return {
 			usuario: usuario?.toObject(),
-			senhaCorreta
-		}
+			senhaCorreta,
+		};
 	}
 	static async findUsuario(params: FiltrosUsuario) {
-		const usuario = await UsuarioModel.findOne(params, {senha: false});
+		const usuario = await UsuarioModel.findOne(params, { senha: false });
 
 		return usuario;
 	}
-	static findUsuarioId(id: any) {}
+	static async findUsuarioId(id: any) {
+		if (!mongoose.isValidObjectId) {
+			throw {
+				codigo: 400,
+				erro: ["Id inválido"],
+			} as Erro;
+		}
+		
+		const usuario = await UsuarioModel.findById(id);
+
+		return usuario;
+	}
 	static findUsuarios(params: any) {}
 	static async createUsuario(data: Usuario) {
 		const usuario = new UsuarioModel(data);
