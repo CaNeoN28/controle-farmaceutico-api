@@ -124,9 +124,10 @@ describe("A rota de atualizar perfil", () => {
 		const resposta = await request(app)
 			.put("/perfil/atualizar")
 			.set("Accept", "application/json")
-			.send({ email: "emailjautilizado@gmail.com" })
+			.set("Authorization", `Bearer ${token}`)
+			.send({ email: "emailjautilizado@email.com" })
 			.expect(409)
-			.then((res) => res.text);
+			.then((res) => res.body);
 
 		expect(resposta).toHaveProperty("email", "Email já utilizado")
 	});
