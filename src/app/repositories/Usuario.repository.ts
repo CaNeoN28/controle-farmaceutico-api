@@ -99,7 +99,22 @@ class UsuarioRepository {
 
 		return { usuario: usuario.toObject(), erro };
 	}
-	static updateUsuario(id: string, data: any) {}
+	static async updateUsuario(id: string, data: any) {
+		const usuario = await UsuarioModel.findById(id, { senha: false });
+		const erro: Erro | undefined = undefined;
+
+		if (usuario) {
+			try {
+				usuario.updateOne(data);
+
+				await usuario.save();
+			} catch (err) {}
+		}
+		return {
+			usuario: usuario,
+			erro: "Usuário não encontrado",
+		};
+	}
 	static deleteUsuario(id: string) {}
 }
 
