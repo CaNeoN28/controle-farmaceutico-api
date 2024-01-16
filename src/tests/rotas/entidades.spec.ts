@@ -248,4 +248,30 @@ describe("Rota para exclusão de entidade", () => {
 
 		expect(resposta).toBe(undefined);
 	});
+
+	it("deve retornar erro ao não informar o token de autorização", async () => {
+		const resposta = await request(app)
+			.delete(`/entidade/${entidade_id}`)
+			.set("Accept", "application/json")
+			.send({
+				...entidade,
+			})
+			.expect(401)
+			.then((res) => res.body);
+
+		expect(resposta).toEqual("É preciso estar autenticado para usar esta rota");
+	});
+
+	it("não deve permitir que entidades sejam removidas por usuários de nível baixo", async () => {
+		const resposta = await request(app)
+			.delete(`/entidade/${entidade_id}`)
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${tokenBaixo}`)
+			.expect(403)
+			.then((res) => res.body);
+
+		expect(resposta).toEqual(
+			"É preciso ser gerente ou superior para realizar essa ação"
+		);
+	});
 });
