@@ -1,6 +1,6 @@
 import request from "supertest";
 import { criarUsuarioAdm } from "../../../app/utils/db/gerarDadosDiversos";
-import { generateToken } from "../../../app/utils/jwt";
+import { generateTokenFromUser } from "../../../app/utils/jwt";
 import ILogin from "../../../types/ILogin";
 import app from "../../../app/app";
 import Usuario from "../../../types/Usuario";
@@ -21,15 +21,7 @@ beforeAll(async () => {
 	login = dados.dadosLogin;
 	usuario = dados.usuario;
 
-	if (usuario) {
-		token = generateToken({
-			email: usuario.email,
-			funcao: usuario.dados_administrativos.funcao,
-			id: usuario.id,
-			nome_usuario: usuario.nome_usuario,
-			numero_registro: usuario.numero_registro,
-		});
-	}
+	token = generateTokenFromUser(usuario)!
 });
 
 afterAll(async () => {

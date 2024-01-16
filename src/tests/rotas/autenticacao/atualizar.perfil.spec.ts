@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import app from "../../../app/app";
 import UsuarioModel from "../../../app/models/Usuario";
-import { generateToken } from "../../../app/utils/jwt";
+import { generateTokenFromUser } from "../../../app/utils/jwt";
 import ILogin from "../../../types/ILogin";
 import request from "supertest";
 import { criarUsuarioAdm } from "../../../app/utils/db/gerarDadosDiversos";
@@ -16,19 +16,11 @@ let token = "";
 
 beforeAll(async () => {
 	const dados = await criarUsuarioAdm();
-	
-	login = dados.dadosLogin
-	usuario = dados.usuario
 
-	if (usuario) {
-		token = generateToken({
-			email: usuario.email,
-			funcao: usuario.dados_administrativos.funcao,
-			id: usuario._id,
-			nome_usuario: usuario.nome_usuario,
-			numero_registro: usuario.numero_registro,
-		});
-	}
+	login = dados.dadosLogin;
+	usuario = dados.usuario;
+
+	token = generateTokenFromUser(usuario)!;
 });
 
 afterAll(async () => {
@@ -129,6 +121,6 @@ describe("A rota de atualizar perfil", () => {
 			.expect(409)
 			.then((res) => res.body);
 
-		expect(resposta).toHaveProperty("email", "Email já utilizado")
+		expect(resposta).toHaveProperty("email", "Email já utilizado");
 	});
 });
