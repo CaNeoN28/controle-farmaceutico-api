@@ -70,9 +70,11 @@ describe("Rota de cadastro de entidades", () => {
 			.expect(400)
 			.then((res) => res.body);
 
-		expect(resposta).toBe(
-			"Não foi possível cadastrar entidade: Estado é obrigatório, Município é obrigatório, Nome da entidade é obrigatório"
-		);
+		expect(resposta).toMatchObject({
+			estado: "Estado é obrigatório",
+			municipio: "Município é obrigatório",
+			nome_entidade: "Nome da entidade é obrigatório",
+		});
 	});
 
 	it("deve retornar erro ao não informar o token de autorização", async () => {
@@ -83,7 +85,9 @@ describe("Rota de cadastro de entidades", () => {
 			.expect(401)
 			.then((res) => res.text);
 
-		expect(resposta).toEqual("É necessário estar autenticado para usar esta rota");
+		expect(resposta).toEqual(
+			"É necessário estar autenticado para usar esta rota"
+		);
 	});
 
 	it("não deve permitir criação de entidades para usuários de nível baixo", async () => {
@@ -176,9 +180,9 @@ describe("Rota para atualização de entidade", () => {
 			.expect(400)
 			.then((res) => res.body);
 
-		expect(resposta).toBe(
-			"Não foi possível atualizar a entidade: Nome da entidade inválido"
-		);
+		expect(resposta).toMatchObject({
+			nome_entidade: "Nome da entidade inválido",
+		});
 	});
 
 	it("deve retornar erro ao não informar o token de autorização", async () => {
@@ -191,7 +195,9 @@ describe("Rota para atualização de entidade", () => {
 			.expect(401)
 			.then((res) => res.text);
 
-		expect(resposta).toEqual("É necessário estar autenticado para usar esta rota");
+		expect(resposta).toEqual(
+			"É necessário estar autenticado para usar esta rota"
+		);
 	});
 
 	it("não deve permitir atualização de entidades para usuários de nível baixo", async () => {
@@ -250,7 +256,9 @@ describe("Rota para exclusão de entidade", () => {
 			.expect(401)
 			.then((res) => res.text);
 
-		expect(resposta).toEqual("É necessário estar autenticado para usar esta rota");
+		expect(resposta).toEqual(
+			"É necessário estar autenticado para usar esta rota"
+		);
 	});
 
 	it("não deve permitir que entidades sejam removidas por usuários de nível baixo", async () => {
