@@ -17,25 +17,20 @@ describe("O modelo de entidade", () => {
 	it("deve realizar validação dos atributos obrigatórios", async () => {
 		const entidade = new EntidadeModel({});
 
-		expect(entidade.validateSync).toThrow();
-
 		const validar = () => {
-			try {
-				entidade.validateSync();
+			const erro = entidade.validateSync()!;
+			const { nome_entidade, estado, municipio } = erro.errors;
 
-				return {};
-			} catch (error: any) {
-				const { nome_entidade, estado, municipio } = error.errors;
-
-				return {
-					nome_entidade: nome_entidade.message,
-					estado: estado.message,
-					municipio: municipio.message,
-				};
-			}
+			return {
+				nome_entidade: nome_entidade.message,
+				estado: estado.message,
+				municipio: municipio.message,
+			};
 		};
 
 		const erros = validar();
+
+		expect(validar).not.toThrow();
 
 		expect(erros).toHaveProperty(
 			"nome_entidade",
@@ -51,27 +46,20 @@ describe("O modelo de entidade", () => {
 			municipio: "Municipio Inexistente",
 		});
 
-		expect(entidade.validateSync).toThrow();
-
 		const validar = () => {
-			try {
-				entidade.validateSync();
+			const erro = entidade.validateSync()!;
+			const { nome_entidade, estado, municipio } = erro.errors;
 
-				return {};
-			} catch (error: any) {
-				const { nome_entidade, estado, municipio } = error.errors;
-
-				return {
-					nome_entidade: nome_entidade.message,
-					estado: estado.message,
-					municipio: municipio.message,
-				};
-			}
+			return {
+				nome_entidade: nome_entidade.message,
+				estado: estado.message,
+				municipio: municipio.message,
+			};
 		};
 
-		const erros = validar();
+		expect(validar).not.toThrow();
 
-		console.log(erros);
+		const erros = validar();
 
 		expect(erros).toHaveProperty("nome_entidade", "Nome da entidade inválido");
 		expect(erros).toHaveProperty("estado", "Estado inválido");
