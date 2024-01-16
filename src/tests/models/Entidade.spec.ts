@@ -1,9 +1,11 @@
+import mongoose from "mongoose";
 import EntidadeModel from "../../app/models/Entidade";
 
 const dados = {
+	_id: new mongoose.Types.ObjectId(),
 	nome_entidade: "Ministério da Saúde",
 	estado: "Rondônia",
-	município: "Vilhena",
+	municipio: "Vilhena",
 };
 
 describe("O modelo de entidade", () => {
@@ -34,8 +36,6 @@ describe("O modelo de entidade", () => {
 		};
 
 		const erros = validar();
-
-		console.log(erros);
 
 		expect(erros).toHaveProperty(
 			"nome_entidade",
