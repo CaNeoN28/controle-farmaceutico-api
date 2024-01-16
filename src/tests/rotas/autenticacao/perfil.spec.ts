@@ -1,11 +1,11 @@
 import request from "supertest";
 import UsuarioModel from "../../../app/models/Usuario";
-import { criarUsuarioAdm } from "../../../app/utils/gerarDadosDiversos";
+import { criarUsuarioAdm } from "../../../app/utils/db/gerarDadosDiversos";
 import { generateToken } from "../../../app/utils/jwt";
 import ILogin from "../../../types/ILogin";
 import app from "../../../app/app";
 import Usuario from "../../../types/Usuario";
-import limparBanco from "../../../app/utils/limparBanco";
+import limparBanco from "../../../app/utils/db/limparBanco";
 
 let admin: ILogin = {
 	senha: "",

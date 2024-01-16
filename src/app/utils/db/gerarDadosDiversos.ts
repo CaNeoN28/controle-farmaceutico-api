@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import UsuarioModel from "../models/Usuario";
+import UsuarioModel from "../../models/Usuario";
 
 async function criarUsuarioAdm() {
 	const usuario = new UsuarioModel({

@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 import request from "supertest";
 import app from "../../../app/app";
-import { criarUsuarioAdm, criarUsuarioInativo } from "../../../app/utils/gerarDadosDiversos";
-import limparBanco from "../../../app/utils/limparBanco";
+import { criarUsuarioAdm, criarUsuarioInativo } from "../../../app/utils/db/gerarDadosDiversos";
+import limparBanco from "../../../app/utils/db/limparBanco";
 import Usuario from "../../../types/Usuario";
 import ILogin from "../../../types/ILogin";
 

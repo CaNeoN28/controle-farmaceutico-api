@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 import app from "../../../app/app";
 import Usuario from "../../../types/Usuario";
 import UsuarioModel from "../../../app/models/Usuario";
-import limparBanco from "../../../app/utils/limparBanco";
+import limparBanco from "../../../app/utils/db/limparBanco";
 
 const entidade_id = new Types.ObjectId();
 

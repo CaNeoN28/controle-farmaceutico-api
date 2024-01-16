@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 import app from "../../../app/app";
 import UsuarioModel from "../../../app/models/Usuario";
-import { criarUsuarioAdm } from "../../../app/utils/gerarDadosDiversos";
+import { criarUsuarioAdm } from "../../../app/utils/db/gerarDadosDiversos";
 import { generateToken } from "../../../app/utils/jwt";
-import limparBanco from "../../../app/utils/limparBanco";
+import limparBanco from "../../../app/utils/db/limparBanco";
 import ILogin from "../../../types/ILogin";
 import request from "supertest";
 
