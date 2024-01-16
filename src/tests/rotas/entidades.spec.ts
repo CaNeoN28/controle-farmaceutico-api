@@ -21,7 +21,7 @@ const entidade = new Entidade({
 let usuarioBaixo: any = undefined;
 let tokenBaixo = "";
 
-let entidade_id = "";
+let entidade_id = new Types.ObjectId();
 
 beforeAll(async () => {
 	usuario = (await criarUsuarioAdm()).usuario;
@@ -191,7 +191,7 @@ describe("Rota para atualização de entidade", () => {
 			.expect(401)
 			.then((res) => res.text);
 
-		expect(resposta).toEqual("É preciso estar autenticado para usar esta rota");
+		expect(resposta).toEqual("É necessário estar autenticado para usar esta rota");
 	});
 
 	it("não deve permitir atualização de entidades para usuários de nível baixo", async () => {
@@ -250,7 +250,7 @@ describe("Rota para exclusão de entidade", () => {
 			.expect(401)
 			.then((res) => res.text);
 
-		expect(resposta).toEqual("É preciso estar autenticado para usar esta rota");
+		expect(resposta).toEqual("É necessário estar autenticado para usar esta rota");
 	});
 
 	it("não deve permitir que entidades sejam removidas por usuários de nível baixo", async () => {
