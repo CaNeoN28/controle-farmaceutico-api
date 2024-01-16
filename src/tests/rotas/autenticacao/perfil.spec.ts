@@ -1,13 +1,12 @@
 import request from "supertest";
-import UsuarioModel from "../../../app/models/Usuario";
-import { criarUsuarioAdm } from "../../../app/utils/gerarDadosDiversos";
-import { generateToken } from "../../../app/utils/jwt";
+import { criarUsuarioAdm } from "../../../app/utils/db/gerarDadosDiversos";
+import { generateTokenFromUser } from "../../../app/utils/jwt";
 import ILogin from "../../../types/ILogin";
 import app from "../../../app/app";
 import Usuario from "../../../types/Usuario";
-import limparBanco from "../../../app/utils/limparBanco";
+import limparBanco from "../../../app/utils/db/limparBanco";
 
-let admin: ILogin = {
+let login: ILogin = {
 	senha: "",
 	usuario: "",
 };
@@ -17,21 +16,12 @@ let usuario: any = {};
 let token = "";
 
 beforeAll(async () => {
-	admin = await criarUsuarioAdm();
-	usuario = await UsuarioModel.findOne(
-		{ nome_usuario: admin.usuario },
-		{ senha: false }
-	);
+	const dados = await criarUsuarioAdm();
 
-	if (usuario) {
-		token = generateToken({
-			email: usuario.email,
-			funcao: usuario.dados_administrativos.funcao,
-			id: usuario.id,
-			nome_usuario: usuario.nome_usuario,
-			numero_registro: usuario.numero_registro,
-		});
-	}
+	login = dados.dadosLogin;
+	usuario = dados.usuario;
+
+	token = generateTokenFromUser(usuario) || ""
 });
 
 afterAll(async () => {

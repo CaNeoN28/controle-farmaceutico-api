@@ -1,6 +1,6 @@
 import Erro from "../../types/Erro";
 import UsuarioRepository from "../repositories/Usuario.repository";
-import { generateToken } from "../utils/jwt";
+import { generateTokenFromUser } from "../utils/jwt";
 
 interface Data {
 	nome_usuario: string;
@@ -18,13 +18,15 @@ async function loginService(data: Data) {
 			} as Erro
 		}
 
-		const token = generateToken({
-			id: usuario._id.toString(),
-			email: usuario.email,
-			funcao: usuario.dados_administrativos.funcao,
-			nome_usuario: usuario.nome_usuario,
-			numero_registro: usuario.numero_registro,
-		});
+		console.log(usuario)
+		const token = generateTokenFromUser(usuario);
+
+		if(!token){
+			throw {
+				codigo: 403,
+				erro: "Usuário inválido"
+			}
+		}
 
 		return {
 			usuario: {

@@ -1,11 +1,10 @@
 import mongoose from "mongoose";
 import app from "../../../app/app";
-import UsuarioModel from "../../../app/models/Usuario";
-import { criarUsuarioAdm } from "../../../app/utils/gerarDadosDiversos";
-import { generateToken } from "../../../app/utils/jwt";
-import limparBanco from "../../../app/utils/limparBanco";
+import { generateTokenFromUser } from "../../../app/utils/jwt";
 import ILogin from "../../../types/ILogin";
 import request from "supertest";
+import { criarUsuario, criarUsuarioAdm, encontrarPorId } from "../../../app/utils/db/gerarDadosDiversos";
+import limparBanco from "../../../app/utils/db/limparBanco";
 
 let login: ILogin = {
 	usuario: "",
@@ -15,20 +14,12 @@ let usuario: any = {};
 let token = "";
 
 beforeAll(async () => {
-	login = await criarUsuarioAdm();
-	usuario = await UsuarioModel.findOne({
-		nome_usuario: login.usuario,
-	});
+	const dados = await criarUsuarioAdm();
 
-	if (usuario) {
-		token = generateToken({
-			email: usuario.email,
-			funcao: usuario.dados_administrativos.funcao,
-			id: usuario._id,
-			nome_usuario: usuario.nome_usuario,
-			numero_registro: usuario.numero_registro,
-		});
-	}
+	login = dados.dadosLogin;
+	usuario = dados.usuario;
+
+	token = generateTokenFromUser(usuario) || "";
 });
 
 afterAll(async () => {
@@ -46,7 +37,7 @@ describe("A rota de atualizar perfil", () => {
 			})
 			.expect(200)
 			.then((res) => res.body);
-		const atualizado = await UsuarioModel.findById(usuario._id);
+		const atualizado = await encontrarPorId(usuario._id);
 
 		expect(resposta).not.toHaveProperty("senha");
 
@@ -71,7 +62,7 @@ describe("A rota de atualizar perfil", () => {
 			.send(dadosAlterados)
 			.expect(200)
 			.then((res) => res.body);
-		const atualizado = await UsuarioModel.findById(usuario._id);
+		const atualizado = await encontrarPorId(usuario._id);
 
 		expect(resposta).not.toMatchObject(dadosAlterados);
 		expect(atualizado).not.toMatchObject(dadosAlterados);
@@ -107,7 +98,7 @@ describe("A rota de atualizar perfil", () => {
 	});
 
 	it("deve retornar erro ao tentar atualizar para um email já utilizado", async () => {
-		await UsuarioModel.create({
+		await criarUsuario({
 			cpf: "71328893030",
 			dados_administrativos: {
 				funcao: "USUARIO",
@@ -129,6 +120,6 @@ describe("A rota de atualizar perfil", () => {
 			.expect(409)
 			.then((res) => res.body);
 
-		expect(resposta).toHaveProperty("email", "Email já utilizado")
+		expect(resposta).toHaveProperty("email", "Email já utilizado");
 	});
 });

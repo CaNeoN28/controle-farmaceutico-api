@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import UsuarioModel from "../models/Usuario";
+import UsuarioModel from "../../models/Usuario";
 
 async function criarUsuarioAdm() {
 	const usuario = new UsuarioModel({
@@ -19,8 +19,11 @@ async function criarUsuarioAdm() {
 	await usuario.save();
 
 	return {
-		usuario: usuario.nome_usuario,
-		senha: usuario.senha,
+		dadosLogin: {
+			usuario: usuario.nome_usuario,
+			senha: usuario.senha,
+		},
+		usuario: usuario.toObject(),
 	};
 }
 
@@ -46,4 +49,20 @@ async function criarUsuarioInativo() {
 	};
 }
 
-export { criarUsuarioAdm, criarUsuarioInativo };
+async function encontrarPorId(id: string) {
+	return await UsuarioModel.findById(id)
+		.then((res) => {
+			return res;
+		})
+		.catch((err) => {
+			return err;
+		});
+}
+
+async function criarUsuario(data: any) {
+	const usuario = await UsuarioModel.create(data);
+
+	return usuario;
+}
+
+export { criarUsuarioAdm, criarUsuarioInativo, encontrarPorId, criarUsuario };
