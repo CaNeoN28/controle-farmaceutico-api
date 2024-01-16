@@ -49,4 +49,20 @@ async function criarUsuarioInativo() {
 	};
 }
 
-export { criarUsuarioAdm, criarUsuarioInativo };
+async function encontrarPorId(id: string) {
+	return await UsuarioModel.findById(id)
+		.then((res) => {
+			return res;
+		})
+		.catch((err) => {
+			return err;
+		});
+}
+
+async function criarUsuario(data: any) {
+	const usuario = await UsuarioModel.create(data);
+
+	return usuario;
+}
+
+export { criarUsuarioAdm, criarUsuarioInativo, encontrarPorId, criarUsuario };
