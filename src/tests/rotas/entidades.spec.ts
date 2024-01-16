@@ -4,9 +4,12 @@ import app from "../../app/app";
 import Entidade from "../../types/Entidade";
 import { generateToken, generateTokenFromUser } from "../../app/utils/jwt";
 import limparBanco from "../../app/utils/db/limparBanco";
-import { criarUsuario, criarUsuarioAdm } from "../../app/utils/db/gerarDadosDiversos";
+import {
+	criarUsuario,
+	criarUsuarioAdm,
+} from "../../app/utils/db/gerarDadosDiversos";
 
-let usuario: any = undefined
+let usuario: any = undefined;
 let token = "";
 
 const entidade = new Entidade({
@@ -21,8 +24,8 @@ let tokenBaixo = "";
 let entidade_id = "";
 
 beforeAll(async () => {
-	usuario = (await criarUsuarioAdm()).usuario
-	token = generateTokenFromUser(usuario)!
+	usuario = (await criarUsuarioAdm()).usuario;
+	token = generateTokenFromUser(usuario)!;
 
 	usuarioBaixo = await criarUsuario({
 		cpf: "60643036032",
@@ -33,15 +36,15 @@ beforeAll(async () => {
 		senha: "12345678Asdf",
 		dados_administrativos: {
 			entidade_relacionada: new Types.ObjectId(),
-			funcao: "USUARIO"
-		}
-	})
-	tokenBaixo = generateTokenFromUser(usuarioBaixo)!
-})
+			funcao: "USUARIO",
+		},
+	});
+	tokenBaixo = generateTokenFromUser(usuarioBaixo)!;
+});
 
 afterAll(async () => {
-	limparBanco()
-})
+	limparBanco();
+});
 
 describe("Rota de cadastro de entidades", () => {
 	it("deve cadastrar uma entidade", async () => {
@@ -64,7 +67,8 @@ describe("Rota de cadastro de entidades", () => {
 			.set("Authorization", `Bearer ${token}`)
 			.set("Accept", "application/json")
 			.send({})
-			.expect(400);
+			.expect(400)
+			.then((res) => res.body);
 
 		expect(resposta).toBe(
 			"Não foi possível cadastrar entidade: Estado é obrigatório, Município é obrigatório, Nome da entidade é obrigatório"
@@ -77,9 +81,9 @@ describe("Rota de cadastro de entidades", () => {
 			.set("Accept", "application/json")
 			.send(entidade)
 			.expect(401)
-			.then((res) => res.body);
+			.then((res) => res.text);
 
-		expect(resposta).toEqual("É preciso estar autenticado para usar esta rota");
+		expect(resposta).toEqual("É necessário estar autenticado para usar esta rota");
 	});
 
 	it("não deve permitir criação de entidades para usuários de nível baixo", async () => {
@@ -89,7 +93,7 @@ describe("Rota de cadastro de entidades", () => {
 			.set("Authorization", `Bearer ${tokenBaixo}`)
 			.send(entidade)
 			.expect(403)
-			.then((res) => res.body);
+			.then((res) => res.text);
 
 		expect(resposta).toEqual(
 			"É preciso ser gerente ou superior para realizar essa ação"
@@ -125,7 +129,7 @@ describe("Rota para exibição de entidade", () => {
 			.get("/entidade/idinvalido")
 			.set("Accept", "application/json")
 			.expect(400)
-			.then((res) => res.body);
+			.then((res) => res.text);
 
 		expect(resposta).toBe("Id Inválido");
 	});
@@ -135,7 +139,7 @@ describe("Rota para exibição de entidade", () => {
 			.get(`/entidade/${new Types.ObjectId()}`)
 			.set("Accept", "aplication/json")
 			.expect(404)
-			.then((res) => res.body);
+			.then((res) => res.text);
 
 		expect(resposta).toBe("Não foi possível encontrar a entidade");
 	});
@@ -179,25 +183,25 @@ describe("Rota para atualização de entidade", () => {
 
 	it("deve retornar erro ao não informar o token de autorização", async () => {
 		const resposta = await request(app)
-			.put("/entidade")
+			.put(`/entidade/${entidade_id}`)
 			.set("Accept", "application/json")
 			.send({
 				...entidade,
 			})
 			.expect(401)
-			.then((res) => res.body);
+			.then((res) => res.text);
 
 		expect(resposta).toEqual("É preciso estar autenticado para usar esta rota");
 	});
 
 	it("não deve permitir atualização de entidades para usuários de nível baixo", async () => {
 		const resposta = await request(app)
-			.put("/entidade")
+			.put(`/entidade/${entidade_id}`)
 			.set("Accept", "application/json")
 			.set("Authorization", `Bearer ${tokenBaixo}`)
 			.send(entidade)
 			.expect(403)
-			.then((res) => res.body);
+			.then((res) => res.text);
 
 		expect(resposta).toEqual(
 			"É preciso ser gerente ou superior para realizar essa ação"
@@ -212,7 +216,7 @@ describe("Rota para exclusão de entidade", () => {
 			.set("Authorization", `Bearer ${token}`)
 			.set("Accept", "application/json")
 			.expect(404)
-			.then((res) => res.body);
+			.then((res) => res.text);
 
 		expect(resposta).toBe("Não foi possível encontrar a entidade");
 	});
@@ -223,19 +227,9 @@ describe("Rota para exclusão de entidade", () => {
 			.set("Authorization", `Bearer ${token}`)
 			.set("Accept", "application/json")
 			.expect(400)
-			.then((res) => res.body);
+			.then((res) => res.text);
 
 		expect(resposta).toBe("Id inválido");
-	});
-
-	it("deve retornar erro de não autentiacação", async () => {
-		const resposta = await request(app)
-			.delete(`/entidade/${entidade_id}`)
-			.set("Accept", "application/json")
-			.expect(401)
-			.then((res) => res.body);
-
-		expect(resposta).toBe("Não auntenticado");
 	});
 
 	it("deve realizar uma exclusão bem sucedida", async () => {
@@ -253,11 +247,8 @@ describe("Rota para exclusão de entidade", () => {
 		const resposta = await request(app)
 			.delete(`/entidade/${entidade_id}`)
 			.set("Accept", "application/json")
-			.send({
-				...entidade,
-			})
 			.expect(401)
-			.then((res) => res.body);
+			.then((res) => res.text);
 
 		expect(resposta).toEqual("É preciso estar autenticado para usar esta rota");
 	});
@@ -268,7 +259,7 @@ describe("Rota para exclusão de entidade", () => {
 			.set("Accept", "application/json")
 			.set("Authorization", `Bearer ${tokenBaixo}`)
 			.expect(403)
-			.then((res) => res.body);
+			.then((res) => res.text);
 
 		expect(resposta).toEqual(
 			"É preciso ser gerente ou superior para realizar essa ação"
