@@ -41,15 +41,40 @@ describe("O modelo de entidade", () => {
 			"nome_entidade",
 			"Nome da entidade é obrigatório"
 		);
-		expect(erros).toHaveProperty(
-			"estado",
-			"Estado é obrigatório"
-		);
-		expect(erros).toHaveProperty(
-			"municipio",
-			"Município é obrigatório"
-		);
+		expect(erros).toHaveProperty("estado", "Estado é obrigatório");
+		expect(erros).toHaveProperty("municipio", "Município é obrigatório");
 	});
+	it("deve verificar atributos inválidos", () => {
+		const entidade = new EntidadeModel({
+			nome_entidade: "",
+			estado: "Estado Inexistente",
+			municipio: "Municipio Inexistente",
+		});
 
-	it("deve verificar atributos inválidos", () => {});
+		expect(entidade.validateSync).toThrow();
+
+		const validar = () => {
+			try {
+				entidade.validateSync();
+
+				return {};
+			} catch (error: any) {
+				const { nome_entidade, estado, municipio } = error.errors;
+
+				return {
+					nome_entidade: nome_entidade.message,
+					estado: estado.message,
+					municipio: municipio.message,
+				};
+			}
+		};
+
+		const erros = validar();
+
+		console.log(erros);
+
+		expect(erros).toHaveProperty("nome_entidade", "Nome da entidade inválido");
+		expect(erros).toHaveProperty("estado", "Estado inválido");
+		expect(erros).toHaveProperty("municipio", "Município inválido");
+	});
 });
