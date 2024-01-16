@@ -2,8 +2,12 @@ import request from "supertest";
 import { Types } from "mongoose";
 import app from "../../app/app";
 import Entidade from "../../types/Entidade";
+import { generateToken, generateTokenFromUser } from "../../app/utils/jwt";
+import limparBanco from "../../app/utils/db/limparBanco";
+import { criarUsuario, criarUsuarioAdm } from "../../app/utils/db/gerarDadosDiversos";
 
-const token = process.env.TEST_TOKEN;
+let usuario: any = undefined
+let token = "";
 
 const entidade = new Entidade({
 	estado: "Rondônia",
@@ -11,7 +15,33 @@ const entidade = new Entidade({
 	nome_entidade: "Ministério da Saúde",
 });
 
+let usuarioBaixo: any = undefined;
+let tokenBaixo = "";
+
 let entidade_id = "";
+
+beforeAll(async () => {
+	usuario = (await criarUsuarioAdm()).usuario
+	token = generateTokenFromUser(usuario)!
+
+	usuarioBaixo = await criarUsuario({
+		cpf: "60643036032",
+		email: "usuariobaixo@gmail.com",
+		nome_completo: "Usuário Baixo",
+		nome_usuario: "usuariobaixo",
+		numero_registro: "0000",
+		senha: "12345678Asdf",
+		dados_administrativos: {
+			entidade_relacionada: new Types.ObjectId(),
+			funcao: "USUARIO"
+		}
+	})
+	tokenBaixo = generateTokenFromUser(usuarioBaixo)!
+})
+
+afterAll(async () => {
+	limparBanco()
+})
 
 describe("Rota de cadastro de entidades", () => {
 	it("deve cadastrar uma entidade", async () => {
@@ -28,16 +58,6 @@ describe("Rota de cadastro de entidades", () => {
 		expect(resposta).toEqual(entidade);
 	});
 
-	it("deve retornar erro ao não informar o token de autorização", async () => {
-		const resposta = await request(app)
-			.post("/entidade")
-			.set("Accept", "application/json")
-			.send(entidade)
-			.expect(401);
-
-		expect(resposta).toEqual("Não autenticado");
-	});
-
 	it("deve retornar erro ao tentar cadastrar entidade inválida", async () => {
 		const resposta = await request(app)
 			.post("/entidade")
@@ -48,6 +68,31 @@ describe("Rota de cadastro de entidades", () => {
 
 		expect(resposta).toBe(
 			"Não foi possível cadastrar entidade: Estado é obrigatório, Município é obrigatório, Nome da entidade é obrigatório"
+		);
+	});
+
+	it("deve retornar erro ao não informar o token de autorização", async () => {
+		const resposta = await request(app)
+			.post("/entidade")
+			.set("Accept", "application/json")
+			.send(entidade)
+			.expect(401)
+			.then((res) => res.body);
+
+		expect(resposta).toEqual("É preciso estar autenticado para usar esta rota");
+	});
+
+	it("não deve permitir criação de entidades para usuários de nível baixo", async () => {
+		const resposta = await request(app)
+			.post("/entidade")
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${tokenBaixo}`)
+			.send(entidade)
+			.expect(403)
+			.then((res) => res.body);
+
+		expect(resposta).toEqual(
+			"É preciso ser gerente ou superior para realizar essa ação"
 		);
 	});
 });
@@ -122,26 +167,42 @@ describe("Rota para atualização de entidade", () => {
 			.set("Accept", "application/json")
 			.send({
 				...entidade,
-				nome_entidade: ""
+				nome_entidade: "",
 			})
 			.expect(400)
 			.then((res) => res.body);
 
-		expect(resposta).toBe("Não foi possível atualizar a entidade: Nome da entidade inválido")
-	})
+		expect(resposta).toBe(
+			"Não foi possível atualizar a entidade: Nome da entidade inválido"
+		);
+	});
 
-	it("deve retornar erro caso o usuário não esteja autenticado", async () => {
+	it("deve retornar erro ao não informar o token de autorização", async () => {
 		const resposta = await request(app)
-			.put(`/entidade/${entidade_id}`)
+			.put("/entidade")
 			.set("Accept", "application/json")
 			.send({
-				...entidade
+				...entidade,
 			})
 			.expect(401)
 			.then((res) => res.body);
 
-		expect(resposta).toBe("Não autenticado")
-	})
+		expect(resposta).toEqual("É preciso estar autenticado para usar esta rota");
+	});
+
+	it("não deve permitir atualização de entidades para usuários de nível baixo", async () => {
+		const resposta = await request(app)
+			.put("/entidade")
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${tokenBaixo}`)
+			.send(entidade)
+			.expect(403)
+			.then((res) => res.body);
+
+		expect(resposta).toEqual(
+			"É preciso ser gerente ou superior para realizar essa ação"
+		);
+	});
 });
 
 describe("Rota para exclusão de entidade", () => {
@@ -154,7 +215,7 @@ describe("Rota para exclusão de entidade", () => {
 			.then((res) => res.body);
 
 		expect(resposta).toBe("Não foi possível encontrar a entidade");
-	})
+	});
 
 	it("deve retornar erro de Id Inválido", async () => {
 		const resposta = await request(app)
@@ -165,7 +226,7 @@ describe("Rota para exclusão de entidade", () => {
 			.then((res) => res.body);
 
 		expect(resposta).toBe("Id inválido");
-	})
+	});
 
 	it("deve retornar erro de não autentiacação", async () => {
 		const resposta = await request(app)
@@ -175,7 +236,7 @@ describe("Rota para exclusão de entidade", () => {
 			.then((res) => res.body);
 
 		expect(resposta).toBe("Não auntenticado");
-	})
+	});
 
 	it("deve realizar uma exclusão bem sucedida", async () => {
 		const resposta = await request(app)
@@ -186,5 +247,5 @@ describe("Rota para exclusão de entidade", () => {
 			.then((res) => res.body);
 
 		expect(resposta).toBe(undefined);
-	})
-})
+	});
+});
