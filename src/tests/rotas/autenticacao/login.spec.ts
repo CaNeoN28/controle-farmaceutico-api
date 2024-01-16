@@ -1,10 +1,11 @@
-import jwt from "jsonwebtoken";
 import request from "supertest";
 import app from "../../../app/app";
 import { criarUsuarioAdm, criarUsuarioInativo } from "../../../app/utils/db/gerarDadosDiversos";
 import Usuario from "../../../types/Usuario";
 import ILogin from "../../../types/ILogin";
 import limparBanco from "../../../app/utils/db/limparBanco";
+import TokenData from "../../../types/TokenData";
+import { verificarToken } from "../../../app/utils/jwt";
 
 let administrador: ILogin = {
 	usuario: "",
@@ -42,17 +43,17 @@ describe("Rota de login", () => {
 			usuario: Usuario;
 		};
 
-		const verificarToken = () => {
-			const payload = jwt.verify(token, process.env.SECRET_KEY || "");
+		const checkToken = () => {
+			const payload = verificarToken<TokenData>(token);
 
 			return payload;
 		};
 
 		expect(usuario).toHaveProperty("nome_usuario", administrador.usuario);
 		expect(usuario.senha).toBeUndefined();
-		expect(verificarToken).not.toThrow();
+		expect(checkToken).not.toThrow();
 
-		const payload = verificarToken();
+		const payload = checkToken();
 
 		expect(payload).toHaveProperty("nome_usuario", administrador.usuario);
 	});

@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import TokenData from "../../types/TokenData";
 import findUsuarioService from "../services/find.usuario.service";
 import Erro from "../../types/Erro";
+import { verificarToken } from "../utils/jwt";
 
 const AuthenticationMiddleware: RequestHandler = async function (
 	req: AuthenticatedRequest,
@@ -24,10 +25,7 @@ const AuthenticationMiddleware: RequestHandler = async function (
 
 		token = token.split(" ")[1];
 
-		const decoded = jwt.verify(
-			token,
-			process.env.SECRET_KEY || ""
-		) as TokenData;
+		const decoded = verificarToken<TokenData>(token)
 
 		if (!decoded) {
 			throw {

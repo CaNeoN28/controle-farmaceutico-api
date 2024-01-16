@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import TokenData from "../../types/TokenData";
 import Usuario from "../../types/Usuario";
+import Erro from "../../types/Erro";
 
 function generateToken(data: any) {
 	const { SECRET_KEY } = process.env;
@@ -20,6 +21,14 @@ function generateToken(data: any) {
 	);
 
 	return token;
+}
+
+function verificarToken<T>(token: string) {
+	const key = process.env.SECRET_KEY || ""
+
+	const payload = jwt.verify(token, key) as T
+
+	return payload
 }
 
 function generateTokenFromUser(user: any) {
@@ -46,4 +55,4 @@ try {
 	}
 }
 
-export { generateToken, generateTokenFromUser };
+export { generateToken, generateTokenFromUser, verificarToken };
