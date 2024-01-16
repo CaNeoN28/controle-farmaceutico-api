@@ -20,7 +20,7 @@ beforeAll(async () => {
 	login = dados.dadosLogin;
 	usuario = dados.usuario;
 
-	token = generateTokenFromUser(usuario)!;
+	token = generateTokenFromUser(usuario) || "";
 });
 
 afterAll(async () => {

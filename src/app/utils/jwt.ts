@@ -23,17 +23,17 @@ function generateToken(data: any) {
 }
 
 function generateTokenFromUser(user: any) {
-	const { email, funcao, id, nome_usuario, numero_registro }: TokenData = user;
+	const { email, dados_administrativos, _id, nome_usuario, numero_registro } = user;
 
-	try {
-		if (!email || !funcao || !id || !nome_usuario || !numero_registro) {
+try {
+		if (!email || !dados_administrativos || !_id || !nome_usuario || !numero_registro) {
 			throw {};
 		}
 
 		const data = {
 			email,
-			funcao,
-			id,
+			funcao: dados_administrativos.funcao,
+			id: _id,
 			nome_usuario,
 			numero_registro,
 		};
