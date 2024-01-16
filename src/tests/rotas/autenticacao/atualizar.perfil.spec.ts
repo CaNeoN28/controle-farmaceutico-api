@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 import app from "../../../app/app";
 import UsuarioModel from "../../../app/models/Usuario";
-import { criarUsuarioAdm } from "../../../app/utils/db/gerarDadosDiversos";
 import { generateToken } from "../../../app/utils/jwt";
-import limparBanco from "../../../app/utils/db/limparBanco";
 import ILogin from "../../../types/ILogin";
 import request from "supertest";
+import { criarUsuarioAdm } from "../../../app/utils/db/gerarDadosDiversos";
+import limparBanco from "../../../app/utils/db/limparBanco";
 
 let login: ILogin = {
 	usuario: "",
@@ -15,10 +15,10 @@ let usuario: any = {};
 let token = "";
 
 beforeAll(async () => {
-	login = await criarUsuarioAdm();
-	usuario = await UsuarioModel.findOne({
-		nome_usuario: login.usuario,
-	});
+	const dados = await criarUsuarioAdm();
+	
+	login = dados.dadosLogin
+	usuario = dados.usuario
 
 	if (usuario) {
 		token = generateToken({

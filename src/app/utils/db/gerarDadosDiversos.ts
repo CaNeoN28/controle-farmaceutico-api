@@ -19,8 +19,11 @@ async function criarUsuarioAdm() {
 	await usuario.save();
 
 	return {
-		usuario: usuario.nome_usuario,
-		senha: usuario.senha,
+		dadosLogin: {
+			usuario: usuario.nome_usuario,
+			senha: usuario.senha,
+		},
+		usuario: usuario.toObject(),
 	};
 }
 

@@ -2,7 +2,6 @@ import request from "supertest";
 import { Types } from "mongoose";
 import app from "../../../app/app";
 import Usuario from "../../../types/Usuario";
-import UsuarioModel from "../../../app/models/Usuario";
 import limparBanco from "../../../app/utils/db/limparBanco";
 
 const entidade_id = new Types.ObjectId();
@@ -10,8 +9,6 @@ const entidade_id = new Types.ObjectId();
 let usuario: any = {}
 
 beforeAll(async () => {
-	await limparBanco()
-
 	usuario = new Usuario({
 		cpf: "01880090007",
 		dados_administrativos: {

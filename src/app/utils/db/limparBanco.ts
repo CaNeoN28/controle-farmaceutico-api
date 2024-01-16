@@ -1,4 +1,4 @@
-import UsuarioModel from "../../models/Usuario";
+import UsuarioModel from "../models/Usuario";
 
 async function limparBanco() {
 	await UsuarioModel.deleteMany();

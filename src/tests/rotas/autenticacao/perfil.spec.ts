@@ -1,5 +1,4 @@
 import request from "supertest";
-import UsuarioModel from "../../../app/models/Usuario";
 import { criarUsuarioAdm } from "../../../app/utils/db/gerarDadosDiversos";
 import { generateToken } from "../../../app/utils/jwt";
 import ILogin from "../../../types/ILogin";
@@ -7,7 +6,7 @@ import app from "../../../app/app";
 import Usuario from "../../../types/Usuario";
 import limparBanco from "../../../app/utils/db/limparBanco";
 
-let admin: ILogin = {
+let login: ILogin = {
 	senha: "",
 	usuario: "",
 };
@@ -17,11 +16,10 @@ let usuario: any = {};
 let token = "";
 
 beforeAll(async () => {
-	admin = await criarUsuarioAdm();
-	usuario = await UsuarioModel.findOne(
-		{ nome_usuario: admin.usuario },
-		{ senha: false }
-	);
+	const dados = await criarUsuarioAdm();
+
+	login = dados.dadosLogin;
+	usuario = dados.usuario;
 
 	if (usuario) {
 		token = generateToken({
