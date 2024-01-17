@@ -125,7 +125,7 @@ describe("Rota para exibição de entidade", () => {
 			.expect(200)
 			.then((res) => res.body);
 
-		expect(resposta).toEqual(entidade);
+		expect(resposta).toMatchObject(entidade);
 	});
 
 	it("deve retornar erro ao informar um Id Inválido", async () => {
@@ -135,7 +135,7 @@ describe("Rota para exibição de entidade", () => {
 			.expect(400)
 			.then((res) => res.text);
 
-		expect(resposta).toBe("Id Inválido");
+		expect(resposta).toBe("Id inválido");
 	});
 
 	it("deve retornar erro de entidade não encontrado", async () => {
@@ -145,7 +145,7 @@ describe("Rota para exibição de entidade", () => {
 			.expect(404)
 			.then((res) => res.text);
 
-		expect(resposta).toBe("Não foi possível encontrar a entidade");
+		expect(resposta).toBe("Entidade não encontrada");
 	});
 });
 

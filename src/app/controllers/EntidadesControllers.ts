@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import Entidade from "../../types/Entidade";
 import createEntidadeService from "../services/create.entidade.service";
+import findEntidadeService from "../services/find.entidade.service";
 
 class EntidadesControllers {
 	static EncontrarEntidadePorId: RequestHandler = async function (
@@ -8,7 +9,15 @@ class EntidadesControllers {
 		res,
 		next
 	) {
-		res.send("Recuperar entidade por Id");
+		const id = req.params.id as string;
+
+		try {
+			const entidade = await findEntidadeService(id);
+			
+			return res.status(200).send(entidade);
+		} catch (error) {
+			next(error);
+		}
 	};
 
 	static ListarEntidades: RequestHandler = async function (req, res, next) {
