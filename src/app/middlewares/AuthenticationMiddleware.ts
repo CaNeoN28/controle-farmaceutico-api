@@ -47,7 +47,7 @@ const AuthenticationMiddleware: RequestHandler = async function (
 	} catch (err: any) {
 		const { codigo, erro } = err as Erro;
 
-		res.status(codigo).send(erro);
+		return res.status(codigo).send(erro);
 	}
 
 	next();

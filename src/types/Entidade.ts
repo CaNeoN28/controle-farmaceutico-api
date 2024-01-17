@@ -1,13 +1,13 @@
 interface IEntidade {
-	nome_entidade: String;
-	estado: String;
-	municipio: String;
+	nome_entidade: string;
+	estado: string;
+	municipio: string;
 }
 
 class Entidade implements IEntidade {
-	nome_entidade: String;
-	estado: String;
-	municipio: String;
+	nome_entidade: string;
+	estado: string;
+	municipio: string;
 
 	constructor({ estado, municipio, nome_entidade }: IEntidade) {
 		this.estado = estado;

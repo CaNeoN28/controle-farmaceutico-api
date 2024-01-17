@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import UsuarioModel from "../../models/Usuario";
+import Usuario from "../../../types/Usuario";
 
 async function criarUsuarioAdm() {
 	const usuario = new UsuarioModel({
@@ -59,7 +60,7 @@ async function encontrarPorId(id: string) {
 		});
 }
 
-async function criarUsuario(data: any) {
+async function criarUsuario(data: Usuario) {
 	const usuario = await UsuarioModel.create(data);
 
 	return usuario;
