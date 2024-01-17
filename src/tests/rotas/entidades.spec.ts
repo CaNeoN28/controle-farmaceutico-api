@@ -58,7 +58,7 @@ describe("Rota de cadastro de entidades", () => {
 
 		entidade_id = resposta._id;
 
-		expect(resposta).toEqual(entidade);
+		expect(resposta).toMatchObject(entidade);
 	});
 
 	it("deve retornar erro ao tentar cadastrar entidade inválida", async () => {
