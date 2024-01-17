@@ -11,7 +11,9 @@ const dados = {
 describe("O modelo de entidade", () => {
 	it("deve cadastrar uma entidade com os dados informados", () => {
 		const entidade = new EntidadeModel(dados);
+		const erros = entidade.validateSync();
 
+		expect(erros).toBeUndefined()
 		expect(entidade).toMatchObject(dados);
 	});
 	it("deve realizar validação dos atributos obrigatórios", async () => {
