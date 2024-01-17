@@ -41,7 +41,7 @@ describe("O modelo de entidade", () => {
 	});
 	it("deve verificar atributos inválidos", () => {
 		const entidade = new EntidadeModel({
-			nome_entidade: "",
+			nome_entidade: "EI",
 			estado: "Estado Inexistente",
 			municipio: "Municipio Inexistente",
 		});
