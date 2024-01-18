@@ -1,9 +1,10 @@
 import { RequestHandler } from "express";
-import Entidade, { FiltrosEntidade } from "../../types/Entidade";
+import Entidade, { FiltrosEntidade, IEntidade } from "../../types/Entidade";
 import createEntidadeService from "../services/create.entidade.service";
 import findEntidadeService from "../services/find.entidade.service";
 import listEntidadesService from "../services/list.entidades.service";
 import { PaginacaoQuery } from "../../types/Paginacao";
+import updateEntidadeService from "../services/update.entidade.service";
 
 class EntidadesControllers {
 	static EncontrarEntidadePorId: RequestHandler = async function (
@@ -23,7 +24,8 @@ class EntidadesControllers {
 	};
 
 	static ListarEntidades: RequestHandler = async function (req, res, next) {
-		const { estado, municipio, nome_entidade, ativo }: FiltrosEntidade = req.query;
+		const { estado, municipio, nome_entidade, ativo }: FiltrosEntidade =
+			req.query;
 		const { limite, pagina }: PaginacaoQuery = req.query;
 
 		try {
@@ -61,7 +63,21 @@ class EntidadesControllers {
 	};
 
 	static AtualizarEntidade: RequestHandler = async function (req, res, next) {
-		res.send("Atualizer entidade");
+		const id = req.params.id;
+		const { estado, municipio, nome_entidade, ativo } = req.body;
+
+		try {
+			const resposta = await updateEntidadeService(id, {
+				estado,
+				municipio,
+				nome_entidade,
+				ativo,
+			});
+
+			return res.status(200).send(resposta)
+		} catch (error) {
+			next(error);
+		}
 	};
 
 	static RemoverEntidade: RequestHandler = async function (req, res, next) {

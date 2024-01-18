@@ -21,8 +21,17 @@ const EntidadeSchema = new mongoose.Schema({
 		required: [true, "Município é obrigatório"],
 		validate: {
 			validator: function () {
-				const dados = this as Entidade;
-				const valido = validarCidade(dados.municipio, dados.estado);
+				const dados = this as any;
+				let { municipio, estado }: { municipio?: string; estado?: string } = {};
+
+				if (!dados.op) {
+					(municipio = dados.municipio), (estado = dados.estado);
+				} else {
+					municipio = dados._update.$set.municipio;
+					estado = dados._update.$set.estado;
+				}
+
+				const valido = validarCidade(municipio!, estado!);
 
 				return valido;
 			},

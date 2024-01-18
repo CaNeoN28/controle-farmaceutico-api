@@ -5632,7 +5632,7 @@ function validarEstado(estado: string) {
 function validarCidade(cidade: string, estado: string) {
 	const estadoValido = estados[estado];
 
-	if (!estado) return false;
+	if (!estadoValido) return false;
 
 	const cidadeValida = estadoValido.find((e) => e === cidade);
 
