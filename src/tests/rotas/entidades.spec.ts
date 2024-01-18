@@ -132,7 +132,7 @@ describe("Rota de listagem de entidades", () => {
 		expect(resposta.dados[0]).toMatchObject(entidade);
 	});
 
-	it("deve retornar dados de paginação", async () => {
+	it("deve retornar dados de paginação mais um array vazio", async () => {
 		const resposta = await request(app)
 			.get(`/entidades?pagina=2&limite=10`)
 			.set("Accept", "aplication/json")
@@ -147,6 +147,21 @@ describe("Rota de listagem de entidades", () => {
 		});
 		expect(resposta.dados[0]).toBeUndefined();
 	});
+
+	it("deve retornar erro caso os dados de paginação estejam inválidos", async () => {
+		const resposta = await request(app)
+			.get(`/entidades`)
+			.query("pagina=paginainvalida")
+			.query("limite=limiteinvalido")
+			.set("Accept", "aplication/json")
+			.expect(400)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject({
+			pagina: "Pagina inválida",
+			limite: "Limite inválido"
+		});
+	})
 });
 
 describe("Rota para exibição de entidade", () => {
