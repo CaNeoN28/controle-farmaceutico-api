@@ -121,15 +121,26 @@ class EntidadeRepository {
 	}
 	static async deleteEntidade(id: string) {
 		let erro: Erro | undefined = undefined;
-		const entidade = await EntidadeModel.findById(id);
+		let entidade: any
 
-		if (!entidade) {
+		const idValido = mongoose.isValidObjectId(id);
+
+		if (!idValido) {
 			erro = {
-				codigo: 404,
-				erro: "Entidade não encontrada",
+				codigo: 400,
+				erro: "Id inválido",
 			};
 		} else {
-			await entidade.deleteOne();
+			entidade = await EntidadeModel.findById(id);
+
+			if (!entidade) {
+				erro = {
+					codigo: 404,
+					erro: "Entidade não encontrada",
+				};
+			} else {
+				await entidade.deleteOne();
+			}
 		}
 
 		return { entidade, erro };
