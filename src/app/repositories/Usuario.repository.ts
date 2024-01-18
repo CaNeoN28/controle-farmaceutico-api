@@ -63,32 +63,43 @@ class UsuarioRepository {
 		const primeiroUsuario = (await UsuarioModel.find()).length == 0;
 
 		if (primeiroUsuario) {
-			const nome_entidade = "Instituto Federal de Educação de Rondônia - Campus Vilhena"
+			const nome_entidade =
+				"Instituto Federal de Educação de Rondônia - Campus Vilhena";
 
 			let entidadePadrao = await EntidadeRepository.findEntidade({
 				nome_entidade,
 			});
 
-			if(!entidadePadrao) {
-				entidadePadrao = (await EntidadeRepository.createEntidade({
-					estado: "Rondônia",
-					municipio: "Vilhena",
-					nome_entidade: nome_entidade
-				})).entidade
+			if (!entidadePadrao) {
+				entidadePadrao = (
+					await EntidadeRepository.createEntidade({
+						estado: "Rondônia",
+						municipio: "Vilhena",
+						nome_entidade: nome_entidade,
+					})
+				).entidade;
 			}
 
 			usuario.dados_administrativos = {
 				entidade_relacionada: entidadePadrao.id,
-				funcao: "ADMINISTRADOR"
-			}
+				funcao: "ADMINISTRADOR",
+			};
 		}
 
 		const emailExiste = await UsuarioModel.findOne({ email: usuario.email });
+		const nomeExiste = await UsuarioModel.findOne({
+			nome_usuario: usuario.nome_usuario,
+		});
 
-		if (emailExiste) {
+		if (emailExiste || nomeExiste) {
 			erro = {
 				codigo: 409,
-				erro: { email: "Email já cadastrado" },
+				erro: {
+					email: emailExiste ? "Email já cadastrado" : undefined,
+					nome_usuario: nomeExiste
+						? "Nome de usuário já cadastrado"
+						: undefined,
+				},
 			};
 		} else {
 			try {
@@ -114,11 +125,19 @@ class UsuarioRepository {
 				id: { $ne: id },
 			});
 
-			if (emailExiste) {
+			const nomeExiste = await UsuarioModel.findOne({
+				nome_usuario: data.nome_usuario,
+				id: { $ne: id },
+			});
+
+			if (emailExiste || nomeExiste) {
 				erros = {
 					codigo: 409,
 					erro: {
-						email: "Email já utilizado",
+						email: emailExiste ? "Email já cadastrado" : undefined,
+						nome_usuario: nomeExiste
+							? "Nome de usuário já cadastrado"
+							: undefined,
 					},
 				};
 			} else {
