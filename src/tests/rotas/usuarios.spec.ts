@@ -32,10 +32,17 @@ afterAll(async () => {
 
 describe("A rota de cadastro de usuários", () => {
 	it("deve cadastrar um usuário", async () => {
-		const {cpf, email, nome_completo, nome_usuario, numero_registro, dados_administrativos} = usuario
+		const {
+			cpf,
+			email,
+			nome_completo,
+			nome_usuario,
+			numero_registro,
+			dados_administrativos,
+		} = usuario;
 
 		const resposta = await request(app)
-			.post("/entidade")
+			.post("/usuario")
 			.set("Authorization", `Bearer ${token}`)
 			.set("Accept", "application/json")
 			.send(usuario)
@@ -48,7 +55,28 @@ describe("A rota de cadastro de usuários", () => {
 			nome_completo,
 			nome_usuario,
 			numero_registro,
-			dados_administrativos
-		} as Usuario)
+			dados_administrativos,
+		} as Usuario);
+	});
+
+	it("deve realizar teste de validação de atributos obrigatórios", async () => {
+		const resposta = await request(app)
+			.post("/usuario")
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.send(usuario)
+			.expect(400)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject({
+			cpf: "CPF é obrigatório",
+			email: "Email é obrigatório",
+			nome_completo: "Nome completo é obrigatório",
+			nome_usuario: "Nome de usuário é obrigatório",
+			numero_registro: "Número de registro é obrigatório",
+			senha: "Senha é obrigatório",
+			"dados_administrativos.entidade_relacionada":
+				"Entidade relacionada é obrigatório",
+		});
 	});
 });
