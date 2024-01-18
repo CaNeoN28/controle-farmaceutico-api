@@ -113,6 +113,22 @@ describe("Rota de listagem de entidades", () => {
 			.expect(200)
 			.then((res) => res.body);
 
+		expect(resposta.dados[0]).toMatchObject(entidade);
+	});
+
+	it("deve retornar dados de paginação", async () => {
+		const resposta = await request(app)
+			.get(`/entidades?page=1&limit=10`)
+			.set("Accept", "aplication/json")
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject({
+			pagina: 1,
+			limit: 10,
+			paginas_totais: 1,
+			documentos: 1
+		});
 		expect(resposta.dados).toContainEqual(entidade);
 	});
 });
