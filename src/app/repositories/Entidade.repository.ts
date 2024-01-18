@@ -36,16 +36,9 @@ class EntidadeRepository {
 			erro,
 		};
 	}
-	static async findEntidades(params: FiltrosEntidade) {
-		const { estado, municipio, nome_entidade } = params;
-
-		const entidades = await EntidadeModel.find({
-			estado,
-			municipio,
-			nome_entidade,
-		});
+	static async findEntidades(filtros: FiltrosEntidade) {
+		const entidades = await EntidadeModel.find(filtros);
 		
-
 		return entidades
 	}
 	static async createEntidade(data: Entidade) {
