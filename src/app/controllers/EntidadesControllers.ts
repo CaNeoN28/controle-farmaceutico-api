@@ -1,7 +1,8 @@
 import { RequestHandler } from "express";
-import Entidade from "../../types/Entidade";
+import Entidade, { FiltrosEntidade } from "../../types/Entidade";
 import createEntidadeService from "../services/create.entidade.service";
 import findEntidadeService from "../services/find.entidade.service";
+import listEntidadesService from "../services/list.entidades.service";
 
 class EntidadesControllers {
 	static EncontrarEntidadePorId: RequestHandler = async function (
@@ -21,7 +22,17 @@ class EntidadesControllers {
 	};
 
 	static ListarEntidades: RequestHandler = async function (req, res, next) {
-		res.send("Listar entidades");
+		const {estado, municipio, nome_entidade} : FiltrosEntidade = req.query
+
+		const entidades = await listEntidadesService({
+			estado,
+			municipio,
+			nome_entidade
+		})
+
+		return res.status(200).send({
+			dados: entidades
+		})
 	};
 
 	static CriarEntidade: RequestHandler = async function (req, res, next) {
