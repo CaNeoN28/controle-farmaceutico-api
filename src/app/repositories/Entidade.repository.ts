@@ -101,7 +101,7 @@ class EntidadeRepository {
 					runValidators: true,
 				});
 
-				await entidade.save()
+				await entidade.save();
 
 				entidade = await EntidadeModel.findById(id);
 			}
@@ -119,7 +119,32 @@ class EntidadeRepository {
 			erro,
 		};
 	}
-	static deleteEntidade(id: string) {}
+	static async deleteEntidade(id: string) {
+		let erro: Erro | undefined = undefined;
+		let entidade: any
+
+		const idValido = mongoose.isValidObjectId(id);
+
+		if (!idValido) {
+			erro = {
+				codigo: 400,
+				erro: "Id inválido",
+			};
+		} else {
+			entidade = await EntidadeModel.findById(id);
+
+			if (!entidade) {
+				erro = {
+					codigo: 404,
+					erro: "Entidade não encontrada",
+				};
+			} else {
+				await entidade.deleteOne();
+			}
+		}
+
+		return { entidade, erro };
+	}
 }
 
 export default EntidadeRepository;

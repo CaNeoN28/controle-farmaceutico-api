@@ -271,7 +271,7 @@ describe("Rota para exclusão de entidade", () => {
 			.expect(404)
 			.then((res) => res.text);
 
-		expect(resposta).toBe("Não foi possível encontrar a entidade");
+		expect(resposta).toBe("Entidade não encontrada");
 	});
 
 	it("deve retornar erro de Id Inválido", async () => {
@@ -293,7 +293,7 @@ describe("Rota para exclusão de entidade", () => {
 			.expect(204)
 			.then((res) => res.body);
 
-		expect(resposta).toBe(undefined);
+		expect(resposta).toEqual({});
 	});
 
 	it("deve retornar erro ao não informar o token de autorização", async () => {

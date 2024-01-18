@@ -13,6 +13,6 @@ entidadesRoutes
 	.route("/entidade/:id")
 	.get(EntidadesControllers.EncontrarEntidadePorId)
 	.put(AuthenticationMiddleware, AutorizarGerente, EntidadesControllers.AtualizarEntidade)
-	.delete(AuthenticationMiddleware, EntidadesControllers.RemoverEntidade);
+	.delete(AuthenticationMiddleware, AutorizarGerente, EntidadesControllers.RemoverEntidade);
 
 export default entidadesRoutes
