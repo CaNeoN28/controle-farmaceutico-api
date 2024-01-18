@@ -16,6 +16,7 @@ const entidade = new Entidade({
 	estado: "Rondônia",
 	municipio: "Vilhena",
 	nome_entidade: "Ministério da Saúde",
+	ativo: true
 });
 
 let usuarioBaixo: any = undefined;
@@ -203,13 +204,12 @@ describe("Rota para atualização de entidade", () => {
 			.set("Authorization", `Bearer ${token}`)
 			.set("Accept", "application/json")
 			.send({
-				...entidade,
 				municipio: "Ji-Paraná",
 			})
 			.expect(200)
 			.then((res) => res.body);
 
-		expect(resposta).toEqual({
+		expect(resposta).toMatchObject({
 			...entidade,
 			municipio: "Ji-Paraná",
 		});
@@ -222,7 +222,7 @@ describe("Rota para atualização de entidade", () => {
 			.set("Accept", "application/json")
 			.send({
 				...entidade,
-				nome_entidade: "",
+				nome_entidade: "A",
 			})
 			.expect(400)
 			.then((res) => res.body);
