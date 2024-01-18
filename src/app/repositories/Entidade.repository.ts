@@ -3,6 +3,8 @@ import Entidade, { FiltrosEntidade } from "../../types/Entidade";
 import Erro from "../../types/Erro";
 import EntidadeModel from "../models/Entidade";
 import { erroParaDicionario } from "../utils/mongooseErrors";
+import { Paginacao } from "../../types/Paginacao";
+import { calcularPaginas } from "../utils/paginacao";
 
 class EntidadeRepository {
 	static async findEntidadeId(id: string) {
@@ -36,10 +38,22 @@ class EntidadeRepository {
 			erro,
 		};
 	}
-	static async findEntidades(filtros: FiltrosEntidade) {
-		const entidades = await EntidadeModel.find(filtros);
-		
-		return entidades
+	static async findEntidades(filtros: FiltrosEntidade, paginacao: Paginacao) {
+		const { limite, pagina } = paginacao;
+
+		const documentos_totais = await EntidadeModel.countDocuments(filtros);
+		const pular = limite * (pagina - 1)
+		const paginas_totais = calcularPaginas(documentos_totais, limite)
+
+		const entidades = await EntidadeModel.find(filtros).limit(limite).skip(pular);
+
+		return {
+			dados: entidades,
+			documentos_totais,
+			limite,
+			pagina,
+			paginas_totais
+		};
 	}
 	static async createEntidade(data: Entidade) {
 		let erro: Erro | undefined = undefined;

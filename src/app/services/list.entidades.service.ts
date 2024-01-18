@@ -1,8 +1,10 @@
 import { FiltrosEntidade } from "../../types/Entidade";
+import { Paginacao, PaginacaoQuery } from "../../types/Paginacao";
 import EntidadeRepository from "../repositories/Entidade.repository";
+import { extrairPaginacao } from "../utils/paginacao";
 
-async function listEntidadesService(params: FiltrosEntidade) {
-	const { estado, municipio, nome_entidade } = params;
+async function listEntidadesService(params: FiltrosEntidade & PaginacaoQuery) {
+	const { estado, municipio, nome_entidade }: FiltrosEntidade = params;
 	const filtros: FiltrosEntidade = {};
 
 	if (estado) {
@@ -15,10 +17,16 @@ async function listEntidadesService(params: FiltrosEntidade) {
 		filtros.nome_entidade = new RegExp(nome_entidade);
 	}
 
-	const entidades = await EntidadeRepository.findEntidades(filtros)
+	const { limite, pagina } = extrairPaginacao(params);
 
-	return entidades
+	const paginacao: Paginacao = {
+		limite: limite || 10,
+		pagina: pagina || 1,
+	};
 
+	const resposta = await EntidadeRepository.findEntidades(filtros, paginacao);
+
+	return resposta;
 }
 
 export default listEntidadesService;
