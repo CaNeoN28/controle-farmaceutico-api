@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Entidade from "../../types/Entidade";
+import Entidade, { FiltrosEntidade } from "../../types/Entidade";
 import Erro from "../../types/Erro";
 import EntidadeModel from "../models/Entidade";
 import { erroParaDicionario } from "../utils/mongooseErrors";
@@ -36,7 +36,18 @@ class EntidadeRepository {
 			erro,
 		};
 	}
-	static findEntidades(params: any) {}
+	static async findEntidades(params: FiltrosEntidade) {
+		const { estado, municipio, nome_entidade } = params;
+
+		const entidades = await EntidadeModel.find({
+			estado,
+			municipio,
+			nome_entidade,
+		});
+		
+
+		return entidades
+	}
 	static async createEntidade(data: Entidade) {
 		let erro: Erro | undefined = undefined;
 		const entidade = new EntidadeModel(data);
