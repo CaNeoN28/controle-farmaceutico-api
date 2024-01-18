@@ -5,6 +5,7 @@ import findEntidadeService from "../services/find.entidade.service";
 import listEntidadesService from "../services/list.entidades.service";
 import { PaginacaoQuery } from "../../types/Paginacao";
 import updateEntidadeService from "../services/update.entidade.service";
+import deleteEntidadeService from "../services/delete.entidade.service";
 
 class EntidadesControllers {
 	static EncontrarEntidadePorId: RequestHandler = async function (
@@ -81,7 +82,16 @@ class EntidadesControllers {
 	};
 
 	static RemoverEntidade: RequestHandler = async function (req, res, next) {
-		res.send("Remover entidade");
+		const {id} = req.params
+
+		try {
+			await deleteEntidadeService(id)
+
+			res.status(204).send()
+		} catch (error) {
+			console.log(error)
+			next (error)
+		}
 	};
 }
 export default EntidadesControllers;
