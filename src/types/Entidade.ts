@@ -4,6 +4,7 @@ interface IEntidade {
 	nome_entidade: string;
 	estado: string;
 	municipio: string;
+	ativo?: boolean;
 }
 
 interface FiltrosEntidade {
@@ -19,11 +20,13 @@ class Entidade implements IEntidade {
 	nome_entidade: string;
 	estado: string;
 	municipio: string;
+	ativo?: boolean
 
-	constructor({ estado, municipio, nome_entidade }: IEntidade) {
+	constructor({ estado, municipio, nome_entidade, ativo }: IEntidade) {
 		this.estado = estado;
 		this.municipio = municipio;
 		this.nome_entidade = nome_entidade;
+		this.ativo = ativo
 	}
 }
 
