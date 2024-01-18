@@ -7,6 +7,11 @@ import { Paginacao } from "../../types/Paginacao";
 import { calcularPaginas } from "../utils/paginacao";
 
 class EntidadeRepository {
+	static async findEntidade(filtros: FiltrosEntidade) {
+		const entidade = await EntidadeModel.findOne(filtros);
+
+		return entidade;
+	}
 	static async findEntidadeId(id: string) {
 		let erro: Erro | undefined = undefined;
 
@@ -42,17 +47,19 @@ class EntidadeRepository {
 		const { limite, pagina } = paginacao;
 
 		const documentos_totais = await EntidadeModel.countDocuments(filtros);
-		const pular = limite * (pagina - 1)
-		const paginas_totais = calcularPaginas(documentos_totais, limite)
+		const pular = limite * (pagina - 1);
+		const paginas_totais = calcularPaginas(documentos_totais, limite);
 
-		const entidades = await EntidadeModel.find(filtros).limit(limite).skip(pular);
+		const entidades = await EntidadeModel.find(filtros)
+			.limit(limite)
+			.skip(pular);
 
 		return {
 			dados: entidades,
 			documentos_totais,
 			limite,
 			pagina,
-			paginas_totais
+			paginas_totais,
 		};
 	}
 	static async createEntidade(data: Entidade) {

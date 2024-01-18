@@ -4,6 +4,7 @@ import Usuario, { Funcao } from "../../types/Usuario";
 import UsuarioModel from "../models/Usuario";
 import { compararSenha } from "../utils/senhas";
 import { erroParaDicionario } from "../utils/mongooseErrors";
+import EntidadeRepository from "./Entidade.repository";
 
 interface FiltrosUsuario {
 	dados_administrativos?: {
@@ -62,7 +63,24 @@ class UsuarioRepository {
 		const primeiroUsuario = (await UsuarioModel.find()).length == 0;
 
 		if (primeiroUsuario) {
-			usuario.dados_administrativos.funcao = "ADMINISTRADOR";
+			const nome_entidade = "Instituto Federal de Educação de Rondônia - Campus Vilhena"
+
+			let entidadePadrao = await EntidadeRepository.findEntidade({
+				nome_entidade,
+			});
+
+			if(!entidadePadrao) {
+				entidadePadrao = (await EntidadeRepository.createEntidade({
+					estado: "Rondônia",
+					municipio: "Vilhena",
+					nome_entidade: nome_entidade
+				})).entidade
+			}
+
+			usuario.dados_administrativos = {
+				entidade_relacionada: entidadePadrao.id,
+				funcao: "ADMINISTRADOR"
+			}
 		}
 
 		const emailExiste = await UsuarioModel.findOne({ email: usuario.email });

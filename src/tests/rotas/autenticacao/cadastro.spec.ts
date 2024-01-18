@@ -4,16 +4,11 @@ import app from "../../../app/app";
 import Usuario from "../../../types/Usuario";
 import limparBanco from "../../../app/utils/db/limparBanco";
 
-const entidade_id = new Types.ObjectId();
-
 let usuario: any = {}
 
 beforeAll(async () => {
 	usuario = new Usuario({
 		cpf: "01880090007",
-		dados_administrativos: {
-			entidade_relacionada: entidade_id,
-		},
 		email: `antoniobandeira@gmail.com`,
 		imagem_url: ".jpg",
 		nome_completo: "Antônio José Bandeira",
@@ -39,16 +34,16 @@ describe("Rota de cadastro de usuário", () => {
 
 		expect(resposta).toMatchObject({
 			cpf: usuario.cpf,
-			dados_administrativos: {
-				entidade_relacionada: entidade_id.toString(),
-				funcao: "ADMINISTRADOR",
-			},
 			email: usuario.email,
 			imagem_url: usuario.imagem_url,
 			nome_completo: usuario.nome_completo,
 			nome_usuario: usuario.nome_usuario,
 			numero_registro: usuario.numero_registro,
 		});
+
+		expect(resposta.dados_administrativos).toMatchObject({
+			funcao: "ADMINISTRADOR"
+		})
 
 		expect(resposta.senha).toBeUndefined();
 	});
