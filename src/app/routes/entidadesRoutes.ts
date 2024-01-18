@@ -12,7 +12,7 @@ entidadesRoutes.post("/entidade", AuthenticationMiddleware, AutorizarGerente, En
 entidadesRoutes
 	.route("/entidade/:id")
 	.get(EntidadesControllers.EncontrarEntidadePorId)
-	.put(AuthenticationMiddleware, EntidadesControllers.AtualizarEntidade)
+	.put(AuthenticationMiddleware, AutorizarGerente, EntidadesControllers.AtualizarEntidade)
 	.delete(AuthenticationMiddleware, EntidadesControllers.RemoverEntidade);
 
 export default entidadesRoutes
