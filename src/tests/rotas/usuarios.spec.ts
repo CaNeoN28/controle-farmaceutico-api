@@ -79,4 +79,38 @@ describe("A rota de cadastro de usuários", () => {
 				"Entidade relacionada é obrigatório",
 		});
 	});
+
+	it("deve realizar validação dos atributos de usuário", async () => {
+		const resposta = await request(app)
+			.post("/usuario")
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.send({
+				cpf: "00000000000",
+				email: "emailinvalido",
+				nome_completo: "N",
+				nome_usuario: "__nome_usuario__",
+				numero_registro: "Numero Inválido",
+				senha: "12345678",
+				dados_administrativos: {
+					entidade_relacionada: "0",
+					funcao: "FUNCAO",
+				},
+			})
+			.expect(400)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject({
+			cpf: "CPF inválido",
+			email: "Email inválido",
+			nome_completo: "Nome completo inválido",
+			nome_usuario: "Nome de usuário inválido",
+			numero_registro: "Número de registro inválido",
+			senha: "Senha inválida",
+			"dados_administrativos.entidade_relacionada":
+				"Entidade relacionada inválida",
+			"dados_administrativos.funcao":
+				"Função em dados administrativos inválida",
+		});
+	});
 });
