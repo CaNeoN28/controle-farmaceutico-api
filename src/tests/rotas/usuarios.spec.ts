@@ -1,5 +1,8 @@
 import request from "supertest";
-import { criarUsuarioAdm } from "../../app/utils/db/gerarDadosDiversos";
+import {
+	criarUsuario,
+	criarUsuarioAdm,
+} from "../../app/utils/db/gerarDadosDiversos";
 import limparBanco from "../../app/utils/db/limparBanco";
 import { generateTokenFromUser } from "../../app/utils/jwt";
 import app from "../../app/app";
@@ -7,6 +10,7 @@ import Usuario from "../../types/Usuario";
 import mongoose from "mongoose";
 
 let token = "";
+let tokenBaixo = "";
 
 const usuario = new Usuario({
 	cpf: "06408728081",
@@ -22,8 +26,23 @@ const usuario = new Usuario({
 });
 
 beforeAll(async () => {
-	const { usuario } = await criarUsuarioAdm();
-	token = generateTokenFromUser(usuario)!;
+	const { usuario: adm } = await criarUsuarioAdm();
+	token = generateTokenFromUser(adm)!;
+
+	const usuarioBaixo = await criarUsuario({
+		cpf: usuario.cpf,
+		email: "emailbaixo@gmail.com",
+		nome_completo: "Usuário baixo",
+		nome_usuario: "usuariobaixo",
+		numero_registro: "0",
+		senha: "12345678Asdf",
+		dados_administrativos: {
+			entidade_relacionada: new mongoose.Types.ObjectId(),
+			funcao: "USUARIO",
+		},
+	});
+
+	tokenBaixo = generateTokenFromUser(usuarioBaixo)!;
 });
 
 afterAll(async () => {
@@ -112,5 +131,30 @@ describe("A rota de cadastro de usuários", () => {
 			"dados_administrativos.funcao":
 				"Função em dados administrativos inválida",
 		});
+	});
+
+	it("deve retornar erro ao tentar criar um usuário sem token de autorização", async () => {
+		const resposta = await request(app)
+			.post("/usuario")
+			.set("Accept", "application/json")
+			.send(usuario)
+			.expect(401)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("É necessário estar autenticado para usar esta rota");
+	});
+
+	it("deve retornar erro ao tentar criar um usuário com um usuário de nível baixo", async () => {
+		const resposta = await request(app)
+			.post("/usuario")
+			.set("Authorization", `Bearer ${tokenBaixo}`)
+			.set("Accept", "application/json")
+			.send(usuario)
+			.expect(403)
+			.then((res) => res.text);
+
+		expect(resposta).toBe(
+			"É preciso ser gerente ou superior para realizar essa ação"
+		);
 	});
 });
