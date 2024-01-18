@@ -122,4 +122,30 @@ describe("A rota de atualizar perfil", () => {
 
 		expect(resposta).toHaveProperty("email", "Email já utilizado");
 	});
+
+	it("deve retornar erro ao tentar atualizar para um nome de usuário já utilizado", async () => {
+		await criarUsuario({
+			cpf: "71328893030",
+			dados_administrativos: {
+				funcao: "USUARIO",
+				entidade_relacionada: new mongoose.Types.ObjectId(),
+			},
+			email: "emailjautilizado@email.com",
+			imagem_url: ".jpg",
+			nome_completo: "Email já utilizado",
+			nome_usuario: "emailjautilizado",
+			numero_registro: "000000",
+			senha: "12345678Asdf",
+		});
+
+		const resposta = await request(app)
+			.put("/perfil/atualizar")
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${token}`)
+			.send({ nome_usuario: "emailjautilizado" })
+			.expect(409)
+			.then((res) => res.body);
+
+		expect(resposta).toHaveProperty("email", "Email já utilizado");
+	});
 });

@@ -67,11 +67,26 @@ describe("Rota de cadastro de usuário", () => {
 		const resposta = await request(app)
 			.post("/cadastro")
 			.set("Accept", "application/json")
-			.send(usuario)
+			.send({
+				email: usuario.email
+			})
 			.expect(409)
 			.then((res) => res.body);
 
 		expect(resposta).toMatchObject({ email: "Email já cadastrado" });
+	});
+
+	it("deve retornar erro ao usar um nome de usuário já existente", async () => {
+		const resposta = await request(app)
+			.post("/cadastro")
+			.set("Accept", "application/json")
+			.send({
+				nome_usuario: usuario.nome_usuario
+			})
+			.expect(409)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject({ nome_usuario: "Nome de usuário já cadastrado" });
 	});
 
 	it("deve retornar erro ao enviar um usuário inválido", async () => {
