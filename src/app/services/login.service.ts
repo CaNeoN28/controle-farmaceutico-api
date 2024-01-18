@@ -18,7 +18,6 @@ async function loginService(data: Data) {
 			} as Erro
 		}
 
-		console.log(usuario)
 		const token = generateTokenFromUser(usuario);
 
 		if(!token){

@@ -2,7 +2,7 @@ import request from "supertest";
 import { Types } from "mongoose";
 import app from "../../app/app";
 import Entidade from "../../types/Entidade";
-import { generateToken, generateTokenFromUser } from "../../app/utils/jwt";
+import { generateTokenFromUser } from "../../app/utils/jwt";
 import limparBanco from "../../app/utils/db/limparBanco";
 import {
 	criarUsuario,
@@ -113,8 +113,55 @@ describe("Rota de listagem de entidades", () => {
 			.expect(200)
 			.then((res) => res.body);
 
-		expect(resposta).toContainEqual(entidade);
+		expect(resposta.dados[0]).toMatchObject(entidade);
 	});
+
+	it("deve retornar dados de paginação", async () => {
+		const resposta = await request(app)
+			.get(`/entidades?pagina=1&limite=10`)
+			.set("Accept", "aplication/json")
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject({
+			pagina: 1,
+			limite: 10,
+			paginas_totais: 1,
+			documentos_totais: 1
+		});
+		expect(resposta.dados[0]).toMatchObject(entidade);
+	});
+
+	it("deve retornar dados de paginação mais um array vazio", async () => {
+		const resposta = await request(app)
+			.get(`/entidades?pagina=2&limite=10`)
+			.set("Accept", "aplication/json")
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject({
+			pagina: 2,
+			limite: 10,
+			paginas_totais: 1,
+			documentos_totais: 1
+		});
+		expect(resposta.dados[0]).toBeUndefined();
+	});
+
+	it("deve retornar erro caso os dados de paginação estejam inválidos", async () => {
+		const resposta = await request(app)
+			.get(`/entidades`)
+			.query("pagina=paginainvalida")
+			.query("limite=limiteinvalido")
+			.set("Accept", "aplication/json")
+			.expect(400)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject({
+			pagina: "Pagina inválida",
+			limite: "Limite inválido"
+		});
+	})
 });
 
 describe("Rota para exibição de entidade", () => {
