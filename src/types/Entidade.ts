@@ -4,6 +4,12 @@ interface IEntidade {
 	municipio: string;
 }
 
+interface FiltrosEntidade {
+	nome_entidade?: RegExp | string;
+	estado?: string;
+	municipio?: string;
+}
+
 class Entidade implements IEntidade {
 	nome_entidade: string;
 	estado: string;
@@ -17,4 +23,4 @@ class Entidade implements IEntidade {
 }
 
 export default Entidade;
-export { IEntidade };
+export { IEntidade, FiltrosEntidade };

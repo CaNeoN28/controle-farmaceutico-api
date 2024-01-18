@@ -2,7 +2,7 @@ import request from "supertest";
 import { Types } from "mongoose";
 import app from "../../app/app";
 import Entidade from "../../types/Entidade";
-import { generateToken, generateTokenFromUser } from "../../app/utils/jwt";
+import { generateTokenFromUser } from "../../app/utils/jwt";
 import limparBanco from "../../app/utils/db/limparBanco";
 import {
 	criarUsuario,
@@ -113,7 +113,7 @@ describe("Rota de listagem de entidades", () => {
 			.expect(200)
 			.then((res) => res.body);
 
-		expect(resposta).toContainEqual(entidade);
+		expect(resposta.dados).toContainEqual(entidade);
 	});
 });
 
