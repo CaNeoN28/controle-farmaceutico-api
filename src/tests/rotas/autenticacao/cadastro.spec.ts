@@ -54,6 +54,7 @@ describe("Rota de cadastro de usuário", () => {
 			.set("Accept", "application/json")
 			.send({
 				...usuario,
+				nome_usuario: "outronomedeusuario",
 				email: "outroemail@gmail.com",
 				senha: "12345678",
 			})

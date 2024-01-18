@@ -120,7 +120,7 @@ describe("A rota de atualizar perfil", () => {
 			.expect(409)
 			.then((res) => res.body);
 
-		expect(resposta).toHaveProperty("email", "Email já utilizado");
+		expect(resposta).toHaveProperty("email", "Email já cadastrado");
 	});
 
 	it("deve retornar erro ao tentar atualizar para um nome de usuário já utilizado", async () => {
@@ -146,6 +146,6 @@ describe("A rota de atualizar perfil", () => {
 			.expect(409)
 			.then((res) => res.body);
 
-		expect(resposta).toHaveProperty("email", "Email já utilizado");
+		expect(resposta).toHaveProperty("nome_usuario", "Nome de usuário já cadastrado");
 	});
 });
