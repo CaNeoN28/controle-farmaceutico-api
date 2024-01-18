@@ -81,7 +81,44 @@ class EntidadeRepository {
 
 		return { entidade, erro };
 	}
-	static updateEntidade(id: string, data: any) {}
+	static async updateEntidade(id: string, data: any) {
+		let erro: Erro | undefined = undefined;
+		let entidade = await EntidadeModel.findById(id);
+
+		try {
+			if (!entidade) {
+				erro = {
+					codigo: 404,
+					erro: "Entidade não encontrada",
+				};
+			} else {
+				if (!data.estado && data.municipio) {
+					data.estado = entidade.estado;
+				}
+
+				await entidade.updateOne(data, {
+					new: true,
+					runValidators: true,
+				});
+
+				await entidade.save()
+
+				entidade = await EntidadeModel.findById(id);
+			}
+		} catch (error) {
+			const { codigo, erros } = erroParaDicionario("Entidade", error);
+
+			erro = {
+				codigo,
+				erro: erros,
+			};
+		}
+
+		return {
+			entidade,
+			erro,
+		};
+	}
 	static deleteEntidade(id: string) {}
 }
 
