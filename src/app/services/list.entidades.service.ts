@@ -1,11 +1,14 @@
+import Ativo from "../../types/Ativo";
 import { FiltrosEntidade } from "../../types/Entidade";
 import { Paginacao, PaginacaoQuery } from "../../types/Paginacao";
 import EntidadeRepository from "../repositories/Entidade.repository";
 import { extrairPaginacao } from "../utils/paginacao";
 
 async function listEntidadesService(params: FiltrosEntidade & PaginacaoQuery) {
-	const { estado, municipio, nome_entidade }: FiltrosEntidade = params;
-	const filtros: FiltrosEntidade = {};
+	const { estado, municipio, nome_entidade, ativo }: FiltrosEntidade = params;
+	const filtros: FiltrosEntidade = {
+		ativo: true,
+	};
 
 	if (estado) {
 		filtros.estado = estado;
@@ -15,6 +18,11 @@ async function listEntidadesService(params: FiltrosEntidade & PaginacaoQuery) {
 	}
 	if (nome_entidade) {
 		filtros.nome_entidade = new RegExp(nome_entidade);
+	}
+	if (ativo as Ativo) {
+		if (ativo == "NAO") filtros.ativo = false;
+		else if (ativo == "SIM") filtros.ativo = true;
+		else if (ativo == "TODOS") filtros.ativo = { $in: [true, false] };
 	}
 
 	const { limite, pagina } = extrairPaginacao(params);

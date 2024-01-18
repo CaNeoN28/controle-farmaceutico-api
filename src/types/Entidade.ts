@@ -1,3 +1,5 @@
+import Ativo from "./Ativo";
+
 interface IEntidade {
 	nome_entidade: string;
 	estado: string;
@@ -8,6 +10,9 @@ interface FiltrosEntidade {
 	nome_entidade?: RegExp | string;
 	estado?: string;
 	municipio?: string;
+	ativo?: Ativo | boolean | {
+		[key: string]: boolean[]
+	}
 }
 
 class Entidade implements IEntidade {

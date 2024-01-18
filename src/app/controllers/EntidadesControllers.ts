@@ -23,11 +23,12 @@ class EntidadesControllers {
 	};
 
 	static ListarEntidades: RequestHandler = async function (req, res, next) {
-		const { estado, municipio, nome_entidade }: FiltrosEntidade = req.query;
+		const { estado, municipio, nome_entidade, ativo }: FiltrosEntidade = req.query;
 		const { limite, pagina }: PaginacaoQuery = req.query;
 
 		try {
 			const resposta = await listEntidadesService({
+				ativo,
 				estado,
 				municipio,
 				nome_entidade,
