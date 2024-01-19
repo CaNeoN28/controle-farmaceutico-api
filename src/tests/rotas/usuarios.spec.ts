@@ -427,7 +427,9 @@ describe("A rota de atualização de usuários", () => {
 			.expect(403)
 			.then((res) => res.text);
 
-		expect(resposta).toBe("É necessário ser gerente ou superior para realizar esta ação");
+		expect(resposta).toBe(
+			"É necessário ser gerente ou superior para realizar esta ação"
+		);
 	});
 });
 
@@ -452,6 +454,24 @@ describe("A rota para deletar usuários", () => {
 			.expect(403)
 			.then((res) => res.text);
 
-		expect(resposta).toBe("É necessário ser gerente ou superior para realizar esta ação");
+		expect(resposta).toBe(
+			"É necessário ser gerente ou superior para realizar esta ação"
+		);
 	});
-})
+
+	it("deve retornar erro ao tentar remover um usuário de nível superior", async () => {
+		const admId = usuarioAdm._id;
+
+		const resposta = await request(app)
+			.delete(`/usuario/${admId}`)
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${tokenGerente}`)
+			.send({})
+			.expect(403)
+			.then((res) => res.text);
+
+		expect(resposta).toBe(
+			"Não é possível remover um usuário de nível superior"
+		);
+	});
+});
