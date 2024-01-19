@@ -64,7 +64,9 @@ class UsuarioRepository {
 		const pular = limite * (pagina - 1);
 		const paginas_totais = calcularPaginas(documentos_totais, limite);
 
-		const usuarios = await UsuarioModel.find(filtros).limit(limite).skip(pular);
+		const usuarios = await UsuarioModel.find(filtros, {
+			senha: false
+		}).limit(limite).skip(pular);
 
 		return {
 			dados: usuarios,
