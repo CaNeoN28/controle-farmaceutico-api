@@ -141,12 +141,19 @@ class UsuarioRepository {
 	static async updateUsuario(id: string, data: any, idGerenciador: string) {
 		let usuario = await UsuarioModel.findById(id);
 		let gerenciador = await UsuarioModel.findById(idGerenciador)!;
-		let erros: Erro | undefined = undefined;
+		let erro: Erro | undefined = undefined;
 
 		try {
-		} catch (error) {}
+		} catch (error) {
+			const { codigo, erros } = erroParaDicionario("Usuário", error);
 
-		return { usuario, erros };
+			erro = {
+				codigo: codigo,
+				erro: erros
+			}
+		}
+
+		return { usuario, erros: erro };
 	}
 	static async selfUpdateUsuario(id: string, data: any) {
 		try {

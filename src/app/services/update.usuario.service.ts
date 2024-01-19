@@ -16,11 +16,30 @@ async function updateUsuarioService(
 		};
 	}
 
+	if (data.senha && !validarSenha(data.senha)) {
+		erro = {
+			codigo: 400,
+			erro: {
+				senha: "Senha inválida",
+			},
+		};
+	}
+
 	const { usuario, erros } = await UsuarioRepository.updateUsuario(
 		id,
 		data,
 		idGerenciador
 	);
+
+	if(erros) {
+		erro = {
+			codigo: erros.codigo,
+			erro: {
+				...erro?.erro,
+				...erros.erro
+			}
+		}
+	}
 
 	if (erro) {
 		throw erro;
