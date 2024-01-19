@@ -15,6 +15,13 @@ interface IUsuario {
 	};
 }
 
+interface FiltrosUsuario {
+	nome_usuario?: RegExp | string;
+	cpf?: RegExp | string;
+	funcao?: string;
+	entidade_relacionada: string;
+}
+
 class Usuario implements IUsuario {
 	nome_completo: string;
 	nome_usuario: string;
@@ -59,4 +66,4 @@ class Usuario implements IUsuario {
 }
 
 export default Usuario;
-export { IUsuario, Funcao };
+export { IUsuario, Funcao, FiltrosUsuario };
