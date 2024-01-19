@@ -478,12 +478,21 @@ describe("A rota para deletar usuários", () => {
 		const resposta = await request(app)
 			.delete(`/usuario/${admId}`)
 			.set("Accept", "application/json")
-			.set("Authorization", `Bearer ${tokenGerente}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
 			.expect(403)
 			.then((res) => res.text);
 
-		expect(resposta).toBe(
-			"Não é possível remover o prório usuário"
-		);
+		expect(resposta).toBe("Não é possível remover o prório usuário");
+	});
+
+	it("deve remover um usuário com sucesso do banco de dados", async () => {
+		const resposta = await request(app)
+			.delete(`/usuario/${usuarioId}`)
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.expect(204)
+			.then((res) => res.body);
+
+		expect(resposta).toEqual({});
 	});
 });
