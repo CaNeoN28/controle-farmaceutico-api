@@ -385,4 +385,25 @@ describe("A rota de atualização de usuários", () => {
 			"Não é possível alterar os dados de um usuário de nível superior"
 		);
 	});
+
+	it("deve retornar erro ao tentar alterar a função de um usuário para ser maior que a própria", async () => {
+		const usuarioId = usuarioBaixo._id;
+
+		const resposta = await request(app)
+			.put(`/usuario/${usuarioId}`)
+			.set("Authorization", `Bearer ${tokenGerente}`)
+			.set("Accept", "application/json")
+			.send({
+				dados_administrativos: {
+					funcao: "ADMINISTRADOR",
+				},
+			})
+			.expect(403)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject({
+			"dados_administrativos.funcao":
+				"Não foi possível alterar a função do usuário",
+		});
+	});
 });
