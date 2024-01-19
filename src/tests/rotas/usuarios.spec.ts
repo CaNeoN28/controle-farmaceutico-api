@@ -8,6 +8,7 @@ import { generateTokenFromUser } from "../../app/utils/jwt";
 import app from "../../app/app";
 import Usuario from "../../types/Usuario";
 import mongoose from "mongoose";
+import { Paginacao } from "../../types/Paginacao";
 
 let token = "";
 let tokenBaixo = "";
@@ -231,5 +232,26 @@ describe("A rota de recuperação de usuário", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toBe("Você deve estar autenticado para usar esta rota");
+	});
+});
+
+describe("A rota de listagem de usuários", () => {
+	it("Deve retornar uma lista com os dados do usuário cadastrado anteriormente", async () => {
+		const resposta = await request(app)
+			.get("/usuarios")
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.send(usuario)
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject({
+			limite: 10,
+			pagina: 1,
+			paginas_totais: 1,
+			documentos_totais: 3,
+		});
+
+		expect(resposta.dados[1]).toMatchObject(usuario)
 	});
 });
