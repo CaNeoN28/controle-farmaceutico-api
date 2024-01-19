@@ -34,7 +34,14 @@ const usuario = {
 beforeAll(async () => {
 	const { usuario: adm } = await criarUsuarioAdm();
 
-	usuarioAdm = adm;
+	usuarioAdm = {
+		...adm,
+		dados_administrativos: {
+			...adm.dados_administrativos,
+			entidade_relacionada:
+				adm.dados_administrativos.entidade_relacionada.toString(),
+		},
+	};
 	usuarioBaixo = await criarUsuario({
 		cpf: usuario.cpf,
 		email: "emailbaixo@gmail.com",
@@ -302,6 +309,15 @@ describe("A rota de listagem de usuários", () => {
 	});
 
 	it("deve retornar um usuário administrador com base nos filtros", async () => {
+		const {
+			cpf,
+			email,
+			nome_completo,
+			nome_usuario,
+			numero_registro,
+			dados_administrativos,
+		} = usuarioAdm as Usuario;
+
 		const resposta = await request(app)
 			.get("/usuarios")
 			.query("funcao=ADMINISTRADOR")
@@ -311,7 +327,14 @@ describe("A rota de listagem de usuários", () => {
 			.then((res) => res.body);
 
 		expect(resposta.documentos_totais).toBe(1);
-		expect(resposta.dados[0]).toMatchObject(usuario);
+		expect(resposta.dados[0]).toMatchObject({
+			cpf,
+			email,
+			nome_completo,
+			nome_usuario,
+			numero_registro,
+			dados_administrativos,
+		});
 	});
 
 	it("deve exigir token para exibição de usuário", async () => {
