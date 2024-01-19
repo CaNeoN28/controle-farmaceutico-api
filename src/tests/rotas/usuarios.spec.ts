@@ -304,3 +304,19 @@ describe("A rota de listagem de usuários", () => {
 		expect(resposta).toBe("É preciso estar autenticado para usar esta rota");
 	});
 });
+
+describe("A rota de atualização de usuários", () => {
+	it("deve atualizar os dados de um usuário corretamente", async () => {
+		const resposta = await request(app)
+			.put(`/usuario/${usuarioId}`)
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.send({
+				nome_completo: "Nome alterado",
+			})
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta).toHaveProperty("nome_completo", "Nome alterado");
+	});
+});
