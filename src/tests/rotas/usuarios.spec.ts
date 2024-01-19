@@ -418,7 +418,7 @@ describe("A rota de atualização de usuários", () => {
 		expect(resposta).toBe("É necessário estar autenticado para usar esta rota");
 	});
 
-	it("deve retornar erro ao tentar alterar um usuário sem estar autenticado", async () => {
+	it("deve retornar erro ao tentar alterar um usuário como um usuário de nível baixo", async () => {
 		const resposta = await request(app)
 			.put(`/usuario/${usuarioId}`)
 			.set("Accept", "application/json")
@@ -430,3 +430,28 @@ describe("A rota de atualização de usuários", () => {
 		expect(resposta).toBe("É necessário ser gerente ou superior para realizar esta ação");
 	});
 });
+
+describe("A rota para deletar usuários", () => {
+	it("deve retornar erro ao tentar remover um usuário sem estar autenticado", async () => {
+		const resposta = await request(app)
+			.delete(`/usuario/${usuarioId}`)
+			.set("Accept", "application/json")
+			.send({})
+			.expect(401)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("É necessário estar autenticado para usar esta rota");
+	});
+
+	it("deve retornar erro ao tentar remover um usuário como um usuário de nível baixo", async () => {
+		const resposta = await request(app)
+			.delete(`/usuario/${usuarioId}`)
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${tokenBaixo}`)
+			.send({})
+			.expect(403)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("É necessário ser gerente ou superior para realizar esta ação");
+	});
+})
