@@ -5,7 +5,7 @@ import Erro from "../../types/Erro";
 import loginService from "../services/login.service";
 import { AuthenticatedRequest } from "../../types/Requests";
 import findUsuarioService from "../services/find.usuario.service";
-import updateUsuarioService from "../services/update.usuario.service";
+import selfUpdateUsuarioService from "../services/self.update.usuario.service";
 
 class AutenticacaoControllers {
 	static Cadastro: RequestHandler = async function (req, res, next) {
@@ -60,7 +60,7 @@ class AutenticacaoControllers {
 		try {
 			const { nome_usuario, email, senha, imagem_url } = req.body;
 
-			const resposta = await updateUsuarioService(user.id, {
+			const resposta = await selfUpdateUsuarioService(user.id, {
 				nome_usuario,
 				email,
 				senha,
