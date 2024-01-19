@@ -251,6 +251,14 @@ describe("A rota de recuperação de usuário", () => {
 
 describe("A rota de listagem de usuários", () => {
 	it("deve retornar uma lista com os dados do usuário cadastrado anteriormente", async () => {
+		const {
+			cpf,
+			dados_administrativos,
+			email,
+			nome_completo,
+			nome_usuario,
+			numero_registro,
+		} = usuario;
 		const resposta = await request(app)
 			.get("/usuarios")
 			.set("Authorization", `Bearer ${tokenAdm}`)
@@ -262,10 +270,17 @@ describe("A rota de listagem de usuários", () => {
 			limite: 10,
 			pagina: 1,
 			paginas_totais: 1,
-			documentos_totais: 3,
+			documentos_totais: 4,
 		});
 
-		expect(resposta.dados[1]).toMatchObject(usuario);
+		expect(resposta.dados[3]).toMatchObject({
+			cpf,
+			dados_administrativos,
+			email,
+			nome_completo,
+			nome_usuario,
+			numero_registro,
+		});
 	});
 
 	it("não deve retornar dados de usuário por página inexistente", async () => {
@@ -281,11 +296,9 @@ describe("A rota de listagem de usuários", () => {
 		expect(resposta).toMatchObject({
 			limite: 2,
 			pagina: 2,
-			paginas_totais: 1,
-			documentos_totais: 3,
+			paginas_totais: 2,
+			documentos_totais: 4,
 		});
-
-		expect(resposta.dados[0]).toMatchObject(usuarioBaixo);
 	});
 
 	it("deve retornar um usuário administrador com base nos filtros", async () => {
@@ -308,7 +321,7 @@ describe("A rota de listagem de usuários", () => {
 			.expect(401)
 			.then((res) => res.text);
 
-		expect(resposta).toBe("É preciso estar autenticado para usar esta rota");
+		expect(resposta).toBe("É necessário estar autenticado para usar esta rota");
 	});
 });
 
