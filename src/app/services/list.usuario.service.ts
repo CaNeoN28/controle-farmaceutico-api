@@ -14,15 +14,11 @@ async function listUsuariosService(params: any) {
 		filtros.nome_usuario = new RegExp(nome_usuario);
 	}
 	if (entidade_relacionada) {
-		filtros.dados_administrativos = {
-			entidade_relacionada,
-		};
+		filtros["dados_administrativos.entidade_relacionada"] =
+			entidade_relacionada;
 	}
 	if (funcao) {
-		filtros.dados_administrativos = {
-			...filtros.dados_administrativos,
-			funcao,
-		};
+		filtros["dados_administrativos.funcao"] = funcao;
 	}
 
 	const { limite, pagina } = extrairPaginacao(params);
@@ -34,7 +30,7 @@ async function listUsuariosService(params: any) {
 
 	const resposta = await UsuarioRepository.findUsuarios(filtros, paginacao);
 
-	return resposta
+	return resposta;
 }
 
 export default listUsuariosService;
