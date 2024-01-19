@@ -319,4 +319,23 @@ describe("A rota de atualização de usuários", () => {
 
 		expect(resposta).toHaveProperty("nome_completo", "Nome alterado");
 	});
+
+	it("deve realizar validação dos dados do usuário", async () => {
+		const resposta = await request(app)
+			.put(`/usuario/${usuarioId}`)
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.send({
+				dados_administrativos: {
+					funcao: "FUNCAO",
+				},
+			})
+			.expect(400)
+			.then((res) => res.body);
+
+		expect(resposta).toHaveProperty(
+			"dados_administrativos.funcao",
+			"Função em dados administrativos inválida"
+		);
+	});
 });
