@@ -3,6 +3,7 @@ import Usuario, { FiltrosUsuario } from "../../types/Usuario";
 import createUsuarioService from "../services/create.usuario.service";
 import findUsuarioService from "../services/find.usuario.service";
 import listUsuariosService from "../services/list.usuario.service";
+import { PaginacaoQuery } from "../../types/Paginacao";
 
 class UsuariosControllers {
 	static PegarUsuarioPorId: RequestHandler = async function (req, res, next) {
@@ -18,16 +19,10 @@ class UsuariosControllers {
 	};
 
 	static ListarUsuarios: RequestHandler = async function (req, res, next) {
-		const { entidade_relacionada, cpf, funcao, nome_usuario }: FiltrosUsuario =
-			req.query as any;
+		const params = req.query
 
 		try {
-			const resposta = await listUsuariosService({
-				entidade_relacionada,
-				cpf,
-				funcao,
-				nome_usuario,
-			});
+			const resposta = await listUsuariosService(params);
 
 			return res.status(200).send(resposta);
 		} catch (error) {
