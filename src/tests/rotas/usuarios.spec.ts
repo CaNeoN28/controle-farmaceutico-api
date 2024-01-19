@@ -12,6 +12,8 @@ import mongoose from "mongoose";
 let token = "";
 let tokenBaixo = "";
 
+let usuarioId = new mongoose.Types.ObjectId();
+
 const usuario = new Usuario({
 	cpf: "06408728081",
 	email: "emailaleatorio12@gmail.com",
@@ -76,6 +78,10 @@ describe("A rota de cadastro de usuários", () => {
 			numero_registro,
 			dados_administrativos,
 		} as Usuario);
+
+		expect(resposta).toHaveProperty("_id");
+
+		usuarioId = resposta._id;
 	});
 
 	it("deve realizar teste de validação de atributos obrigatórios", async () => {
