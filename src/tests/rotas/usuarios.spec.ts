@@ -177,4 +177,16 @@ describe("A rota de recuperação de usuário", () => {
 
 		expect(resposta).toMatchObject(usuario);
 	});
+
+	it("deve retornar o erro ao informar um id inválido", async () => {
+		const resposta = await request(app)
+			.get(`/usuario/idinvalido`)
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.send(usuario)
+			.expect(200)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Id inválido")
+	});
 });
