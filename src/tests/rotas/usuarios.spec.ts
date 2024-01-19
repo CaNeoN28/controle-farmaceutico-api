@@ -189,4 +189,18 @@ describe("A rota de recuperação de usuário", () => {
 
 		expect(resposta).toBe("Id inválido")
 	});
+
+	it("deve retornar erro de usuário não encontrado", async () => {
+		const idFalso = new mongoose.Types.ObjectId()
+
+		const resposta = await request(app)
+			.get(`/usuario/${idFalso}`)
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.send(usuario)
+			.expect(404)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Usuário não encontrado");
+	});
 });
