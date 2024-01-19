@@ -245,7 +245,7 @@ describe("A rota de recuperação de usuário", () => {
 			.expect(401)
 			.then((res) => res.text);
 
-		expect(resposta).toBe("Você deve estar autenticado para usar esta rota");
+		expect(resposta).toBe("É necessário estar autenticado para usar esta rota");
 	});
 });
 

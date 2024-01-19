@@ -1,10 +1,19 @@
 import { RequestHandler } from "express";
 import Usuario from "../../types/Usuario";
 import createUsuarioService from "../services/create.usuario.service";
+import findUsuarioService from "../services/find.usuario.service";
 
 class UsuariosControllers {
 	static PegarUsuarioPorId: RequestHandler = async function (req, res, next) {
-		res.send("Pegar usuário por Id");
+		const {id} = req.params
+
+		try {
+			const resposta = await findUsuarioService(id)
+
+			return res.status(200).send(resposta)
+		} catch (error) {
+			next(error)
+		}
 	};
 
 	static ListarUsuarios: RequestHandler = async function (req, res, next) {
