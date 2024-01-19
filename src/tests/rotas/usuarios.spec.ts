@@ -15,6 +15,8 @@ let tokenBaixo = "";
 
 let usuarioId = new mongoose.Types.ObjectId();
 
+let usuarioBaixo: any = undefined;
+
 const usuario = new Usuario({
 	cpf: "06408728081",
 	email: "emailaleatorio12@gmail.com",
@@ -32,7 +34,7 @@ beforeAll(async () => {
 	const { usuario: adm } = await criarUsuarioAdm();
 	token = generateTokenFromUser(adm)!;
 
-	const usuarioBaixo = await criarUsuario({
+	usuarioBaixo = await criarUsuario({
 		cpf: usuario.cpf,
 		email: "emailbaixo@gmail.com",
 		nome_completo: "Usuário baixo",
@@ -236,7 +238,7 @@ describe("A rota de recuperação de usuário", () => {
 });
 
 describe("A rota de listagem de usuários", () => {
-	it("Deve retornar uma lista com os dados do usuário cadastrado anteriormente", async () => {
+	it("deve retornar uma lista com os dados do usuário cadastrado anteriormente", async () => {
 		const resposta = await request(app)
 			.get("/usuarios")
 			.set("Authorization", `Bearer ${token}`)
@@ -252,6 +254,27 @@ describe("A rota de listagem de usuários", () => {
 			documentos_totais: 3,
 		});
 
-		expect(resposta.dados[1]).toMatchObject(usuario)
+		expect(resposta.dados[1]).toMatchObject(usuario);
+	});
+
+	it("não deve retornar dados de usuário por página inexistente", async () => {
+		const resposta = await request(app)
+			.get("/usuarios")
+			.query("pagina=2")
+			.query("limite=2")
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.send(usuario)
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject({
+			limite: 2,
+			pagina: 2,
+			paginas_totais: 1,
+			documentos_totais: 3,
+		});
+
+		expect(resposta.dados[0]).toMatchObject(usuarioBaixo);
 	});
 });
