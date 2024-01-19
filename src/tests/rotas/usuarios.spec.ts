@@ -199,7 +199,6 @@ describe("A rota de recuperação de usuário", () => {
 			.get(`/usuario/${usuarioId}`)
 			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
-			.send(usuario)
 			.expect(200)
 			.then((res) => res.body);
 
@@ -220,7 +219,6 @@ describe("A rota de recuperação de usuário", () => {
 			.get(`/usuario/idinvalido`)
 			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
-			.send(usuario)
 			.expect(200)
 			.then((res) => res.text);
 
@@ -234,7 +232,6 @@ describe("A rota de recuperação de usuário", () => {
 			.get(`/usuario/${idFalso}`)
 			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
-			.send(usuario)
 			.expect(404)
 			.then((res) => res.text);
 
@@ -245,7 +242,6 @@ describe("A rota de recuperação de usuário", () => {
 		const resposta = await request(app)
 			.get(`/usuario/${usuarioId}`)
 			.set("Accept", "application/json")
-			.send(usuario)
 			.expect(401)
 			.then((res) => res.text);
 
@@ -259,7 +255,6 @@ describe("A rota de listagem de usuários", () => {
 			.get("/usuarios")
 			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
-			.send(usuario)
 			.expect(200)
 			.then((res) => res.body);
 
@@ -280,7 +275,6 @@ describe("A rota de listagem de usuários", () => {
 			.query("limite=2")
 			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
-			.send(usuario)
 			.expect(200)
 			.then((res) => res.body);
 
@@ -300,7 +294,6 @@ describe("A rota de listagem de usuários", () => {
 			.query("funcao=ADMINISTRADOR")
 			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
-			.send(usuario)
 			.expect(200)
 			.then((res) => res.body);
 
@@ -312,7 +305,6 @@ describe("A rota de listagem de usuários", () => {
 		const resposta = await request(app)
 			.get("/usuarios")
 			.set("Accept", "application/json")
-			.send(usuario)
 			.expect(401)
 			.then((res) => res.text);
 
