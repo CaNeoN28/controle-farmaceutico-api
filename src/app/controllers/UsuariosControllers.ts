@@ -5,6 +5,8 @@ import findUsuarioService from "../services/find.usuario.service";
 import listUsuariosService from "../services/list.usuario.service";
 import { PaginacaoQuery } from "../../types/Paginacao";
 import selfUpdateUsuarioService from "../services/self.update.usuario.service";
+import { AuthenticatedRequest } from "../../types/Requests";
+import updateUsuarioService from "../services/update.usuario.service";
 
 class UsuariosControllers {
 	static PegarUsuarioPorId: RequestHandler = async function (req, res, next) {
@@ -63,7 +65,7 @@ class UsuariosControllers {
 		}
 	};
 
-	static AtualizarUsuario: RequestHandler = async function (req, res, next) {
+	static AtualizarUsuario: RequestHandler = async function (req: AuthenticatedRequest, res, next) {
 		const {
 			cpf,
 			email,
@@ -75,10 +77,12 @@ class UsuariosControllers {
 			imagem_url,
 		} = req.body as Usuario;
 
+		const user = req.user!
+
 		const { id } = req.params;
 
 		try {
-			const resposta = await selfUpdateUsuarioService(id, {
+			const resposta = await updateUsuarioService(id, {
 				cpf,
 				email,
 				nome_completo,
@@ -87,7 +91,7 @@ class UsuariosControllers {
 				senha,
 				dados_administrativos,
 				imagem_url,
-			});
+			}, user);
 
 			return res.status(200).send(resposta)
 		} catch (error) {
