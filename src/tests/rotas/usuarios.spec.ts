@@ -8,14 +8,13 @@ import { generateTokenFromUser } from "../../app/utils/jwt";
 import app from "../../app/app";
 import Usuario from "../../types/Usuario";
 import mongoose from "mongoose";
-import { Paginacao } from "../../types/Paginacao";
 
 let token = "";
 let tokenBaixo = "";
 
 let usuarioId = new mongoose.Types.ObjectId();
-
 let usuarioBaixo: any = undefined;
+let usuarioAdm: any = undefined;
 
 const usuario = new Usuario({
 	cpf: "06408728081",
@@ -33,6 +32,8 @@ const usuario = new Usuario({
 beforeAll(async () => {
 	const { usuario: adm } = await criarUsuarioAdm();
 	token = generateTokenFromUser(adm)!;
+
+	usuarioAdm = adm;
 
 	usuarioBaixo = await criarUsuario({
 		cpf: usuario.cpf,
@@ -276,5 +277,19 @@ describe("A rota de listagem de usuários", () => {
 		});
 
 		expect(resposta.dados[0]).toMatchObject(usuarioBaixo);
+	});
+
+	it("deve retornar um usuário administrador com base nos filtros", async () => {
+		const resposta = await request(app)
+			.get("/usuarios")
+			.query("funcao=ADMINISTRADOR")
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.send(usuario)
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta.documentos_totais).toBe(1);
+		expect(resposta.dados[0]).toMatchObject(usuario);
 	});
 });
