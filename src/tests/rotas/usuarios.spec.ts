@@ -9,11 +9,13 @@ import app from "../../app/app";
 import Usuario from "../../types/Usuario";
 import mongoose from "mongoose";
 
-let token = "";
+let tokenAdm = "";
+let tokenGerente = "";
 let tokenBaixo = "";
 
 let usuarioId = new mongoose.Types.ObjectId();
 let usuarioBaixo: any = undefined;
+let usuarioGerente: any = undefined;
 let usuarioAdm: any = undefined;
 
 const usuario = new Usuario({
@@ -31,10 +33,8 @@ const usuario = new Usuario({
 
 beforeAll(async () => {
 	const { usuario: adm } = await criarUsuarioAdm();
-	token = generateTokenFromUser(adm)!;
 
 	usuarioAdm = adm;
-
 	usuarioBaixo = await criarUsuario({
 		cpf: usuario.cpf,
 		email: "emailbaixo@gmail.com",
@@ -48,7 +48,22 @@ beforeAll(async () => {
 		},
 	});
 
+	usuarioGerente = await criarUsuario({
+		cpf: usuario.cpf,
+		email: "usuariogerente@gmail.com",
+		nome_completo: "Usuário Gerente",
+		nome_usuario: "usuariogerente",
+		numero_registro: "0",
+		senha: "12345678Asdf.",
+		dados_administrativos: {
+			entidade_relacionada: new mongoose.Types.ObjectId(),
+			funcao: "GERENTE",
+		},
+	});
+
+	tokenAdm = generateTokenFromUser(adm)!;
 	tokenBaixo = generateTokenFromUser(usuarioBaixo)!;
+	tokenGerente = generateTokenFromUser(usuarioGerente)!;
 });
 
 afterAll(async () => {
@@ -68,7 +83,7 @@ describe("A rota de cadastro de usuários", () => {
 
 		const resposta = await request(app)
 			.post("/usuario")
-			.set("Authorization", `Bearer ${token}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
 			.send(usuario)
 			.expect(201)
@@ -91,7 +106,7 @@ describe("A rota de cadastro de usuários", () => {
 	it("deve realizar teste de validação de atributos obrigatórios", async () => {
 		const resposta = await request(app)
 			.post("/usuario")
-			.set("Authorization", `Bearer ${token}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
 			.send(usuario)
 			.expect(400)
@@ -112,7 +127,7 @@ describe("A rota de cadastro de usuários", () => {
 	it("deve realizar validação dos atributos de usuário", async () => {
 		const resposta = await request(app)
 			.post("/usuario")
-			.set("Authorization", `Bearer ${token}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
 			.send({
 				cpf: "00000000000",
@@ -182,7 +197,7 @@ describe("A rota de recuperação de usuário", () => {
 
 		const resposta = await request(app)
 			.get(`/usuario/${usuarioId}`)
-			.set("Authorization", `Bearer ${token}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
 			.send(usuario)
 			.expect(200)
@@ -203,7 +218,7 @@ describe("A rota de recuperação de usuário", () => {
 	it("deve retornar o erro ao informar um id inválido", async () => {
 		const resposta = await request(app)
 			.get(`/usuario/idinvalido`)
-			.set("Authorization", `Bearer ${token}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
 			.send(usuario)
 			.expect(200)
@@ -217,7 +232,7 @@ describe("A rota de recuperação de usuário", () => {
 
 		const resposta = await request(app)
 			.get(`/usuario/${idFalso}`)
-			.set("Authorization", `Bearer ${token}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
 			.send(usuario)
 			.expect(404)
@@ -242,7 +257,7 @@ describe("A rota de listagem de usuários", () => {
 	it("deve retornar uma lista com os dados do usuário cadastrado anteriormente", async () => {
 		const resposta = await request(app)
 			.get("/usuarios")
-			.set("Authorization", `Bearer ${token}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
 			.send(usuario)
 			.expect(200)
@@ -263,7 +278,7 @@ describe("A rota de listagem de usuários", () => {
 			.get("/usuarios")
 			.query("pagina=2")
 			.query("limite=2")
-			.set("Authorization", `Bearer ${token}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
 			.send(usuario)
 			.expect(200)
@@ -283,7 +298,7 @@ describe("A rota de listagem de usuários", () => {
 		const resposta = await request(app)
 			.get("/usuarios")
 			.query("funcao=ADMINISTRADOR")
-			.set("Authorization", `Bearer ${token}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
 			.send(usuario)
 			.expect(200)
@@ -302,5 +317,116 @@ describe("A rota de listagem de usuários", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toBe("É preciso estar autenticado para usar esta rota");
+	});
+});
+
+describe("A rota de atualização de usuários", () => {
+	it("deve atualizar os dados de um usuário corretamente", async () => {
+		const resposta = await request(app)
+			.put(`/usuario/${usuarioId}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.send({
+				nome_completo: "Nome alterado",
+			})
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta).toHaveProperty("nome_completo", "Nome alterado");
+	});
+
+	it("deve realizar validação dos dados do usuário", async () => {
+		const resposta = await request(app)
+			.put(`/usuario/${usuarioId}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.send({
+				dados_administrativos: {
+					funcao: "FUNCAO",
+				},
+			})
+			.expect(400)
+			.then((res) => res.body);
+
+		expect(resposta).toHaveProperty(
+			"dados_administrativos.funcao",
+			"Função em dados administrativos inválida"
+		);
+	});
+
+	it("deve retornar erro ao tentar alterar os dados do próprio usuário", async () => {
+		const admId = usuarioAdm._id;
+
+		const resposta = await request(app)
+			.put(`/usuario/${admId}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.send({})
+			.expect(403)
+			.then((res) => res.text);
+
+		expect(resposta).toBe(
+			"Não é possível alterar seus próprios dados usando esta rota"
+		);
+	});
+
+	it("deve retornar erro ao tentar alterar os dados do próprio usuário", async () => {
+		const admId = usuarioAdm._id;
+
+		const resposta = await request(app)
+			.put(`/usuario/${admId}`)
+			.set("Authorization", `Bearer ${tokenGerente}`)
+			.set("Accept", "application/json")
+			.send({})
+			.expect(403)
+			.then((res) => res.text);
+
+		expect(resposta).toBe(
+			"Não é possível alterar os dados de um usuário de nível superior"
+		);
+	});
+
+	it("deve retornar erro ao tentar alterar a função de um usuário para ser maior que a própria", async () => {
+		const usuarioId = usuarioBaixo._id;
+
+		const resposta = await request(app)
+			.put(`/usuario/${usuarioId}`)
+			.set("Authorization", `Bearer ${tokenGerente}`)
+			.set("Accept", "application/json")
+			.send({
+				dados_administrativos: {
+					funcao: "ADMINISTRADOR",
+				},
+			})
+			.expect(403)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject({
+			"dados_administrativos.funcao":
+				"Não foi possível alterar a função do usuário",
+		});
+	});
+
+	it("deve retornar erro ao tentar alterar um usuário sem estar autenticado", async () => {
+		const resposta = await request(app)
+			.put(`/usuario/${usuarioId}`)
+			.set("Accept", "application/json")
+			.send({})
+			.expect(401)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("É necessário estar autenticado para usar esta rota");
+	});
+
+	it("deve retornar erro ao tentar alterar um usuário sem estar autenticado", async () => {
+		const resposta = await request(app)
+			.put(`/usuario/${usuarioId}`)
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${tokenBaixo}`)
+			.send({})
+			.expect(403)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("É necessário ser gerente ou superior para realizar esta ação");
 	});
 });
