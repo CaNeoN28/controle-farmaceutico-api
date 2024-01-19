@@ -65,7 +65,11 @@ class UsuariosControllers {
 		}
 	};
 
-	static AtualizarUsuario: RequestHandler = async function (req: AuthenticatedRequest, res, next) {
+	static AtualizarUsuario: RequestHandler = async function (
+		req: AuthenticatedRequest,
+		res,
+		next
+	) {
 		const {
 			cpf,
 			email,
@@ -77,23 +81,27 @@ class UsuariosControllers {
 			imagem_url,
 		} = req.body as Usuario;
 
-		const user = req.user!
+		const user = req.user!;
 
 		const { id } = req.params;
 
 		try {
-			const resposta = await updateUsuarioService(id, {
-				cpf,
-				email,
-				nome_completo,
-				nome_usuario,
-				numero_registro,
-				senha,
-				dados_administrativos,
-				imagem_url,
-			}, user);
+			const resposta = await updateUsuarioService(
+				id,
+				{
+					cpf,
+					email,
+					nome_completo,
+					nome_usuario,
+					numero_registro,
+					senha,
+					dados_administrativos,
+					imagem_url,
+				},
+				user.id
+			);
 
-			return res.status(200).send(resposta)
+			return res.status(200).send(resposta);
 		} catch (error) {
 			next(error);
 		}
