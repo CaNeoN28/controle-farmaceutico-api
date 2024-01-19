@@ -8,7 +8,7 @@ const usuarioRoutes = Router();
 usuarioRoutes
 	.route("/usuario/:id")
 	.get(AuthenticationMiddleware, UsuariosControllers.PegarUsuarioPorId)
-	.put(UsuariosControllers.AtualizarUsuario)
+	.put(AuthenticationMiddleware, AutorizarGerente, UsuariosControllers.AtualizarUsuario)
 	.delete(UsuariosControllers.RemoverUsuário);
 
 usuarioRoutes.get("/usuarios", AuthenticationMiddleware, UsuariosControllers.ListarUsuarios);
