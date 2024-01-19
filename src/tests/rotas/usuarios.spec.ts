@@ -292,4 +292,15 @@ describe("A rota de listagem de usuários", () => {
 		expect(resposta.documentos_totais).toBe(1);
 		expect(resposta.dados[0]).toMatchObject(usuario);
 	});
+
+	it("deve exigir token para exibição de usuário", async () => {
+		const resposta = await request(app)
+			.get("/usuarios")
+			.set("Accept", "application/json")
+			.send(usuario)
+			.expect(401)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("É preciso estar autenticado para usar esta rota");
+	});
 });
