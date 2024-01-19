@@ -14,7 +14,7 @@ async function selfUpdateUsuarioService(id: string, data: any) {
 		}
 	}
 
-	const { usuario, erros } = await UsuarioRepository.updateUsuario(id, data);
+	const { usuario, erros } = await UsuarioRepository.selfUpdateUsuario(id, data);
 
 	if(erros) {
 		erro = {

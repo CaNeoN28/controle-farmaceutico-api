@@ -65,8 +65,10 @@ class UsuarioRepository {
 		const paginas_totais = calcularPaginas(documentos_totais, limite);
 
 		const usuarios = await UsuarioModel.find(filtros, {
-			senha: false
-		}).limit(limite).skip(pular);
+			senha: false,
+		})
+			.limit(limite)
+			.skip(pular);
 
 		return {
 			dados: usuarios,
@@ -136,7 +138,8 @@ class UsuarioRepository {
 
 		return { usuario: usuario.toObject(), erro };
 	}
-	static async updateUsuario(id: string, data: any) {
+	static async updateUsuario(id: string, data: any, idGerenciador: string) {}
+	static async selfUpdateUsuario(id: string, data: any) {
 		try {
 			let erros: Erro | undefined = undefined;
 			let usuario: any = undefined;
