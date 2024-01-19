@@ -219,7 +219,7 @@ describe("A rota de recuperação de usuário", () => {
 			.get(`/usuario/idinvalido`)
 			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
-			.expect(200)
+			.expect(400)
 			.then((res) => res.text);
 
 		expect(resposta).toBe("Id inválido");
@@ -344,6 +344,32 @@ describe("A rota de atualização de usuários", () => {
 			"dados_administrativos.funcao",
 			"Função em dados administrativos inválida"
 		);
+	});
+
+	it("deve retornar o erro ao informar um id inválido", async () => {
+		const resposta = await request(app)
+			.put(`/usuario/idinvalido`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.send({})
+			.expect(400)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Id inválido");
+	});
+
+	it("deve retornar erro de usuário não encontrado", async () => {
+		const idFalso = new mongoose.Types.ObjectId();
+
+		const resposta = await request(app)
+			.put(`/usuario/${idFalso}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.send({})
+			.expect(404)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Usuário não encontrado");
 	});
 
 	it("deve retornar erro ao tentar alterar os dados do próprio usuário", async () => {
