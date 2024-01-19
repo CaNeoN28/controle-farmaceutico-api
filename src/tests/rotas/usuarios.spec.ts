@@ -438,7 +438,6 @@ describe("A rota para deletar usuários", () => {
 		const resposta = await request(app)
 			.delete(`/usuario/${usuarioId}`)
 			.set("Accept", "application/json")
-			.send({})
 			.expect(401)
 			.then((res) => res.text);
 
@@ -450,7 +449,6 @@ describe("A rota para deletar usuários", () => {
 			.delete(`/usuario/${usuarioId}`)
 			.set("Accept", "application/json")
 			.set("Authorization", `Bearer ${tokenBaixo}`)
-			.send({})
 			.expect(403)
 			.then((res) => res.text);
 
@@ -466,12 +464,26 @@ describe("A rota para deletar usuários", () => {
 			.delete(`/usuario/${admId}`)
 			.set("Accept", "application/json")
 			.set("Authorization", `Bearer ${tokenGerente}`)
-			.send({})
 			.expect(403)
 			.then((res) => res.text);
 
 		expect(resposta).toBe(
 			"Não é possível remover um usuário de nível superior"
+		);
+	});
+
+	it("deve retornar erro ao tentar remover o próprio usuário", async () => {
+		const admId = usuarioAdm._id;
+
+		const resposta = await request(app)
+			.delete(`/usuario/${admId}`)
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${tokenGerente}`)
+			.expect(403)
+			.then((res) => res.text);
+
+		expect(resposta).toBe(
+			"Não é possível remover o prório usuário"
 		);
 	});
 });
