@@ -485,6 +485,30 @@ describe("A rota para deletar usuários", () => {
 		expect(resposta).toBe("Não é possível remover o prório usuário");
 	});
 
+	it("deve retornar erro ao tentar remover um usuário que não existe", async () => {
+		const resposta = await request(app)
+			.delete(`/usuario/idinvalido`)
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.expect(400)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Id inválido");
+	});
+
+	it("deve retornar erro ao tentar remover um usuário que não existe", async () => {
+		const idFalso = new mongoose.Types.ObjectId();
+
+		const resposta = await request(app)
+			.delete(`/usuario/${idFalso}`)
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.expect(404)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Usuário não encontrado");
+	});
+
 	it("deve remover um usuário com sucesso do banco de dados", async () => {
 		const resposta = await request(app)
 			.delete(`/usuario/${usuarioId}`)
