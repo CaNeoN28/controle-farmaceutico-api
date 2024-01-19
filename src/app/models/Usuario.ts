@@ -10,10 +10,11 @@ const DatosAdministrativosSchema = new mongoose.Schema(
 	{
 		entidade_relacionada: {
 			type: mongoose.Types.ObjectId,
+			cast: "Entidade relacionada inválida",
 			ref: "Entidade",
 			validate: {
 				validator: validarID<String>,
-				message: "Entidade relacionada em dados administrativos inválida",
+				message: "Entidade relacionada inválida",
 			},
 			required: [true, "Entidade relacionada é obrigatório"],
 		},

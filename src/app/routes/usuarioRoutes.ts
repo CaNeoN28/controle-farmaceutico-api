@@ -1,5 +1,7 @@
 import { Router } from "express";
 import UsuariosControllers from "../controllers/UsuariosControllers";
+import AuthenticationMiddleware from "../middlewares/AuthenticationMiddleware";
+import { AutorizarGerente } from "../middlewares/AuthorizationMiddlewares";
 
 const usuarioRoutes = Router();
 
@@ -10,6 +12,6 @@ usuarioRoutes
 	.delete(UsuariosControllers.RemoverUsuário);
 
 usuarioRoutes.get("/usuarios", UsuariosControllers.ListarUsuarios);
-usuarioRoutes.post("/usuario", UsuariosControllers.CriarUsuario);
+usuarioRoutes.post("/usuario", AuthenticationMiddleware, AutorizarGerente, UsuariosControllers.CriarUsuario);
 
 export default usuarioRoutes
