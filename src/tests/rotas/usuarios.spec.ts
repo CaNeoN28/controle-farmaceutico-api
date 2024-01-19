@@ -12,6 +12,8 @@ import mongoose from "mongoose";
 let token = "";
 let tokenBaixo = "";
 
+let usuarioId = new mongoose.Types.ObjectId();
+
 const usuario = new Usuario({
 	cpf: "06408728081",
 	email: "emailaleatorio12@gmail.com",
@@ -76,6 +78,10 @@ describe("A rota de cadastro de usuários", () => {
 			numero_registro,
 			dados_administrativos,
 		} as Usuario);
+
+		expect(resposta).toHaveProperty("_id");
+
+		usuarioId = resposta._id;
 	});
 
 	it("deve realizar teste de validação de atributos obrigatórios", async () => {
@@ -156,5 +162,74 @@ describe("A rota de cadastro de usuários", () => {
 		expect(resposta).toBe(
 			"É preciso ser gerente ou superior para realizar essa ação"
 		);
+	});
+});
+
+describe("A rota de recuperação de usuário", () => {
+	it("deve retornar o usuário cadastrado anteriormente", async () => {
+		const {
+			cpf,
+			email,
+			nome_completo,
+			nome_usuario,
+			numero_registro,
+			dados_administrativos,
+		} = usuario;
+
+		const resposta = await request(app)
+			.get(`/usuario/${usuarioId}`)
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.send(usuario)
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject({
+			cpf,
+			email,
+			nome_completo,
+			nome_usuario,
+			numero_registro,
+			dados_administrativos,
+		});
+
+		expect(resposta).not.toHaveProperty("senha");
+	});
+
+	it("deve retornar o erro ao informar um id inválido", async () => {
+		const resposta = await request(app)
+			.get(`/usuario/idinvalido`)
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.send(usuario)
+			.expect(200)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Id inválido");
+	});
+
+	it("deve retornar erro de usuário não encontrado", async () => {
+		const idFalso = new mongoose.Types.ObjectId();
+
+		const resposta = await request(app)
+			.get(`/usuario/${idFalso}`)
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.send(usuario)
+			.expect(404)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Usuário não encontrado");
+	});
+
+	it("deve retornar erro ao tentar usar a rota sem um token de autenticação", async () => {
+		const resposta = await request(app)
+			.get(`/usuario/${usuarioId}`)
+			.set("Accept", "application/json")
+			.send(usuario)
+			.expect(401)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Você deve estar autenticado para usar esta rota");
 	});
 });
