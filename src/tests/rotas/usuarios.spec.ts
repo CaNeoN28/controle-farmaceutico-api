@@ -167,6 +167,15 @@ describe("A rota de cadastro de usuários", () => {
 
 describe("A rota de recuperação de usuário", () => {
 	it("deve retornar o usuário cadastrado anteriormente", async () => {
+		const {
+			cpf,
+			email,
+			nome_completo,
+			nome_usuario,
+			numero_registro,
+			dados_administrativos,
+		} = usuario;
+
 		const resposta = await request(app)
 			.get(`/usuario/${usuarioId}`)
 			.set("Authorization", `Bearer ${token}`)
@@ -175,7 +184,16 @@ describe("A rota de recuperação de usuário", () => {
 			.expect(200)
 			.then((res) => res.body);
 
-		expect(resposta).toMatchObject(usuario);
+		expect(resposta).toMatchObject({
+			cpf,
+			email,
+			nome_completo,
+			nome_usuario,
+			numero_registro,
+			dados_administrativos,
+		});
+
+		expect(resposta).not.toHaveProperty("senha");
 	});
 
 	it("deve retornar o erro ao informar um id inválido", async () => {
