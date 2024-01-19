@@ -44,10 +44,10 @@ class UsuarioRepository {
 		return usuario;
 	}
 	static async findUsuarioId(id: any) {
-		if (!mongoose.isValidObjectId) {
+		if (!mongoose.isValidObjectId(id)) {
 			throw {
 				codigo: 400,
-				erro: ["Id inválido"],
+				erro: "Id inválido",
 			} as Erro;
 		}
 
