@@ -406,4 +406,27 @@ describe("A rota de atualização de usuários", () => {
 				"Não foi possível alterar a função do usuário",
 		});
 	});
+
+	it("deve retornar erro ao tentar alterar um usuário sem estar autenticado", async () => {
+		const resposta = await request(app)
+			.put(`/usuario/${usuarioId}`)
+			.set("Accept", "application/json")
+			.send({})
+			.expect(401)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("É necessário estar autenticado para usar esta rota");
+	});
+
+	it("deve retornar erro ao tentar alterar um usuário sem estar autenticado", async () => {
+		const resposta = await request(app)
+			.put(`/usuario/${usuarioId}`)
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${tokenBaixo}`)
+			.send({})
+			.expect(403)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("É necessário ser gerente ou superior para realizar esta ação");
+	});
 });
