@@ -18,7 +18,7 @@ let usuarioBaixo: any = undefined;
 let usuarioGerente: any = undefined;
 let usuarioAdm: any = undefined;
 
-const usuario = new Usuario({
+const usuario = {
 	cpf: "06408728081",
 	email: "emailaleatorio12@gmail.com",
 	nome_completo: "Usuário Teste",
@@ -26,10 +26,10 @@ const usuario = new Usuario({
 	numero_registro: "0",
 	senha: "12345678Asdf.",
 	dados_administrativos: {
-		entidade_relacionada: new mongoose.Types.ObjectId(),
+		entidade_relacionada: new mongoose.Types.ObjectId().toString(),
 		funcao: "USUARIO",
 	},
-});
+};
 
 beforeAll(async () => {
 	const { usuario: adm } = await criarUsuarioAdm();
@@ -96,7 +96,7 @@ describe("A rota de cadastro de usuários", () => {
 			nome_usuario,
 			numero_registro,
 			dados_administrativos,
-		} as Usuario);
+		});
 
 		expect(resposta).toHaveProperty("_id");
 
@@ -108,7 +108,7 @@ describe("A rota de cadastro de usuários", () => {
 			.post("/usuario")
 			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
-			.send(usuario)
+			.send({})
 			.expect(400)
 			.then((res) => res.body);
 
