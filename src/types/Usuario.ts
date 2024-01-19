@@ -19,7 +19,7 @@ interface FiltrosUsuario {
 	nome_usuario?: RegExp | string;
 	cpf?: RegExp | string;
 	funcao?: string;
-	entidade_relacionada: string;
+	entidade_relacionada?: string;
 }
 
 class Usuario implements IUsuario {
