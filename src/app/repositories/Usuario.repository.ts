@@ -138,7 +138,16 @@ class UsuarioRepository {
 
 		return { usuario: usuario.toObject(), erro };
 	}
-	static async updateUsuario(id: string, data: any, idGerenciador: string) {}
+	static async updateUsuario(id: string, data: any, idGerenciador: string) {
+		let usuario = await UsuarioModel.findById(id);
+		let gerenciador = await UsuarioModel.findById(idGerenciador)!;
+		let erros: Erro | undefined = undefined;
+
+		try {
+		} catch (error) {}
+
+		return { usuario, erros };
+	}
 	static async selfUpdateUsuario(id: string, data: any) {
 		try {
 			let erros: Erro | undefined = undefined;
