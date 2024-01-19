@@ -187,11 +187,11 @@ describe("A rota de recuperação de usuário", () => {
 			.expect(200)
 			.then((res) => res.text);
 
-		expect(resposta).toBe("Id inválido")
+		expect(resposta).toBe("Id inválido");
 	});
 
 	it("deve retornar erro de usuário não encontrado", async () => {
-		const idFalso = new mongoose.Types.ObjectId()
+		const idFalso = new mongoose.Types.ObjectId();
 
 		const resposta = await request(app)
 			.get(`/usuario/${idFalso}`)
@@ -202,5 +202,16 @@ describe("A rota de recuperação de usuário", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toBe("Usuário não encontrado");
+	});
+
+	it("deve retornar erro ao tentar usar a rota sem um token de autenticação", async () => {
+		const resposta = await request(app)
+			.get(`/usuario/${usuarioId}`)
+			.set("Accept", "application/json")
+			.send(usuario)
+			.expect(401)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Você deve estar autenticado para usar esta rota");
 	});
 });
