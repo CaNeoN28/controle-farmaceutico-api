@@ -5,6 +5,8 @@ import UsuarioModel from "../models/Usuario";
 import { compararSenha } from "../utils/senhas";
 import { erroParaDicionario } from "../utils/mongooseErrors";
 import EntidadeRepository from "./Entidade.repository";
+import { Paginacao } from "../../types/Paginacao";
+import { calcularPaginas } from "../utils/paginacao";
 
 interface FiltrosUsuario {
 	dados_administrativos?: {
@@ -55,7 +57,25 @@ class UsuarioRepository {
 
 		return usuario;
 	}
-	static findUsuarios(params: any) {}
+	static async findUsuarios(filtros: FiltrosUsuario, paginacao: Paginacao) {
+		const { limite, pagina } = paginacao;
+
+		const documentos_totais = await UsuarioModel.countDocuments(filtros);
+		const pular = limite * (pagina - 1);
+		const paginas_totais = calcularPaginas(documentos_totais, limite);
+
+		const usuarios = await UsuarioModel.find(filtros, {
+			senha: false
+		}).limit(limite).skip(pular);
+
+		return {
+			dados: usuarios,
+			documentos_totais,
+			limite,
+			pagina,
+			paginas_totais,
+		};
+	}
 	static async createUsuario(data: Usuario) {
 		const usuario = new UsuarioModel(data);
 		let erro: Erro | undefined = undefined;

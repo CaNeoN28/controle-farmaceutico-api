@@ -1,23 +1,33 @@
 import { RequestHandler } from "express";
-import Usuario from "../../types/Usuario";
+import Usuario, { FiltrosUsuario } from "../../types/Usuario";
 import createUsuarioService from "../services/create.usuario.service";
 import findUsuarioService from "../services/find.usuario.service";
+import listUsuariosService from "../services/list.usuario.service";
+import { PaginacaoQuery } from "../../types/Paginacao";
 
 class UsuariosControllers {
 	static PegarUsuarioPorId: RequestHandler = async function (req, res, next) {
-		const {id} = req.params
+		const { id } = req.params;
 
 		try {
-			const resposta = await findUsuarioService(id)
+			const resposta = await findUsuarioService(id);
 
-			return res.status(200).send(resposta)
+			return res.status(200).send(resposta);
 		} catch (error) {
-			next(error)
+			next(error);
 		}
 	};
 
 	static ListarUsuarios: RequestHandler = async function (req, res, next) {
-		res.send("Listar usuários");
+		const params = req.query
+
+		try {
+			const resposta = await listUsuariosService(params);
+
+			return res.status(200).send(resposta);
+		} catch (error) {
+			res.send(error);
+		}
 	};
 
 	static CriarUsuario: RequestHandler = async function (req, res, next) {
@@ -44,11 +54,11 @@ class UsuariosControllers {
 		};
 
 		try {
-			const resposta = await createUsuarioService(data)
+			const resposta = await createUsuarioService(data);
 
-			return res.status(201).send(resposta)
+			return res.status(201).send(resposta);
 		} catch (error) {
-			next(error)
+			next(error);
 		}
 	};
 
