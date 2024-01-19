@@ -418,7 +418,7 @@ describe("A rota de atualização de usuários", () => {
 		expect(resposta).toBe("É necessário estar autenticado para usar esta rota");
 	});
 
-	it("deve retornar erro ao tentar alterar um usuário sem estar autenticado", async () => {
+	it("deve retornar erro ao tentar alterar um usuário como um usuário de nível baixo", async () => {
 		const resposta = await request(app)
 			.put(`/usuario/${usuarioId}`)
 			.set("Accept", "application/json")
@@ -427,6 +427,96 @@ describe("A rota de atualização de usuários", () => {
 			.expect(403)
 			.then((res) => res.text);
 
-		expect(resposta).toBe("É necessário ser gerente ou superior para realizar esta ação");
+		expect(resposta).toBe(
+			"É necessário ser gerente ou superior para realizar esta ação"
+		);
+	});
+});
+
+describe("A rota para deletar usuários", () => {
+	it("deve retornar erro ao tentar remover um usuário sem estar autenticado", async () => {
+		const resposta = await request(app)
+			.delete(`/usuario/${usuarioId}`)
+			.set("Accept", "application/json")
+			.expect(401)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("É necessário estar autenticado para usar esta rota");
+	});
+
+	it("deve retornar erro ao tentar remover um usuário como um usuário de nível baixo", async () => {
+		const resposta = await request(app)
+			.delete(`/usuario/${usuarioId}`)
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${tokenBaixo}`)
+			.expect(403)
+			.then((res) => res.text);
+
+		expect(resposta).toBe(
+			"É necessário ser gerente ou superior para realizar esta ação"
+		);
+	});
+
+	it("deve retornar erro ao tentar remover um usuário de nível superior", async () => {
+		const admId = usuarioAdm._id;
+
+		const resposta = await request(app)
+			.delete(`/usuario/${admId}`)
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${tokenGerente}`)
+			.expect(403)
+			.then((res) => res.text);
+
+		expect(resposta).toBe(
+			"Não é possível remover um usuário de nível superior"
+		);
+	});
+
+	it("deve retornar erro ao tentar remover o próprio usuário", async () => {
+		const admId = usuarioAdm._id;
+
+		const resposta = await request(app)
+			.delete(`/usuario/${admId}`)
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.expect(403)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Não é possível remover o prório usuário");
+	});
+
+	it("deve retornar erro ao tentar remover um usuário que não existe", async () => {
+		const resposta = await request(app)
+			.delete(`/usuario/idinvalido`)
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.expect(400)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Id inválido");
+	});
+
+	it("deve retornar erro ao tentar remover um usuário que não existe", async () => {
+		const idFalso = new mongoose.Types.ObjectId();
+
+		const resposta = await request(app)
+			.delete(`/usuario/${idFalso}`)
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.expect(404)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Usuário não encontrado");
+	});
+
+	it("deve remover um usuário com sucesso do banco de dados", async () => {
+		const resposta = await request(app)
+			.delete(`/usuario/${usuarioId}`)
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.expect(204)
+			.then((res) => res.body);
+
+		expect(resposta).toEqual({});
 	});
 });
