@@ -482,7 +482,7 @@ describe("A rota de atualização de usuários", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toBe(
-			"É necessário ser gerente ou superior para realizar esta ação"
+			"É preciso ser gerente ou superior para realizar essa ação"
 		);
 	});
 });
