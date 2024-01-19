@@ -164,3 +164,17 @@ describe("A rota de cadastro de usuários", () => {
 		);
 	});
 });
+
+describe("A rota de recuperação de usuário", () => {
+	it("deve retornar o usuário cadastrado anteriormente", async () => {
+		const resposta = await request(app)
+			.get(`/usuario/${usuarioId}`)
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.send(usuario)
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject(usuario);
+	});
+});
