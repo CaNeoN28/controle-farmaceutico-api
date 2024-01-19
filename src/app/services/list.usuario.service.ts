@@ -1,8 +1,8 @@
-import { Paginacao, PaginacaoQuery } from "../../types/Paginacao";
 import { FiltrosUsuario } from "../../types/Usuario";
 import UsuarioRepository from "../repositories/Usuario.repository";
+import { extrairPaginacao } from "../utils/paginacao";
 
-function listUsuariosService(params: any) {
+async function listUsuariosService(params: any) {
 	const { entidade_relacionada, cpf, funcao, nome_usuario }: FiltrosUsuario =
 		params;
 	const filtros: any = {};
@@ -25,7 +25,9 @@ function listUsuariosService(params: any) {
 		};
 	}
 
-	const { limite, pagina }: PaginacaoQuery = params;
+	const paginacao = extrairPaginacao(params);
+
+	const resposta = await UsuarioRepository.findUsuarios(filtros, paginacao);
 }
 
 export default listUsuariosService;
