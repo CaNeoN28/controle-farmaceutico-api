@@ -25,9 +25,16 @@ async function listUsuariosService(params: any) {
 		};
 	}
 
-	const paginacao = extrairPaginacao(params);
+	const { limite, pagina } = extrairPaginacao(params);
+
+	const paginacao = {
+		limite: limite || 10,
+		pagina: pagina || 1,
+	};
 
 	const resposta = await UsuarioRepository.findUsuarios(filtros, paginacao);
+
+	return resposta
 }
 
 export default listUsuariosService;
