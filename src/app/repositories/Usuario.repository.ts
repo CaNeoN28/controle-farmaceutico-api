@@ -144,6 +144,14 @@ class UsuarioRepository {
 		let erro: Erro | undefined = undefined;
 
 		try {
+			if(usuario){
+
+			} else {
+				erro = {
+					codigo: 404,
+					erro: "Usuário não encontrado"
+				}
+			}
 		} catch (error) {
 			const { codigo, erros } = erroParaDicionario("Usuário", error);
 

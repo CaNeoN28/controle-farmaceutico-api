@@ -31,13 +31,20 @@ async function updateUsuarioService(
 		idGerenciador
 	);
 
-	if(erros) {
-		erro = {
-			codigo: erros.codigo,
-			erro: {
-				...erro?.erro,
-				...erros.erro
-			}
+	if (erros) {
+		if (erro) {
+			erro = {
+				codigo: erros.codigo,
+				erro: {
+					...erro.erro,
+					...erros.erro,
+				},
+			};
+		} else {
+			erro = {
+				codigo: erros.codigo,
+				erro: erros.erro,
+			};
 		}
 	}
 
