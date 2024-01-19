@@ -338,4 +338,20 @@ describe("A rota de atualização de usuários", () => {
 			"Função em dados administrativos inválida"
 		);
 	});
+
+	it("deve retornar erro ao tentar alterar os dados do próprio usuário", async () => {
+		const admId = usuarioAdm._id;
+
+		const resposta = await request(app)
+			.put(`/usuario/${admId}`)
+			.set("Authorization", `Bearer ${token}`)
+			.set("Accept", "application/json")
+			.send({})
+			.expect(403)
+			.then((res) => res.text);
+
+		expect(resposta).toBe(
+			"Não é possível alterar seus próprios dados usando esta rota"
+		);
+	});
 });
