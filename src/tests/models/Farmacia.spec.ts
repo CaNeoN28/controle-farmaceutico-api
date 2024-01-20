@@ -114,8 +114,6 @@ describe("O modelo de farmácia", () => {
 				endereco_bairro: endereco_bairro.message,
 				endereco_cep: endereco_cep.message,
 				endereco_estado: endereco_estado.message,
-				endereco_localizacao_x: endereco_localizacao_x.message,
-				endereco_localizacao_y: endereco_localizacao_y.message,
 				endereco_logradouro: endereco_logradouro.message,
 				endereco_municipio: endereco_municipio.message,
 				endereco_numero: endereco_numero.message,
@@ -133,8 +131,6 @@ describe("O modelo de farmácia", () => {
 			endereco_cep: "CEP inválido",
 			endereco_estado: "Estado inválido",
 			endereco_municipio: "Município inválido",
-			endereco_localizacao_x: "Coordenada X em localizacao inválida",
-			endereco_localizacao_y: "Coordenada Y em localizacao inválida",
 			endereco_logradouro: "Logradouro inválido",
 			endereco_numero: "Número inválido",
 		});
