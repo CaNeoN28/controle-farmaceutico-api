@@ -48,3 +48,5 @@ function validarCNPJ(cnpj: string) {
 
 	return true;
 }
+
+export default validarCNPJ;
