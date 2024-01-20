@@ -135,4 +135,39 @@ describe("O modelo de farmácia", () => {
 			endereco_numero: "Número inválido",
 		});
 	});
+
+	it("deve realizar validação dos atributos de localização", () => {
+		const farmacia = new FarmaciaModel({
+			...dados,
+			endereco: {
+				...dados.endereco,
+				localizacao: {
+					x: "-100.0",
+					y: "200.0"
+				}
+			}
+		})
+
+		const validar = () => {
+			const erros = farmacia.validateSync()!;
+			const {
+				"endereco.localizacao.x": endereco_localizacao_x,
+				"endereco.localizacao.y": endereco_localizacao_y,
+			} = erros.errors;
+
+			return {
+				endereco_localizacao_x: endereco_localizacao_x.message,
+				endereco_localizacao_y: endereco_localizacao_y.message,
+			};
+		};
+
+		expect(validar).not.toThrow();
+
+		const erros = validar()
+
+		expect(erros).toMatchObject({
+			endereco_localizacao_x: "Latitude inválida",
+			endereco_localizacao_y: "Longitude inválida",
+		})
+	})
 });
