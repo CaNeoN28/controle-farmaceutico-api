@@ -159,16 +159,29 @@ class UsuarioRepository {
 					data.dados_administrativos = DA_NOVOS;
 				}
 
+				let permissaoNova = undefined;
+
+				if(data.dados_administrativos && data.dados_administrativos.funcao){
+					permissaoNova = PERMISSOES[data.dados_administrativos.funcao]
+				}
+
 				const permissaoUsuario =
 					PERMISSOES[usuario.dados_administrativos.funcao];
 				const permissaoGerenciador =
 					PERMISSOES[gerenciador.dados_administrativos.funcao];
 
-				if (permissaoGerenciador < permissaoUsuario) {
+				if (permissaoNova && permissaoNova > permissaoGerenciador) {
 					erro = {
 						codigo: 403,
-						erro: "Não é possível alterar os dados de um usuário de nível superior"
+						erro: {
+							"dados_administrativos.funcao": "Não foi possível alterar a função do usuário"
+						}
 					}
+				} else if (permissaoGerenciador < permissaoUsuario) {
+					erro = {
+						codigo: 403,
+						erro: "Não é possível alterar os dados de um usuário de nível superior",
+					};
 				} else {
 					await usuario.updateOne(data, { runValidators: true });
 
