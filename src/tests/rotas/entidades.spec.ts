@@ -101,7 +101,7 @@ describe("Rota de cadastro de entidades", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toEqual(
-			"É preciso ser gerente ou superior para realizar essa ação"
+			"É necessário ser gerente ou superior para realizar esta ação"
 		);
 	});
 });
@@ -257,7 +257,7 @@ describe("Rota para atualização de entidade", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toEqual(
-			"É preciso ser gerente ou superior para realizar essa ação"
+			"É necessário ser gerente ou superior para realizar esta ação"
 		);
 	});
 });
@@ -317,7 +317,7 @@ describe("Rota para exclusão de entidade", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toEqual(
-			"É preciso ser gerente ou superior para realizar essa ação"
+			"É necessário ser gerente ou superior para realizar esta ação"
 		);
 	});
 });

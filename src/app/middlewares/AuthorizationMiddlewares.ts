@@ -15,7 +15,7 @@ const AutorizarGerente: RequestHandler = async function (
 	if(PERMISSOES[funcao] >= 2){
 		next()
 	} else {
-		return res.status(403).send("É preciso ser gerente ou superior para realizar essa ação")
+		return res.status(403).send("É necessário ser gerente ou superior para realizar esta ação")
 	}
 };
 
