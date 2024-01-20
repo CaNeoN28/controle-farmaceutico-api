@@ -7,6 +7,7 @@ import { erroParaDicionario } from "../utils/mongooseErrors";
 import EntidadeRepository from "./Entidade.repository";
 import { Paginacao } from "../../types/Paginacao";
 import { calcularPaginas } from "../utils/paginacao";
+import PERMISSOES from "../utils/permissoes";
 
 interface FiltrosUsuario {
 	dados_administrativos?: {
@@ -155,12 +156,24 @@ class UsuarioRepository {
 							DA_NOVOS.entidade_relacionada || DA_ANTIGOS.entidade_relacionada,
 					};
 
-					data.dados_administrativos = DA_NOVOS
+					data.dados_administrativos = DA_NOVOS;
 				}
 
-				await usuario.updateOne(data, { runValidators: true });
+				const permissaoUsuario =
+					PERMISSOES[usuario.dados_administrativos.funcao];
+				const permissaoGerenciador =
+					PERMISSOES[gerenciador.dados_administrativos.funcao];
 
-				usuario = await UsuarioModel.findById(id)!;
+				if (permissaoGerenciador < permissaoUsuario) {
+					erro = {
+						codigo: 403,
+						erro: "Não é possível alterar os dados de um usuário de nível superior"
+					}
+				} else {
+					await usuario.updateOne(data, { runValidators: true });
+
+					usuario = await UsuarioModel.findById(id)!;
+				}
 			} else {
 				erro = {
 					codigo: 404,
