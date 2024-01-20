@@ -20,8 +20,8 @@ interface IFarmacia {
 			y: string;
 		};
 	};
-	horarios_servico: HorarioServico[];
-	plantoes: string[];
+	horarios_servico?: HorarioServico[];
+	plantoes?: string[];
 }
 
 class Farmacia implements IFarmacia {
@@ -36,8 +36,8 @@ class Farmacia implements IFarmacia {
 		numero: string;
 		localizacao: { x: string; y: string };
 	};
-	horarios_servico: HorarioServico[];
-	plantoes: string[];
+	horarios_servico?: HorarioServico[];
+	plantoes?: string[];
 	imagem_url?: string;
 
 	constructor(data: IFarmacia) {
