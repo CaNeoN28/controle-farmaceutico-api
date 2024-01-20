@@ -8,6 +8,7 @@ import EntidadeRepository from "./Entidade.repository";
 import { Paginacao } from "../../types/Paginacao";
 import { calcularPaginas } from "../utils/paginacao";
 import PERMISSOES from "../utils/permissoes";
+import { validarID } from "../utils/validators";
 
 interface FiltrosUsuario {
 	dados_administrativos?: {
@@ -161,8 +162,8 @@ class UsuarioRepository {
 
 				let permissaoNova = undefined;
 
-				if(data.dados_administrativos && data.dados_administrativos.funcao){
-					permissaoNova = PERMISSOES[data.dados_administrativos.funcao]
+				if (data.dados_administrativos && data.dados_administrativos.funcao) {
+					permissaoNova = PERMISSOES[data.dados_administrativos.funcao];
 				}
 
 				const permissaoUsuario =
@@ -174,9 +175,10 @@ class UsuarioRepository {
 					erro = {
 						codigo: 403,
 						erro: {
-							"dados_administrativos.funcao": "Não foi possível alterar a função do usuário"
-						}
-					}
+							"dados_administrativos.funcao":
+								"Não foi possível alterar a função do usuário",
+						},
+					};
 				} else if (permissaoGerenciador < permissaoUsuario) {
 					erro = {
 						codigo: 403,
@@ -259,7 +261,41 @@ class UsuarioRepository {
 			};
 		}
 	}
-	static deleteUsuario(id: string) {}
+	static async deleteUsuario(id: string, idGerenciador: string) {
+		let erro: Erro | undefined = undefined;
+
+		if (!validarID<string>(id)) {
+			erro = {
+				codigo: 400,
+				erro: "Id inválido",
+			};
+		} else {
+			const usuario = await UsuarioModel.findById(id);
+			const gerenciador = (await UsuarioModel.findById(idGerenciador))!;
+
+			if (!usuario) {
+				erro = {
+					codigo: 404,
+					erro: "Usuário não encontrado",
+				};
+			} else {
+				const funcaoGerenciador =
+					PERMISSOES[gerenciador.dados_administrativos.funcao];
+				const funcaoUsuario = PERMISSOES[usuario.dados_administrativos.funcao];
+
+				if (funcaoUsuario > funcaoGerenciador) {
+					erro = {
+						codigo: 403,
+						erro: "Não é possível remover um usuário de nível superior",
+					};
+				} else {
+					await usuario.deleteOne();
+				}
+			}
+		}
+
+		return erro;
+	}
 }
 
 export default UsuarioRepository;

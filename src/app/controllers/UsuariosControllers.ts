@@ -7,6 +7,7 @@ import { PaginacaoQuery } from "../../types/Paginacao";
 import selfUpdateUsuarioService from "../services/self.update.usuario.service";
 import { AuthenticatedRequest } from "../../types/Requests";
 import updateUsuarioService from "../services/update.usuario.service";
+import deleteUsuarioService from "../services/delete.usuario.service";
 
 class UsuariosControllers {
 	static PegarUsuarioPorId: RequestHandler = async function (req, res, next) {
@@ -107,8 +108,21 @@ class UsuariosControllers {
 		}
 	};
 
-	static RemoverUsuário: RequestHandler = async function (req, res, next) {
-		res.send("Remover um usuário");
+	static RemoverUsuário: RequestHandler = async function (
+		req: AuthenticatedRequest,
+		res,
+		next
+	) {
+		const { id } = req.params;
+		const idGerenciador = req.user!.id;
+
+		try {
+			await deleteUsuarioService(id, idGerenciador);
+
+			res.status(204).send();
+		} catch (error) {
+			next(error);
+		}
 	};
 }
 export default UsuariosControllers;
