@@ -145,6 +145,19 @@ class UsuarioRepository {
 
 		try {
 			if (usuario) {
+				const DA_ANTIGOS = usuario.dados_administrativos;
+				let DA_NOVOS = data.dados_administrativos;
+
+				if (DA_NOVOS) {
+					DA_NOVOS = {
+						funcao: DA_NOVOS.funcao || DA_ANTIGOS.funcao,
+						entidade_relacionada:
+							DA_NOVOS.entidade_relacionada || DA_ANTIGOS.entidade_relacionada,
+					};
+
+					data.dados_administrativos = DA_NOVOS
+				}
+
 				await usuario.updateOne(data, { runValidators: true });
 
 				usuario = await UsuarioModel.findById(id)!;
