@@ -7,6 +7,7 @@ import { erroParaDicionario } from "../utils/mongooseErrors";
 import EntidadeRepository from "./Entidade.repository";
 import { Paginacao } from "../../types/Paginacao";
 import { calcularPaginas } from "../utils/paginacao";
+import PERMISSOES from "../utils/permissoes";
 
 interface FiltrosUsuario {
 	dados_administrativos?: {
@@ -65,8 +66,10 @@ class UsuarioRepository {
 		const paginas_totais = calcularPaginas(documentos_totais, limite);
 
 		const usuarios = await UsuarioModel.find(filtros, {
-			senha: false
-		}).limit(limite).skip(pular);
+			senha: false,
+		})
+			.limit(limite)
+			.skip(pular);
 
 		return {
 			dados: usuarios,
@@ -136,7 +139,72 @@ class UsuarioRepository {
 
 		return { usuario: usuario.toObject(), erro };
 	}
-	static async updateUsuario(id: string, data: any) {
+	static async updateUsuario(id: string, data: any, idGerenciador: string) {
+		let usuario = await UsuarioModel.findById(id);
+		let gerenciador = (await UsuarioModel.findById(idGerenciador))!;
+		let erro: Erro | undefined = undefined;
+
+		try {
+			if (usuario) {
+				const DA_ANTIGOS = usuario.dados_administrativos;
+				let DA_NOVOS = data.dados_administrativos;
+
+				if (DA_NOVOS) {
+					DA_NOVOS = {
+						funcao: DA_NOVOS.funcao || DA_ANTIGOS.funcao,
+						entidade_relacionada:
+							DA_NOVOS.entidade_relacionada || DA_ANTIGOS.entidade_relacionada,
+					};
+
+					data.dados_administrativos = DA_NOVOS;
+				}
+
+				let permissaoNova = undefined;
+
+				if(data.dados_administrativos && data.dados_administrativos.funcao){
+					permissaoNova = PERMISSOES[data.dados_administrativos.funcao]
+				}
+
+				const permissaoUsuario =
+					PERMISSOES[usuario.dados_administrativos.funcao];
+				const permissaoGerenciador =
+					PERMISSOES[gerenciador.dados_administrativos.funcao];
+
+				if (permissaoNova && permissaoNova > permissaoGerenciador) {
+					erro = {
+						codigo: 403,
+						erro: {
+							"dados_administrativos.funcao": "Não foi possível alterar a função do usuário"
+						}
+					}
+				} else if (permissaoGerenciador < permissaoUsuario) {
+					erro = {
+						codigo: 403,
+						erro: "Não é possível alterar os dados de um usuário de nível superior",
+					};
+				} else {
+					await usuario.updateOne(data, { runValidators: true });
+
+					usuario = await UsuarioModel.findById(id)!;
+				}
+			} else {
+				erro = {
+					codigo: 404,
+					erro: "Usuário não encontrado",
+				};
+			}
+		} catch (error) {
+			const { codigo, erros } = erroParaDicionario("Usuário", error);
+
+			erro = {
+				codigo: codigo,
+				erro: erros,
+			};
+		}
+
+		return { usuario, erros: erro };
+	}
+	static async selfUpdateUsuario(id: string, data: any) {
 		try {
 			let erros: Erro | undefined = undefined;
 			let usuario: any = undefined;

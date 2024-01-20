@@ -376,10 +376,10 @@ describe("A rota de atualização de usuários", () => {
 			.expect(400)
 			.then((res) => res.body);
 
-		expect(resposta).toHaveProperty(
-			"dados_administrativos.funcao",
-			"Função em dados administrativos inválida"
-		);
+		expect(resposta).toEqual({
+			"dados_administrativos.funcao":
+				"Função em dados administrativos inválida",
+		});
 	});
 
 	it("deve retornar o erro ao informar um id inválido", async () => {
@@ -424,7 +424,7 @@ describe("A rota de atualização de usuários", () => {
 		);
 	});
 
-	it("deve retornar erro ao tentar alterar os dados do próprio usuário", async () => {
+	it("deve retornar erro ao tentar alterar os dados de um usuário de nível superior", async () => {
 		const admId = usuarioAdm._id;
 
 		const resposta = await request(app)
