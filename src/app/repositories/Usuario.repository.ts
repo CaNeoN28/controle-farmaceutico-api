@@ -140,25 +140,27 @@ class UsuarioRepository {
 	}
 	static async updateUsuario(id: string, data: any, idGerenciador: string) {
 		let usuario = await UsuarioModel.findById(id);
-		let gerenciador = await UsuarioModel.findById(idGerenciador)!;
+		let gerenciador = (await UsuarioModel.findById(idGerenciador))!;
 		let erro: Erro | undefined = undefined;
 
 		try {
-			if(usuario){
+			if (usuario) {
+				await usuario.updateOne(data, { runValidators: true });
 
+				usuario = await UsuarioModel.findById(id)!;
 			} else {
 				erro = {
 					codigo: 404,
-					erro: "Usuário não encontrado"
-				}
+					erro: "Usuário não encontrado",
+				};
 			}
 		} catch (error) {
 			const { codigo, erros } = erroParaDicionario("Usuário", error);
 
 			erro = {
 				codigo: codigo,
-				erro: erros
-			}
+				erro: erros,
+			};
 		}
 
 		return { usuario, erros: erro };
