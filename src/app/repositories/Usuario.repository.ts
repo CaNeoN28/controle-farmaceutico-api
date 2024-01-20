@@ -161,8 +161,8 @@ class UsuarioRepository {
 
 				let permissaoNova = undefined;
 
-				if(data.dados_administrativos && data.dados_administrativos.funcao){
-					permissaoNova = PERMISSOES[data.dados_administrativos.funcao]
+				if (data.dados_administrativos && data.dados_administrativos.funcao) {
+					permissaoNova = PERMISSOES[data.dados_administrativos.funcao];
 				}
 
 				const permissaoUsuario =
@@ -174,9 +174,10 @@ class UsuarioRepository {
 					erro = {
 						codigo: 403,
 						erro: {
-							"dados_administrativos.funcao": "Não foi possível alterar a função do usuário"
-						}
-					}
+							"dados_administrativos.funcao":
+								"Não foi possível alterar a função do usuário",
+						},
+					};
 				} else if (permissaoGerenciador < permissaoUsuario) {
 					erro = {
 						codigo: 403,
@@ -259,7 +260,11 @@ class UsuarioRepository {
 			};
 		}
 	}
-	static deleteUsuario(id: string) {}
+	static deleteUsuario(id: string, idGerenciador: string) {
+		let erro: Erro | undefined = undefined;
+
+		return erro;
+	}
 }
 
 export default UsuarioRepository;
