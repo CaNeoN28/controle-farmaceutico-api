@@ -25,7 +25,7 @@ describe("O modelo de farmácia", () => {
 
 		expect(erros).toBeUndefined();
 		expect(farmacia).toMatchObject({
-			...farmacia,
+			...dados,
 			plantoes: [],
 			horarios_servico: [],
 		});
