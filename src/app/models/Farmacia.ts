@@ -9,7 +9,7 @@ const LocalizacaoSchema = new mongoose.Schema({
 		type: String,
 		required: [true, "Coordenada Y em localização é obrigatório"]
 	},
-});
+}, {_id: false});
 
 const EnderecoSchema = new mongoose.Schema({
 	cep: {
@@ -40,7 +40,7 @@ const EnderecoSchema = new mongoose.Schema({
 		type: LocalizacaoSchema,
 		required: [true, "Localização é obrigatório"],
 	},
-});
+}, {_id: false});
 
 const HorarioServicoSchema = new mongoose.Schema({
 	dia_semana: {
@@ -52,7 +52,7 @@ const HorarioServicoSchema = new mongoose.Schema({
 	horario_saida: {
 		type: String,
 	},
-});
+}, {_id: false});
 
 const FarmaciaSchema = new mongoose.Schema({
 	cnpj: {
