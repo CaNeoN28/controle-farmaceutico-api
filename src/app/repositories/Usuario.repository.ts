@@ -8,6 +8,7 @@ import EntidadeRepository from "./Entidade.repository";
 import { Paginacao } from "../../types/Paginacao";
 import { calcularPaginas } from "../utils/paginacao";
 import PERMISSOES from "../utils/permissoes";
+import { validarID } from "../utils/validators";
 
 interface FiltrosUsuario {
 	dados_administrativos?: {
@@ -262,16 +263,23 @@ class UsuarioRepository {
 	}
 	static async deleteUsuario(id: string, idGerenciador: string) {
 		let erro: Erro | undefined = undefined;
-		const usuario = await UsuarioModel.findById(id)
-		const gerenciador = await UsuarioModel.findById(id)!
 
-		if(!usuario) {
+		if (!validarID<string>(id)) {
 			erro = {
-				codigo: 404,
-				erro: "Usuário não encontrado"
-			}
+				codigo: 400,
+				erro: "Id inválido",
+			};
 		} else {
+			const usuario = await UsuarioModel.findById(id);
+			const gerenciador = await UsuarioModel.findById(id)!;
 			
+			if (!usuario) {
+				erro = {
+					codigo: 404,
+					erro: "Usuário não encontrado",
+				};
+			} else {
+			}
 		}
 
 		return erro;
