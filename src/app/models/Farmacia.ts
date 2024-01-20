@@ -7,7 +7,7 @@ const LocalizacaoSchema = new mongoose.Schema(
 	{
 		x: {
 			type: String,
-			required: [true, "Coordenada X em localização é obrigatório"],
+			required: [true, "Latitude em localização é obrigatório"],
 			validate: {
 				validator: (v: string) => {
 					const latitude = Number(v);
@@ -21,7 +21,7 @@ const LocalizacaoSchema = new mongoose.Schema(
 		},
 		y: {
 			type: String,
-			required: [true, "Coordenada Y em localização é obrigatório"],
+			required: [true, "Longitude em localização é obrigatório"],
 			validate: {
 				validator: (v: string) => {
 					const longitude = Number(v);
