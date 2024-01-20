@@ -260,8 +260,19 @@ class UsuarioRepository {
 			};
 		}
 	}
-	static deleteUsuario(id: string, idGerenciador: string) {
+	static async deleteUsuario(id: string, idGerenciador: string) {
 		let erro: Erro | undefined = undefined;
+		const usuario = await UsuarioModel.findById(id)
+		const gerenciador = await UsuarioModel.findById(id)!
+
+		if(!usuario) {
+			erro = {
+				codigo: 404,
+				erro: "Usuário não encontrado"
+			}
+		} else {
+			
+		}
 
 		return erro;
 	}
