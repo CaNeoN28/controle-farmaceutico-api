@@ -72,7 +72,7 @@ describe("O modelo de farmácia", () => {
 			endereco_cep: "CEP é obrigatório",
 			endereco_estado: "Estado é obrigatório",
 			endereco_municipio: "Município é obrigatório",
-			endereco_localizacao: "Localizacao é obrigatório",
+			endereco_localizacao: "Localização é obrigatório",
 			endereco_logradouro: "Logradouro é obrigatório",
 			endereco_numero: "Número é obrigatório",
 		});
