@@ -177,8 +177,8 @@ describe("O modelo de farmácia", () => {
 			horarios_servico: [
 				{
 					dia_semana: "Dia inválido",
-					horario_entrada: "26:00",
-					horario_saida: "24:00",
+					horario_entrada: "15:00",
+					horario_saida: "12:00",
 				},
 			],
 		});
@@ -202,6 +202,10 @@ describe("O modelo de farmácia", () => {
 
 		const erros = validar();
 
-		console.log(erros);
+		expect(erros).toMatchObject({
+			dia_semana: "Dia da semana inválido",
+			horario_entrada: "Horário de entrada inválido",
+			horario_saida: "Horário de saída inválido",
+		});
 	});
 });

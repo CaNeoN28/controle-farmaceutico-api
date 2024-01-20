@@ -130,8 +130,34 @@ const HorarioServicoSchema = new mongoose.Schema(
 			type: String,
 			required: [true, "Horário de entrada é obrigatório"],
 			validate: {
-				validator: (v: string) => {
-					return validarHorarioServico(v);
+				validator: (horarioEntrada: string) => {
+					const valido = validarHorarioServico(horarioEntrada);
+
+					if(!valido) return valido
+
+					const dados = this as any;
+					let { horarioSaída }: { horarioSaída?: string } = {};
+
+					if (!dados.op) {
+						horarioSaída = dados.horarioSaída;
+					} else {
+						horarioSaída = dados._update.$set.horarioSaída;
+					}
+
+					const [horaEntrada, minutoEntrada] = horarioSaída!
+						.split(":")
+						.map((v) => Number(v));
+					const [horaSaida, minutoSaida] = horarioEntrada
+						.split(":")
+						.map((v) => Number(v));
+
+					if (horaSaida < horaEntrada) {
+						return false;
+					} else if (horaSaida == horaEntrada && minutoEntrada > minutoSaida) {
+						return false;
+					}
+
+					return true;
 				},
 				message: "Horário de entrada inválido",
 			},
@@ -145,15 +171,15 @@ const HorarioServicoSchema = new mongoose.Schema(
 					if (!valido) return valido;
 
 					const dados = this as any;
-					let { horario_entrada }: { horario_entrada?: string } = {};
+					let { horarioEntrada }: { horarioEntrada?: string } = {};
 
 					if (!dados.op) {
-						horario_entrada = dados.horario_entrada;
+						horarioEntrada = dados.horario_entrada;
 					} else {
-						horario_entrada = dados._update.$set.horario_entrada;
+						horarioEntrada = dados._update.$set.horario_entrada;
 					}
 
-					const [horaEntrada, minutoEntrada] = horario_entrada!
+					const [horaEntrada, minutoEntrada] = horarioEntrada!
 						.split(":")
 						.map((v) => Number(v));
 					const [horaSaida, minutoSaida] = horarioSaida
@@ -168,6 +194,7 @@ const HorarioServicoSchema = new mongoose.Schema(
 
 					return true;
 				},
+				message: "Horário de saída inválido"
 			},
 		},
 	},
