@@ -1,4 +1,8 @@
-const PERMISSOES = {
+interface IPermissoes {
+	[key: string]: number
+}
+
+const PERMISSOES: IPermissoes = {
 	ADMINISTRADOR: 3,
 	GERENTE: 2,
 	USUARIO: 1,
