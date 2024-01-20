@@ -8,6 +8,16 @@ const LocalizacaoSchema = new mongoose.Schema(
 		x: {
 			type: String,
 			required: [true, "Coordenada X em localização é obrigatório"],
+			validate: {
+				validator: (v: string) => {
+					const latitude = Number(v);
+
+					if (isNaN(latitude)) return false;
+
+					return latitude < 90.0 || latitude > -90.0;
+				},
+				message: "Latitude inválida",
+			},
 		},
 		y: {
 			type: String,
@@ -57,7 +67,7 @@ const EnderecoSchema = new mongoose.Schema(
 
 					return valido;
 				},
-				message: "Município inválido"
+				message: "Município inválido",
 			},
 		},
 		bairro: {
@@ -77,7 +87,7 @@ const EnderecoSchema = new mongoose.Schema(
 				validator: (v: string) => {
 					return !isNaN(Number(v));
 				},
-				message: "Número inválido"
+				message: "Número inválido",
 			},
 		},
 		localizacao: {
