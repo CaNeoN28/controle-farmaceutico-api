@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Erro from "../../types/Erro";
 import UsuarioRepository from "../repositories/Usuario.repository";
 import { validarSenha } from "../utils/validators";
@@ -8,6 +9,13 @@ async function updateUsuarioService(
 	idGerenciador: string
 ) {
 	let erro: Erro | undefined = undefined;
+
+	if(!mongoose.isValidObjectId(id)){
+		throw {
+			codigo: 400,
+			erro: "Id inválido"
+		}
+	}
 
 	if (idGerenciador === id) {
 		throw {
