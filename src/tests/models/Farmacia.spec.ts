@@ -83,7 +83,7 @@ describe("O modelo de farmácia", () => {
 			cnpj: "00000000000000",
 			endereco: {
 				bairro: "BI",
-				cep: "00000000",
+				cep: "0000000",
 				estado: "Estado inválido",
 				localizacao: {},
 				logradouro: "LI",
