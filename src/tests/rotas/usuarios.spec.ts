@@ -536,7 +536,7 @@ describe("A rota para deletar usuários", () => {
 			.expect(403)
 			.then((res) => res.text);
 
-		expect(resposta).toBe("Não é possível remover o prório usuário");
+		expect(resposta).toBe("Não é possível remover o próprio usuário");
 	});
 
 	it("deve retornar erro caso o id seja inválido", async () => {
