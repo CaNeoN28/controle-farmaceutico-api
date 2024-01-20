@@ -14,7 +14,7 @@ const LocalizacaoSchema = new mongoose.Schema(
 
 					if (isNaN(latitude)) return false;
 
-					return latitude < 90.0 || latitude > -90.0;
+					return latitude < 90.0 && latitude > -90.0;
 				},
 				message: "Latitude inválida",
 			},
@@ -22,6 +22,16 @@ const LocalizacaoSchema = new mongoose.Schema(
 		y: {
 			type: String,
 			required: [true, "Coordenada Y em localização é obrigatório"],
+			validate: {
+				validator: (v: string) => {
+					const longitude = Number(v);
+
+					if (isNaN(longitude)) return false;
+
+					return longitude < 180.0 && longitude > -180.0;
+				},
+				message: "Longitude inválida",
+			}
 		},
 	},
 	{ _id: false }
