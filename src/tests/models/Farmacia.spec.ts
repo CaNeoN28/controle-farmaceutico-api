@@ -143,10 +143,10 @@ describe("O modelo de farmácia", () => {
 				...dados.endereco,
 				localizacao: {
 					x: "-100.0",
-					y: "200.0"
-				}
-			}
-		})
+					y: "200.0",
+				},
+			},
+		});
 
 		const validar = () => {
 			const erros = farmacia.validateSync()!;
@@ -163,11 +163,45 @@ describe("O modelo de farmácia", () => {
 
 		expect(validar).not.toThrow();
 
-		const erros = validar()
+		const erros = validar();
 
 		expect(erros).toMatchObject({
 			endereco_localizacao_x: "Latitude inválida",
 			endereco_localizacao_y: "Longitude inválida",
-		})
-	})
+		});
+	});
+
+	it("deve validar horários de serviço", () => {
+		const farmacia = new FarmaciaModel({
+			...dados,
+			horarios_servico: [
+				{
+					dia_semana: "Dia inválido",
+					horario_entrada: "26:00",
+					horario_saida: "25:00",
+				},
+			],
+		});
+
+		const validar = () => {
+			const erros = farmacia.validateSync()!;
+			const {
+				"horarios_servico.0.dia_semana": dia_semana,
+				"horarios_servico.0.horario_entrada": horario_entrada,
+				"horarios_servico.0.horario_saida": horario_saida,
+			} = erros.errors;
+
+			return {
+				dia_semana: dia_semana.message,
+				horario_entrada: horario_entrada.message,
+				horario_saida: horario_saida.message,
+			};
+		};
+
+		expect(validar).not.toThrow();
+
+		const erros = validar();
+
+		console.log(erros);
+	});
 });
