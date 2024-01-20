@@ -9,7 +9,7 @@ usuarioRoutes
 	.route("/usuario/:id")
 	.get(AuthenticationMiddleware, UsuariosControllers.PegarUsuarioPorId)
 	.put(AuthenticationMiddleware, AutorizarGerente, UsuariosControllers.AtualizarUsuario)
-	.delete(UsuariosControllers.RemoverUsuário);
+	.delete(AuthenticationMiddleware, AutorizarGerente, UsuariosControllers.RemoverUsuário);
 
 usuarioRoutes.get("/usuarios", AuthenticationMiddleware, UsuariosControllers.ListarUsuarios);
 usuarioRoutes.post("/usuario", AuthenticationMiddleware, AutorizarGerente, UsuariosControllers.CriarUsuario);
