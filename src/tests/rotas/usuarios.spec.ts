@@ -539,7 +539,7 @@ describe("A rota para deletar usuários", () => {
 		expect(resposta).toBe("Não é possível remover o prório usuário");
 	});
 
-	it("deve retornar erro ao tentar remover um usuário que não existe", async () => {
+	it("deve retornar erro caso o id seja inválido", async () => {
 		const resposta = await request(app)
 			.delete(`/usuario/idinvalido`)
 			.set("Accept", "application/json")
