@@ -271,14 +271,26 @@ class UsuarioRepository {
 			};
 		} else {
 			const usuario = await UsuarioModel.findById(id);
-			const gerenciador = await UsuarioModel.findById(id)!;
-			
+			const gerenciador = (await UsuarioModel.findById(idGerenciador))!;
+
 			if (!usuario) {
 				erro = {
 					codigo: 404,
 					erro: "Usuário não encontrado",
 				};
 			} else {
+				const funcaoGerenciador =
+					PERMISSOES[gerenciador.dados_administrativos.funcao];
+				const funcaoUsuario = PERMISSOES[usuario.dados_administrativos.funcao];
+
+				if (funcaoUsuario > funcaoGerenciador) {
+					erro = {
+						codigo: 403,
+						erro: "Não é possível remover um usuário de nível superior",
+					};
+				} else {
+					await usuario.deleteOne();
+				}
 			}
 		}
 
