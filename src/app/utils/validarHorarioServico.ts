@@ -26,3 +26,5 @@ function validarHorarioServico(horario: string) {
 		return valido;
 	} else return false;
 }
+
+export default validarHorarioServico

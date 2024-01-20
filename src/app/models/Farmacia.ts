@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import validarCNPJ from "../utils/validarCNPJ";
 import validarCEP from "../utils/validarCEP";
 import { validarCidade, validarEstado } from "../utils/validarEstadoMunicipio";
+import validarHorarioServico from "../utils/validarHorarioServico";
 
 const LocalizacaoSchema = new mongoose.Schema(
 	{
@@ -31,7 +32,7 @@ const LocalizacaoSchema = new mongoose.Schema(
 					return longitude < 180.0 && longitude > -180.0;
 				},
 				message: "Longitude inválida",
-			}
+			},
 		},
 	},
 	{ _id: false }
@@ -112,12 +113,62 @@ const HorarioServicoSchema = new mongoose.Schema(
 	{
 		dia_semana: {
 			type: String,
+			enum: {
+				values: [
+					"Segunda-feira",
+					"Terça-feira",
+					"Quarta-feira",
+					"Quinta-feira",
+					"Sexta-feira",
+					"Sábado",
+					"Domingo",
+				],
+				message: "Dia da semana inválido",
+			},
 		},
 		horario_entrada: {
 			type: String,
+			required: [true, "Horário de entrada é obrigatório"],
+			validate: {
+				validator: (v: string) => {
+					return validarHorarioServico(v);
+				},
+				message: "Horário de entrada inválido",
+			},
 		},
 		horario_saida: {
 			type: String,
+			required: [true, "Horário de entrada é obrigatório"],
+			validate: {
+				validator: (horarioSaida: string) => {
+					const valido = validarHorarioServico(horarioSaida);
+					if (!valido) return valido;
+
+					const dados = this as any;
+					let { horario_entrada }: { horario_entrada?: string } = {};
+
+					if (!dados.op) {
+						horario_entrada = dados.horario_entrada;
+					} else {
+						horario_entrada = dados._update.$set.horario_entrada;
+					}
+
+					const [horaEntrada, minutoEntrada] = horario_entrada!
+						.split(":")
+						.map((v) => Number(v));
+					const [horaSaida, minutoSaida] = horarioSaida
+						.split(":")
+						.map((v) => Number(v));
+
+					if (horaSaida < horaEntrada) {
+						return false;
+					} else if (horaSaida == horaEntrada && minutoEntrada > minutoSaida) {
+						return false;
+					}
+
+					return true;
+				},
+			},
 		},
 	},
 	{ _id: false }

@@ -178,7 +178,7 @@ describe("O modelo de farmácia", () => {
 				{
 					dia_semana: "Dia inválido",
 					horario_entrada: "26:00",
-					horario_saida: "25:00",
+					horario_saida: "24:00",
 				},
 			],
 		});
