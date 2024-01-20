@@ -117,7 +117,7 @@ class UsuariosControllers {
 		const idGerenciador = req.user!.id;
 
 		try {
-			const resposta = await deleteUsuarioService(id);
+			const resposta = await deleteUsuarioService(id, idGerenciador);
 
 			res.status(204).send();
 		} catch (error) {
