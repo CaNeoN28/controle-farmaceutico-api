@@ -261,4 +261,20 @@ describe("A rota de atualização de farmácia", () => {
 			nome_fantasia: "Farmácia Via Láctea",
 		});
 	});
+
+	it("deve realizar validação dos dados de atualização", async () => {
+		const resposta = await request(app)
+			.put(`/farmacia/${idFarmacia}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.send({
+				cnpj: "000000",
+			})
+			.expect(400)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject({
+			cnpj: "CNPJ inválido",
+		});
+	});
 });
