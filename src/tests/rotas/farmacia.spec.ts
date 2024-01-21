@@ -222,4 +222,24 @@ describe("A rota de listagem de farmácias", () => {
 			documentos_totais: 0,
 		});
 	});
+
+	it("deve aceitar dados de paginação", async () => {
+		const resposta = await request(app)
+			.get("/farmacias")
+			.query("pagina=2")
+			.query("limite=2")
+			.set("Accept", "application/json")
+			.expect(200)
+			.then((res) => res.body);
+		const dados = resposta.dados;
+
+		expect(dados).toBeDefined();
+		expect(dados[0]).toBeUndefined();
+		expect(resposta).toMatchObject({
+			pagina: 2,
+			limite: 2,
+			paginas_totais: 1,
+			documentos_totais: 1,
+		});
+	});
 });
