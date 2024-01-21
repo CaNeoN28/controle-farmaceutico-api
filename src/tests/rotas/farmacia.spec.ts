@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import app from "../../app/app";
 import { criarUsuarioAdm } from "../../app/utils/db/gerarDadosDiversos";
 import limparBanco from "../../app/utils/db/limparBanco";
@@ -154,5 +155,16 @@ describe("A rota de recuperação de farmácia", () => {
 			.then((res) => res.body);
 
 		expect(resposta).toMatchObject(dadosFarmacia);
+	});
+
+	it("deve retornar erro por um ID inexistente", async () => {
+		const idFalso = new mongoose.Types.ObjectId();
+		const resposta = await request(app)
+			.get(`/farmacia/${idFalso}`)
+			.set("Accept", "application/json")
+			.expect(404)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Farmácia não encontrada");
 	});
 });
