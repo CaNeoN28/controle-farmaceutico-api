@@ -76,4 +76,52 @@ describe("A rota de cadastro de farmácias", () => {
 			nome_fantasia: "Nome fantasia é obrigatório",
 		});
 	});
+
+	it("deve retornar erro ao tentar cadastrar dados inválidos", async () => {
+		const resposta = await request(app)
+			.post("/farmacia")
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.send({
+				cnpj: "00000000000000",
+				endereco: {
+					bairro: "BI",
+					cep: "CEPINVÁLIDO",
+					estado: "EI",
+					municipio: "MI",
+					localizacao: {
+						x: "LATITUDE",
+						y: "LONGITUDE",
+					},
+					logradouro: "LI",
+					numero: "Número inválido",
+				},
+				nome_fantasia: "NI",
+				horarios_servico: [
+					{
+						dia_semana: "Dia inválido",
+						horario_entrada: "15:30",
+						horario_saida: "12:00",
+					},
+				],
+			} as Farmacia)
+			.expect(400)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject({
+			cnpj: "CNPJ inválido",
+			"endereco.bairro": "Bairro inválido",
+			"endereco.cep": "CEP inválido",
+			"endereco.estado": "Estado inválido",
+			"endereco.municipio": "Município inválido",
+			"endereco.localizacao.x": "Latitude inválida",
+			"endereco.localizacao.y": "Longitude inválida",
+			"endereco.logradouro": "Logradouro inválido",
+			"endereco.numero": "Numero inválido",
+			nome_fantasia: "Nome fantasia inválido",
+			"horarios_servico.0.dia_semana": "Dia da semana inválido",
+			"horarios_servico.0.horario_entrada": "Horário de entrada inválido",
+			"horarios_servico.0.horario_saida": "Horário de saída inválido",
+		});
+	});
 });
