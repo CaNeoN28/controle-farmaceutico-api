@@ -311,8 +311,33 @@ describe("A rota de atualização de farmácia", () => {
 			.expect(401)
 			.then((res) => res.text);
 
-		expect(resposta).toBe(
-			"É necessário estar autenticado para usar esta rota"
-		);
+		expect(resposta).toBe("É necessário estar autenticado para usar esta rota");
+	});
+});
+
+describe("A rota de remoção de farmácia", () => {
+	it("deve retornar erro no caso do ID ser inexistente", async () => {
+		const idFalso = new mongoose.Types.ObjectId();
+		const resposta = await request(app)
+			.delete(`/farmacia/${idFalso}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.send({})
+			.expect(404)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Farmácia não encontrada");
+	});
+
+	it("deve retornar erro no caso do ID ser inexistente", async () => {
+		const resposta = await request(app)
+			.delete("/farmacia/idinvalido")
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.send({})
+			.expect(400)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("ID inválido");
 	});
 });
