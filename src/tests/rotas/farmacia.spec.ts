@@ -3,7 +3,7 @@ import { criarUsuarioAdm } from "../../app/utils/db/gerarDadosDiversos";
 import limparBanco from "../../app/utils/db/limparBanco";
 import { generateTokenFromUser } from "../../app/utils/jwt";
 import Farmacia from "../../types/Farmacia";
-import request from "supertest"
+import request from "supertest";
 
 let tokenAdm = "";
 
@@ -33,9 +33,9 @@ const dadosFarmacia = new Farmacia({
 });
 
 beforeAll(async () => {
-	const adm = (await criarUsuarioAdm()).usuario
+	const adm = (await criarUsuarioAdm()).usuario;
 
-	tokenAdm = generateTokenFromUser(adm)!
+	tokenAdm = generateTokenFromUser(adm)!;
 });
 
 afterAll(async () => {
@@ -52,6 +52,28 @@ describe("A rota de cadastro de farmácias", () => {
 			.expect(201)
 			.then((res) => res.body);
 
-		expect(resposta).toMatchObject(dadosFarmacia)
-	})
-})
+		expect(resposta).toMatchObject(dadosFarmacia);
+	});
+
+	it("deve retornar erro de dados obrigatórios ao informar um documento vazio", async () => {
+		const resposta = await request(app)
+			.post("/farmacia")
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.send({})
+			.expect(400)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject({
+			cnpj: "CNPJ é obrigatório",
+			"endereco.bairro": "Bairro é obrigatório",
+			"endereco.cep": "CEP é obrigatório",
+			"endereco.estado": "Estado é obrigatório",
+			"endereco.municipio": "Município é obrigatório",
+			"endereco.localizacao": "Localização é obrigatório",
+			"endereco.logradouro": "Logradouro é obrigatório",
+			"endereco.numero": "Numero é obrigatório",
+			nome_fantasia: "Nome fantasia é obrigatório",
+		});
+	});
+});
