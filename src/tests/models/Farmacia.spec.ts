@@ -212,21 +212,15 @@ describe("O modelo de farmácia", () => {
 	it("deve validar os dias de escala e rejeitar dias que não sejam válidos", () => {
 		const farmacia = new FarmaciaModel({
 			...dados,
-			plantoes: ["31/31/2025", "Dia inválido"],
+			plantoes: ["31/31/2025", "Dia inválido", "20202024"],
 		});
 
 		const validar = () => {
 			const erros = farmacia.validateSync()!;
-			const {
-				"plantoes.0": plantao_0,
-				"plantoes.1": plantao_1,
-				"plantoes.2": plantao_2,
-			} = erros.errors;
+			const { plantoes: plantoes } = erros.errors;
 
 			return {
-				plantao_0: plantao_0.message,
-				plantao_1: plantao_1.message,
-				plantao_2: plantao_2.message,
+				plantoes: plantoes.message,
 			};
 		};
 
@@ -235,9 +229,7 @@ describe("O modelo de farmácia", () => {
 		const erros = validar();
 
 		expect(erros).toMatchObject({
-			plantao_0: "Dia de plantão inválido",
-			plantao_1: "Dia de plantão inválido",
-			plantao_2: "Dia de plantão inválido",
+			plantoes: "Dia de plantão inválido",
 		});
 	});
 });
