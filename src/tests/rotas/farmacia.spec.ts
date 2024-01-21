@@ -243,3 +243,76 @@ describe("A rota de listagem de farmácias", () => {
 		});
 	});
 });
+
+describe("A rota de atualização de farmácia", () => {
+	it("deve atualizar os dados da farmácia cadastrada anteriormente", async () => {
+		const resposta = await request(app)
+			.put(`/farmacia/${idFarmacia}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.send({
+				nome_fantasia: "Farmácia Via Láctea",
+			})
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject({
+			...dadosFarmacia,
+			nome_fantasia: "Farmácia Via Láctea",
+		});
+	});
+
+	it("deve realizar validação dos dados de atualização", async () => {
+		const resposta = await request(app)
+			.put(`/farmacia/${idFarmacia}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.send({
+				cnpj: "000000",
+			})
+			.expect(400)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject({
+			cnpj: "CNPJ inválido",
+		});
+	});
+
+	it("deve retornar erro no caso de ID inexistente", async () => {
+		const idFalso = new mongoose.Types.ObjectId();
+		const resposta = await request(app)
+			.put(`/farmacia/${idFalso}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.send({})
+			.expect(404)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Farmácia não encontrada");
+	});
+
+	it("deve retornar erro no caso do ID ser inválido", async () => {
+		const resposta = await request(app)
+			.put("/farmacia/idinvalido")
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.send({})
+			.expect(400)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Id inválido");
+	});
+
+	it("deve retornar erro se não for informado o token de autenticação", async () => {
+		const resposta = await request(app)
+			.put(`/farmacia/${idFarmacia}`)
+			.set("Accept", "application/json")
+			.send({})
+			.expect(401)
+			.then((res) => res.text);
+
+		expect(resposta).toBe(
+			"É necessário estar autenticado para usar esta rota"
+		);
+	});
+});
