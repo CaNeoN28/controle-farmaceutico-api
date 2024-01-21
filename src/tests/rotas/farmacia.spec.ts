@@ -124,4 +124,17 @@ describe("A rota de cadastro de farmácias", () => {
 			"horarios_servico.0.horario_saida": "Horário de saída inválido",
 		});
 	});
+
+	it("deve retornar erro ao tentar cadastrar uma farmácia sem estar autenticado", async () => {
+		const resposta = await request(app)
+			.post("/farmacia")
+			.set("Accept", "application/json")
+			.send(dadosFarmacia)
+			.expect(401)
+			.then((res) => res.text);
+
+		expect(resposta).toMatchObject(
+			"É necessário estar autenticado para usar esta rota"
+		);
+	});
 });
