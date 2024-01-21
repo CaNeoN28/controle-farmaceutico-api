@@ -322,7 +322,6 @@ describe("A rota de remoção de farmácia", () => {
 			.delete(`/farmacia/${idFalso}`)
 			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
-			.send({})
 			.expect(404)
 			.then((res) => res.text);
 
@@ -334,10 +333,19 @@ describe("A rota de remoção de farmácia", () => {
 			.delete("/farmacia/idinvalido")
 			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
-			.send({})
 			.expect(400)
 			.then((res) => res.text);
 
-		expect(resposta).toBe("ID inválido");
+		expect(resposta).toBe("Id inválido");
+	});
+
+	it("deve retornar erro se não for informado o token de autenticação", async () => {
+		const resposta = await request(app)
+			.delete(`/farmacia/${idFarmacia}`)
+			.set("Accept", "application/json")
+			.expect(401)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("É necessário estar autenticado para usar esta rota")
 	});
 });
