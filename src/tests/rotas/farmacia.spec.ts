@@ -6,6 +6,7 @@ import Farmacia from "../../types/Farmacia";
 import request from "supertest";
 
 let tokenAdm = "";
+let idFarmacia = "";
 
 const dadosFarmacia = new Farmacia({
 	cnpj: "49487534000183",
@@ -52,7 +53,12 @@ describe("A rota de cadastro de farmácias", () => {
 			.expect(201)
 			.then((res) => res.body);
 
+		const id = resposta._id;
+
+		expect(id).toBeDefined;
 		expect(resposta).toMatchObject(dadosFarmacia);
+
+		idFarmacia = id;
 	});
 
 	it("deve retornar erro de dados obrigatórios ao informar um documento vazio", async () => {
@@ -136,5 +142,17 @@ describe("A rota de cadastro de farmácias", () => {
 		expect(resposta).toMatchObject(
 			"É necessário estar autenticado para usar esta rota"
 		);
+	});
+});
+
+describe("A rota de recuperação de farmácia", () => {
+	it("deve retornar uma farmácia cadastrada pelo ID", async () => {
+		const resposta = await request(app)
+			.get(`/farmacia/${idFarmacia}`)
+			.set("Accept", "application/json")
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject(dadosFarmacia);
 	});
 });
