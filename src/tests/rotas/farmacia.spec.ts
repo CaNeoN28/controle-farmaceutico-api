@@ -140,9 +140,7 @@ describe("A rota de cadastro de farmácias", () => {
 			.expect(401)
 			.then((res) => res.text);
 
-		expect(resposta).toMatchObject(
-			"É necessário estar autenticado para usar esta rota"
-		);
+		expect(resposta).toBe("É necessário estar autenticado para usar esta rota");
 	});
 });
 
