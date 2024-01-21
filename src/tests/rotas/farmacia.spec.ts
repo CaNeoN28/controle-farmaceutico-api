@@ -346,6 +346,17 @@ describe("A rota de remoção de farmácia", () => {
 			.expect(401)
 			.then((res) => res.text);
 
-		expect(resposta).toBe("É necessário estar autenticado para usar esta rota")
+		expect(resposta).toBe("É necessário estar autenticado para usar esta rota");
+	});
+
+	it("deve remover a farmácia cadastrada anteriormente", async () => {
+		const resposta = await request(app)
+			.delete(`/farmacia/${idFarmacia}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.expect(204)
+			.then((res) => res.body);
+
+		expect(resposta).toEqual({});
 	});
 });
