@@ -277,4 +277,29 @@ describe("A rota de atualização de farmácia", () => {
 			cnpj: "CNPJ inválido",
 		});
 	});
+
+	it("deve retornar erro no caso de ID inexistente", async () => {
+		const idFalso = new mongoose.Types.ObjectId();
+		const resposta = await request(app)
+			.put(`/farmacia/${idFalso}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.send({})
+			.expect(404)
+			.then((res) => res.text);
+
+		expect(resposta).toMatchObject("Farmácia não encontrada");
+	});
+
+	it("deve retornar erro no caso do ID ser inválido", async () => {
+		const resposta = await request(app)
+			.put("/farmacia/idinvalido")
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.send({})
+			.expect(400)
+			.then((res) => res.text);
+
+		expect(resposta).toMatchObject("Id inválido");
+	});
 });
