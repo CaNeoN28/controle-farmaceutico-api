@@ -1,11 +1,13 @@
+import app from "../../app/app";
 import { criarUsuarioAdm } from "../../app/utils/db/gerarDadosDiversos";
 import limparBanco from "../../app/utils/db/limparBanco";
 import { generateTokenFromUser } from "../../app/utils/jwt";
 import Farmacia from "../../types/Farmacia";
+import request from "supertest"
 
 let tokenAdm = "";
 
-const farmacia = new Farmacia({
+const dadosFarmacia = new Farmacia({
 	cnpj: "49487534000183",
 	endereco: {
 		bairro: "Bairro estrela",
@@ -39,3 +41,17 @@ beforeAll(async () => {
 afterAll(async () => {
 	limparBanco();
 });
+
+describe("A rota de cadastro de farmácias", () => {
+	it("deve cadastrar uma farmácia corretamente e retornar os dados cadastrados", async () => {
+		const resposta = await request(app)
+			.post("/farmacia")
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.send(dadosFarmacia)
+			.expect(201)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject(dadosFarmacia)
+	})
+})
