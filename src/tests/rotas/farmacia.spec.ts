@@ -288,7 +288,7 @@ describe("A rota de atualização de farmácia", () => {
 			.expect(404)
 			.then((res) => res.text);
 
-		expect(resposta).toMatchObject("Farmácia não encontrada");
+		expect(resposta).toBe("Farmácia não encontrada");
 	});
 
 	it("deve retornar erro no caso do ID ser inválido", async () => {
@@ -300,6 +300,19 @@ describe("A rota de atualização de farmácia", () => {
 			.expect(400)
 			.then((res) => res.text);
 
-		expect(resposta).toMatchObject("Id inválido");
+		expect(resposta).toBe("Id inválido");
+	});
+
+	it("deve retornar erro se não for informado o token de autenticação", async () => {
+		const resposta = await request(app)
+			.put(`/farmacia/${idFarmacia}`)
+			.set("Accept", "application/json")
+			.send({})
+			.expect(401)
+			.then((res) => res.text);
+
+		expect(resposta).toBe(
+			"É necessário estar autenticado para usar esta rota"
+		);
 	});
 });
