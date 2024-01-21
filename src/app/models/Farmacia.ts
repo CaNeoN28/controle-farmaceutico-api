@@ -133,7 +133,7 @@ const HorarioServicoSchema = new mongoose.Schema(
 				validator: (horarioEntrada: string) => {
 					const valido = validarHorarioServico(horarioEntrada);
 
-					if(!valido) return valido
+					if (!valido) return valido;
 
 					const dados = this as any;
 					let { horarioSaída }: { horarioSaída?: string } = {};
@@ -194,7 +194,7 @@ const HorarioServicoSchema = new mongoose.Schema(
 
 					return true;
 				},
-				message: "Horário de saída inválido"
+				message: "Horário de saída inválido",
 			},
 		},
 	},
@@ -222,6 +222,18 @@ const FarmaciaSchema = new mongoose.Schema({
 	plantoes: {
 		type: [String],
 		default: [],
+		validate: {
+			validator: (v: Array<string>) => {
+				const valido = !v.find((v) => {
+					const dataValida = isNaN(Number(new Date(v)))
+
+					return dataValida
+				});
+
+				return valido
+			},
+			message: "Dia de plantão inválido"
+		},
 	},
 	horarios_servico: {
 		type: [HorarioServicoSchema],
