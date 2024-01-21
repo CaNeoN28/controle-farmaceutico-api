@@ -243,3 +243,22 @@ describe("A rota de listagem de farmácias", () => {
 		});
 	});
 });
+
+describe("A rota de atualização de farmácia", () => {
+	it("deve atualizar os dados da farmácia cadastrada anteriormente", async () => {
+		const resposta = await request(app)
+			.put(`/farmacia/${idFarmacia}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.send({
+				nome_fantasia: "Farmácia Via Láctea",
+			})
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject({
+			...dadosFarmacia,
+			nome_fantasia: "Farmácia Via Láctea",
+		});
+	});
+});
