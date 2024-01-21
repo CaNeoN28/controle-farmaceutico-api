@@ -167,4 +167,14 @@ describe("A rota de recuperação de farmácia", () => {
 
 		expect(resposta).toBe("Farmácia não encontrada");
 	});
+
+	it("deve retornar erro por um ID inválido", async () => {
+		const resposta = await request(app)
+			.get("/farmacia/idinvalido")
+			.set("Accept", "application/json")
+			.expect(400)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Id inválido");
+	});
 });
