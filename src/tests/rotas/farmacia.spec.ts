@@ -178,3 +178,26 @@ describe("A rota de recuperação de farmácia", () => {
 		expect(resposta).toBe("Id inválido");
 	});
 });
+
+describe("A rota de listagem de farmácias", () => {
+	it("deve retornar uma lista com os dados cadastrados anteriormente", async () => {
+		const resposta = await request(app)
+			.get("/farmacias")
+			.set("Accept", "application/json")
+			.expect(200)
+			.then((res) => res.body);
+		const dados = resposta.dados;
+
+		expect(dados).toBeDefined();
+		expect(dados[0]).toMatchObject({
+			...dadosFarmacia,
+			_id: idFarmacia,
+		});
+		expect(resposta).toMatchObject({
+			pagina: 1,
+			limite: 10,
+			paginas_totais: 1,
+			documentos_totais: 1,
+		});
+	});
+});
