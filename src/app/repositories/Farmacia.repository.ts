@@ -35,6 +35,8 @@ class FarmaciaRepository {
 				codigo,
 				erro: erros,
 			};
+		} else {
+			await farmacia.save();
 		}
 
 		return {
