@@ -1,7 +1,9 @@
 import Erro from "../../types/Erro";
 import Farmacia from "../../types/Farmacia";
+import { Paginacao } from "../../types/Paginacao";
 import FarmaciaModel from "../models/Farmacia";
 import { erroParaDicionario } from "../utils/mongooseErrors";
+import { calcularPaginas } from "../utils/paginacao";
 
 class FarmaciaRepository {
 	static async findFarmaciaId(id: string) {
@@ -21,7 +23,25 @@ class FarmaciaRepository {
 		};
 	}
 	static findFarmacia(params: any) {}
-	static findFarmacias(params: any) {}
+	static async findFarmacias(filtros: any, paginacao: Paginacao) {
+		const { limite, pagina } = paginacao;
+
+		const documentos_totais = await FarmaciaModel.countDocuments(filtros);
+		const pular = limite * (pagina - 1);
+		const paginas_totais = calcularPaginas(documentos_totais, limite);
+
+		const farmacias = await FarmaciaModel.find(filtros)
+			.limit(limite)
+			.skip(pular);
+
+		return {
+			dados: farmacias,
+			documentos_totais,
+			limite,
+			pagina,
+			paginas_totais,
+		};
+	}
 	static async createFarmacia(data: Farmacia) {
 		const farmacia = new FarmaciaModel(data);
 		let erro: Erro | undefined = undefined;
