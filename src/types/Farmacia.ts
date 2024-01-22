@@ -61,3 +61,4 @@ class Farmacia implements IFarmacia {
 }
 
 export default Farmacia;
+export { HorariosServico };
