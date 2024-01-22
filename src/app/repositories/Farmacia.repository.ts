@@ -64,7 +64,23 @@ class FarmaciaRepository {
 			erro,
 		};
 	}
-	static updateFarmacia(id: string, params: any) {}
+	static async updateFarmacia(id: string, dados: any) {
+		let farmacia = await FarmaciaModel.findById(id);
+		let erros: Erro | undefined = undefined;
+
+		if (farmacia) {
+		} else {
+			erros = {
+				codigo: 404,
+				erro: "Farmácia não encontrada",
+			};
+		}
+
+		return {
+			farmacia,
+			erros,
+		};
+	}
 	static deleteFarmacia(id: string) {}
 }
 
