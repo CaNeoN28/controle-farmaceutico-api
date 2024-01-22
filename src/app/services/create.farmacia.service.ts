@@ -1,5 +1,14 @@
 import Farmacia from "../../types/Farmacia";
+import FarmaciaRepository from "../repositories/Farmacia.repository";
 
-function createFarmaciaService(data: Farmacia) {}
+async function createFarmaciaService(data: Farmacia) {
+	const { erro, farmacia } = await FarmaciaRepository.createFarmacia(data);
 
-export default createFarmaciaService
+	if (erro) {
+		throw erro;
+	}
+
+	return farmacia;
+}
+
+export default createFarmaciaService;
