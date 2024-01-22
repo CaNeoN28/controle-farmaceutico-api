@@ -64,7 +64,37 @@ class FarmaciaRepository {
 			erro,
 		};
 	}
-	static updateFarmacia(id: string, params: any) {}
+	static async updateFarmacia(id: string, dados: any) {
+		let farmacia = await FarmaciaModel.findById(id);
+		let erros: Erro | undefined = undefined;
+
+		if (farmacia) {
+			try {
+				await farmacia.updateOne(dados, {
+					runValidators: true,
+				});
+
+				farmacia = await FarmaciaModel.findById(id);
+			} catch (error) {
+				const { codigo, erros: erro } = erroParaDicionario("Farmácia", error);
+
+				erros = {
+					codigo,
+					erro,
+				};
+			}
+		} else {
+			erros = {
+				codigo: 404,
+				erro: "Farmácia não encontrada",
+			};
+		}
+
+		return {
+			farmacia,
+			erros,
+		};
+	}
 	static deleteFarmacia(id: string) {}
 }
 
