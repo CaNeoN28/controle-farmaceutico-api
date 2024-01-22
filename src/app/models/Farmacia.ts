@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import validarCNPJ from "../utils/validarCNPJ";
 import validarCEP from "../utils/validarCEP";
 import { validarCidade, validarEstado } from "../utils/validarEstadoMunicipio";
-import validarHorarioServico from "../utils/validarHorarioServico";
 
 const LocalizacaoSchema = new mongoose.Schema(
 	{
@@ -177,6 +176,9 @@ const FarmaciaSchema = new mongoose.Schema({
 			validator: (v: Array<string>) => {
 				const valido = !v.find((v) => {
 					const dataValida = isNaN(Number(new Date(v)));
+					console.log({
+						data: v,
+					})
 
 					return dataValida;
 				});
