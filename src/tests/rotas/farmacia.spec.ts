@@ -30,7 +30,7 @@ const dadosFarmacia = new Farmacia({
 			horario_saida: "16:00",
 		},
 	},
-	plantoes: ["10/10/2024", "20/10/2024", "30/10/2024"],
+	plantoes: ["2024/10/10", "2024/10/20", "2024/10/30"],
 	imagem_url: ".jpg"
 });
 
@@ -104,13 +104,12 @@ describe("A rota de cadastro de farmácias", () => {
 					numero: "Número inválido",
 				},
 				nome_fantasia: "NI",
-				horarios_servico: [
-					{
-						dia_semana: "Dia inválido",
-						horario_entrada: "15:30",
-						horario_saida: "12:00",
-					},
-				],
+				horarios_servico: {
+					"segunda_feira": {
+						horario_entrada: "24:00",
+						horario_saida: "00:00"
+					}
+				},
 			} as Farmacia)
 			.expect(400)
 			.then((res) => res.body);
@@ -126,9 +125,8 @@ describe("A rota de cadastro de farmácias", () => {
 			"endereco.logradouro": "Logradouro inválido",
 			"endereco.numero": "Número inválido",
 			nome_fantasia: "Nome fantasia inválido",
-			"horarios_servico.0.dia_semana": "Dia da semana inválido",
-			"horarios_servico.0.horario_entrada": "Horário de entrada inválido",
-			"horarios_servico.0.horario_saida": "Horário de saída inválido",
+			"horarios_servico.segunda_feira.horario_entrada": "Horário de entrada inválido",
+			"horarios_servico.segunda_feira.horario_saida": "Horário de saída inválido",
 		});
 	});
 
