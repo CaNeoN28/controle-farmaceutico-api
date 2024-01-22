@@ -130,24 +130,24 @@ const HorarioServicoSchema = new mongoose.Schema(
 			type: String,
 			required: [true, "Horário de entrada é obrigatório"],
 			validate: {
-				validator: (horarioEntrada: string) => {
-					const valido = validarHorarioServico(horarioEntrada);
+				validator: (horario_entrada: string) => {
+					const valido = validarHorarioServico(horario_entrada);
 
 					if (!valido) return valido;
 
 					const dados = this as any;
-					let { horarioSaída }: { horarioSaída?: string } = {};
+					let { horario_saida }: { horario_saida?: string } = {};
 
 					if (!dados.op) {
-						horarioSaída = dados.horarioSaída;
+						horario_saida = dados.horario_saida;
 					} else {
-						horarioSaída = dados._update.$set.horarioSaída;
+						horario_saida = dados._update.$set.horario_saida;
 					}
 
-					const [horaEntrada, minutoEntrada] = horarioSaída!
+					const [horaEntrada, minutoEntrada] = horario_saida!
 						.split(":")
 						.map((v) => Number(v));
-					const [horaSaida, minutoSaida] = horarioEntrada
+					const [horaSaida, minutoSaida] = horario_entrada
 						.split(":")
 						.map((v) => Number(v));
 
@@ -166,23 +166,23 @@ const HorarioServicoSchema = new mongoose.Schema(
 			type: String,
 			required: [true, "Horário de entrada é obrigatório"],
 			validate: {
-				validator: (horarioSaida: string) => {
-					const valido = validarHorarioServico(horarioSaida);
+				validator: (horario_saida: string) => {
+					const valido = validarHorarioServico(horario_saida);
 					if (!valido) return valido;
 
 					const dados = this as any;
-					let { horarioEntrada }: { horarioEntrada?: string } = {};
-
+					let { horario_entrada }: { horario_entrada?: string } = {};
+					
 					if (!dados.op) {
-						horarioEntrada = dados.horario_entrada;
+						horario_entrada = dados.horario_entrada;
 					} else {
-						horarioEntrada = dados._update.$set.horario_entrada;
+						horario_entrada = dados._update.$set.horario_entrada;
 					}
 
-					const [horaEntrada, minutoEntrada] = horarioEntrada!
+					const [horaEntrada, minutoEntrada] = horario_entrada!
 						.split(":")
 						.map((v) => Number(v));
-					const [horaSaida, minutoSaida] = horarioSaida
+					const [horaSaida, minutoSaida] = horario_saida
 						.split(":")
 						.map((v) => Number(v));
 
