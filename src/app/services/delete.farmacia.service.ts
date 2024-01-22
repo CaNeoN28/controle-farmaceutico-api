@@ -1,10 +1,20 @@
+import Erro from "../../types/Erro";
 import FarmaciaRepository from "../repositories/Farmacia.repository";
+import { validarID } from "../utils/validators";
 
 async function deleteFarmaciaService(id: string) {
-	const { farmacia, erro } = await FarmaciaRepository.deleteFarmacia(id);
+	let erros: Erro | undefined = undefined;
+	if (validarID<string>(id)) {
+		const { farmacia, erro } = await FarmaciaRepository.deleteFarmacia(id);
+	} else {
+		erros = {
+			codigo: 400,
+			erro: "Id inválido"
+		}
+	}
 
-	if (erro) {
-		throw erro;
+	if (erros) {
+		throw erros;
 	}
 }
 
