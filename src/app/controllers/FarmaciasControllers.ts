@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import Farmacia from "../../types/Farmacia";
 import createFarmaciaService from "../services/create.farmacia.service";
+import findFarmaciaService from "../services/find.farmacia.service";
 
 class FarmaciaControllers {
 	static EncontrarFarmaciaPorId: RequestHandler = async function (
@@ -8,7 +9,15 @@ class FarmaciaControllers {
 		res,
 		next
 	) {
-		res.send("Encontrar farmácia por ID");
+		const { id } = req.params;
+
+		try {
+			const resposta = await findFarmaciaService(id);
+
+			res.status(200).send(resposta);
+		} catch (error) {
+			next(error);
+		}
 	};
 
 	static ListarFarmacias: RequestHandler = async function (req, res, next) {
