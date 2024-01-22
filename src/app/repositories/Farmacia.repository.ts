@@ -70,7 +70,9 @@ class FarmaciaRepository {
 
 		if (farmacia) {
 			try {
-				await farmacia.updateOne(dados);
+				await farmacia.updateOne(dados, {
+					runValidators: true,
+				});
 
 				farmacia = await FarmaciaModel.findById(id);
 			} catch (error) {
