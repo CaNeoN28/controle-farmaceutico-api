@@ -99,6 +99,14 @@ class FarmaciaRepository {
 		const farmacia = await FarmaciaModel.findById(id);
 		let erro: Erro | undefined = undefined;
 
+		if (farmacia) {
+		} else {
+			erro = {
+				codigo: 404,
+				erro: "Farmácia não encontrada",
+			};
+		}
+
 		return {
 			farmacia,
 			erro,
