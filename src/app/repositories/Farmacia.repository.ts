@@ -4,7 +4,15 @@ import FarmaciaModel from "../models/Farmacia";
 import { erroParaDicionario } from "../utils/mongooseErrors";
 
 class FarmaciaRepository {
-	static findFarmaciaId(id: string) {}
+	static async findFarmaciaId(id: string) {
+		let farmacia: any = undefined;
+		let erro: Erro | undefined = undefined;
+
+		return {
+			farmacia,
+			erro,
+		};
+	}
 	static findFarmacia(params: any) {}
 	static findFarmacias(params: any) {}
 	static async createFarmacia(data: Farmacia) {
