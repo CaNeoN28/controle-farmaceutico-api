@@ -24,13 +24,12 @@ const dadosFarmacia = new Farmacia({
 		numero: "1000",
 	},
 	nome_fantasia: "Farmácia das Galáxias",
-	horarios_servico: [
-		{
-			dia_semana: "Segunda-feira",
+	horarios_servico: {
+		segunda_feira: {
 			horario_entrada: "07:00",
-			horario_saida: "15:00",
+			horario_saida: "16:00",
 		},
-	],
+	},
 	plantoes: ["10/10/2024", "20/10/2024", "30/10/2024"],
 });
 
