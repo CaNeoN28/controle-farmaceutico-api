@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import validarCNPJ from "../utils/validarCNPJ";
 import validarCEP from "../utils/validarCEP";
 import { validarCidade, validarEstado } from "../utils/validarEstadoMunicipio";
-import validarHorarioServico from "../utils/validarHorarioServico";
 
 const LocalizacaoSchema = new mongoose.Schema(
 	{
@@ -109,93 +108,44 @@ const EnderecoSchema = new mongoose.Schema(
 	{ _id: false }
 );
 
-const HorarioServicoSchema = new mongoose.Schema(
+const HorarioServico = new mongoose.Schema(
 	{
-		dia_semana: {
-			type: String,
-			enum: {
-				values: [
-					"Segunda-feira",
-					"Terça-feira",
-					"Quarta-feira",
-					"Quinta-feira",
-					"Sexta-feira",
-					"Sábado",
-					"Domingo",
-				],
-				message: "Dia da semana inválido",
-			},
-		},
 		horario_entrada: {
 			type: String,
-			required: [true, "Horário de entrada é obrigatório"],
-			validate: {
-				validator: (horarioEntrada: string) => {
-					const valido = validarHorarioServico(horarioEntrada);
-
-					if (!valido) return valido;
-
-					const dados = this as any;
-					let { horarioSaída }: { horarioSaída?: string } = {};
-
-					if (!dados.op) {
-						horarioSaída = dados.horarioSaída;
-					} else {
-						horarioSaída = dados._update.$set.horarioSaída;
-					}
-
-					const [horaEntrada, minutoEntrada] = horarioSaída!
-						.split(":")
-						.map((v) => Number(v));
-					const [horaSaida, minutoSaida] = horarioEntrada
-						.split(":")
-						.map((v) => Number(v));
-
-					if (horaSaida < horaEntrada) {
-						return false;
-					} else if (horaSaida == horaEntrada && minutoEntrada > minutoSaida) {
-						return false;
-					}
-
-					return true;
-				},
-				message: "Horário de entrada inválido",
-			},
+			required: [true, "Horário de entrada é obrigatório"]
 		},
 		horario_saida: {
 			type: String,
-			required: [true, "Horário de entrada é obrigatório"],
-			validate: {
-				validator: (horarioSaida: string) => {
-					const valido = validarHorarioServico(horarioSaida);
-					if (!valido) return valido;
+			required: [true, "Horário de saída é obrigatório"]
+		}
+	},
+	{
+		_id: false,
+	}
+);
 
-					const dados = this as any;
-					let { horarioEntrada }: { horarioEntrada?: string } = {};
-
-					if (!dados.op) {
-						horarioEntrada = dados.horario_entrada;
-					} else {
-						horarioEntrada = dados._update.$set.horario_entrada;
-					}
-
-					const [horaEntrada, minutoEntrada] = horarioEntrada!
-						.split(":")
-						.map((v) => Number(v));
-					const [horaSaida, minutoSaida] = horarioSaida
-						.split(":")
-						.map((v) => Number(v));
-
-					if (horaSaida < horaEntrada) {
-						return false;
-					} else if (horaSaida == horaEntrada && minutoEntrada > minutoSaida) {
-						return false;
-					}
-
-					return true;
-				},
-				message: "Horário de saída inválido",
-			},
+const HorariosServicoSchema = new mongoose.Schema(
+	{
+		segunda_feira: {
+			type: HorarioServico
+		},
+		terca_feira: {
+			type: HorarioServico
+		},
+		quarta_feira: {
+			type: HorarioServico
+		},
+		quinta_feira: {
+			type: HorarioServico
+		},
+		sexta_feira: {
+			type: HorarioServico
+		},
+		sabado: {
+			type: HorarioServico
+		},
+		domingo: {
+			type: HorarioServico
 		},
 	},
 	{ _id: false }
@@ -225,19 +175,19 @@ const FarmaciaSchema = new mongoose.Schema({
 		validate: {
 			validator: (v: Array<string>) => {
 				const valido = !v.find((v) => {
-					const dataValida = isNaN(Number(new Date(v)))
+					const dataValida = isNaN(Number(new Date(v)));
 
-					return dataValida
+					return dataValida;
 				});
 
-				return valido
+				return valido;
 			},
-			message: "Dia de plantão inválido"
+			message: "Dia de plantão inválido",
 		},
 	},
 	horarios_servico: {
-		type: [HorarioServicoSchema],
-		default: [],
+		type: HorariosServicoSchema,
+		default: {},
 	},
 	imagem_url: {
 		type: String,

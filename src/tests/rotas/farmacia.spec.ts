@@ -24,14 +24,14 @@ const dadosFarmacia = new Farmacia({
 		numero: "1000",
 	},
 	nome_fantasia: "Farmácia das Galáxias",
-	horarios_servico: [
-		{
-			dia_semana: "Segunda-feira",
+	horarios_servico: {
+		segunda_feira: {
 			horario_entrada: "07:00",
-			horario_saida: "15:00",
+			horario_saida: "16:00",
 		},
-	],
-	plantoes: ["10/10/2024", "20/10/2024", "30/10/2024"],
+	},
+	plantoes: ["2024/10/10", "2024/10/20", "2024/10/30"],
+	imagem_url: ".jpg"
 });
 
 beforeAll(async () => {
@@ -79,7 +79,7 @@ describe("A rota de cadastro de farmácias", () => {
 			"endereco.municipio": "Município é obrigatório",
 			"endereco.localizacao": "Localização é obrigatório",
 			"endereco.logradouro": "Logradouro é obrigatório",
-			"endereco.numero": "Numero é obrigatório",
+			"endereco.numero": "Número é obrigatório",
 			nome_fantasia: "Nome fantasia é obrigatório",
 		});
 	});
@@ -104,13 +104,12 @@ describe("A rota de cadastro de farmácias", () => {
 					numero: "Número inválido",
 				},
 				nome_fantasia: "NI",
-				horarios_servico: [
-					{
-						dia_semana: "Dia inválido",
-						horario_entrada: "15:30",
-						horario_saida: "12:00",
-					},
-				],
+				horarios_servico: {
+					"segunda_feira": {
+						horario_entrada: "24:00",
+						horario_saida: "00:00"
+					}
+				},
 			} as Farmacia)
 			.expect(400)
 			.then((res) => res.body);
@@ -124,11 +123,10 @@ describe("A rota de cadastro de farmácias", () => {
 			"endereco.localizacao.x": "Latitude inválida",
 			"endereco.localizacao.y": "Longitude inválida",
 			"endereco.logradouro": "Logradouro inválido",
-			"endereco.numero": "Numero inválido",
+			"endereco.numero": "Número inválido",
 			nome_fantasia: "Nome fantasia inválido",
-			"horarios_servico.0.dia_semana": "Dia da semana inválido",
-			"horarios_servico.0.horario_entrada": "Horário de entrada inválido",
-			"horarios_servico.0.horario_saida": "Horário de saída inválido",
+			"horarios_servico.segunda_feira.horario_entrada": "Horário de entrada inválido",
+			"horarios_servico.segunda_feira.horario_saida": "Horário de saída inválido",
 		});
 	});
 
@@ -140,9 +138,7 @@ describe("A rota de cadastro de farmácias", () => {
 			.expect(401)
 			.then((res) => res.text);
 
-		expect(resposta).toMatchObject(
-			"É necessário estar autenticado para usar esta rota"
-		);
+		expect(resposta).toBe("É necessário estar autenticado para usar esta rota");
 	});
 });
 

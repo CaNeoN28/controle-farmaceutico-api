@@ -27,7 +27,7 @@ describe("O modelo de farmácia", () => {
 		expect(farmacia).toMatchObject({
 			...dados,
 			plantoes: [],
-			horarios_servico: [],
+			horarios_servico: {},
 		});
 	});
 
@@ -168,44 +168,6 @@ describe("O modelo de farmácia", () => {
 		expect(erros).toMatchObject({
 			endereco_localizacao_x: "Latitude inválida",
 			endereco_localizacao_y: "Longitude inválida",
-		});
-	});
-
-	it("deve validar horários de serviço", () => {
-		const farmacia = new FarmaciaModel({
-			...dados,
-			horarios_servico: [
-				{
-					dia_semana: "Dia inválido",
-					horario_entrada: "15:00",
-					horario_saida: "12:00",
-				},
-			],
-		});
-
-		const validar = () => {
-			const erros = farmacia.validateSync()!;
-			const {
-				"horarios_servico.0.dia_semana": dia_semana,
-				"horarios_servico.0.horario_entrada": horario_entrada,
-				"horarios_servico.0.horario_saida": horario_saida,
-			} = erros.errors;
-
-			return {
-				dia_semana: dia_semana.message,
-				horario_entrada: horario_entrada.message,
-				horario_saida: horario_saida.message,
-			};
-		};
-
-		expect(validar).not.toThrow();
-
-		const erros = validar();
-
-		expect(erros).toMatchObject({
-			dia_semana: "Dia da semana inválido",
-			horario_entrada: "Horário de entrada inválido",
-			horario_saida: "Horário de saída inválido",
 		});
 	});
 

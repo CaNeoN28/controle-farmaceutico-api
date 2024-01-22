@@ -1,8 +1,18 @@
-interface HorarioServico {
-	dia_semana: string;
-	horario_entrada: string;
-	horario_saida: string;
-}
+type DiasSemana =
+	| "segunda_feira"
+	| "terca_feira"
+	| "quarta_feira"
+	| "quinta_feira"
+	| "sexta_feira"
+	| "sabado"
+	| "domingo";
+
+type HorariosServico = {
+	[dia_semana in DiasSemana]?: {
+		horario_entrada: string;
+		horario_saida: string;
+	};
+};
 
 interface IFarmacia {
 	cnpj: string;
@@ -20,7 +30,7 @@ interface IFarmacia {
 			y: string;
 		};
 	};
-	horarios_servico?: HorarioServico[];
+	horarios_servico?: HorariosServico;
 	plantoes?: string[];
 }
 
@@ -36,7 +46,7 @@ class Farmacia implements IFarmacia {
 		numero: string;
 		localizacao: { x: string; y: string };
 	};
-	horarios_servico?: HorarioServico[];
+	horarios_servico: HorariosServico;
 	plantoes?: string[];
 	imagem_url?: string;
 
@@ -44,10 +54,11 @@ class Farmacia implements IFarmacia {
 		this.cnpj = data.cnpj;
 		this.nome_fantasia = data.nome_fantasia;
 		this.endereco = data.endereco;
-		this.horarios_servico = data.horarios_servico || [];
+		this.horarios_servico = data.horarios_servico || {};
 		this.plantoes = data.plantoes || [];
 		this.imagem_url = data.imagem_url;
 	}
 }
 
 export default Farmacia;
+export { HorariosServico };
