@@ -12,7 +12,7 @@ farmaciaRoutes.get("/farmacias/plantao", FarmaciaControllers.ListarFarmaciaPorPl
 
 farmaciaRoutes.route("/farmacia/:id")
 	.get(FarmaciaControllers.EncontrarFarmaciaPorId)
-	.put(FarmaciaControllers.AtualizarFarmacia)
+	.put(AuthenticationMiddleware, FarmaciaControllers.AtualizarFarmacia)
 	.delete(FarmaciaControllers.RemoverFarmacia)
 
 
