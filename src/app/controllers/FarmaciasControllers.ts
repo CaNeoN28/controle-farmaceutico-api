@@ -4,6 +4,7 @@ import createFarmaciaService from "../services/create.farmacia.service";
 import findFarmaciaService from "../services/find.farmacia.service";
 import listFarmaciasService from "../services/list.farmacias.service";
 import updateFarmaciaService from "../services/update.farmacia.service";
+import deleteFarmaciaService from "../services/delete.farmacia.service";
 
 class FarmaciaControllers {
 	static EncontrarFarmaciaPorId: RequestHandler = async function (
@@ -88,7 +89,15 @@ class FarmaciaControllers {
 	};
 
 	static RemoverFarmacia: RequestHandler = async function (req, res, next) {
-		res.send("Remover farmácia");
+		const { id } = req.params;
+
+		try {
+			await deleteFarmaciaService(id);
+
+			res.status(204).send();
+		} catch (error) {
+			next(error);
+		}
 	};
 
 	static EncontrarFarmaciaProxima: RequestHandler = async function (
