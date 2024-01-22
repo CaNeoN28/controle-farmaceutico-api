@@ -31,6 +31,7 @@ const dadosFarmacia = new Farmacia({
 		},
 	},
 	plantoes: ["10/10/2024", "20/10/2024", "30/10/2024"],
+	imagem_url: ".jpg"
 });
 
 beforeAll(async () => {
