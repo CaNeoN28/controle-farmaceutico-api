@@ -95,7 +95,15 @@ class FarmaciaRepository {
 			erros,
 		};
 	}
-	static deleteFarmacia(id: string) {}
+	static async deleteFarmacia(id: string) {
+		const farmacia = await FarmaciaModel.findById(id);
+		let erro: Erro | undefined = undefined;
+
+		return {
+			farmacia,
+			erro,
+		};
+	}
 }
 
 export default FarmaciaRepository;
