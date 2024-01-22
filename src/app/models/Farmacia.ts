@@ -176,9 +176,6 @@ const FarmaciaSchema = new mongoose.Schema({
 			validator: (v: Array<string>) => {
 				const valido = !v.find((v) => {
 					const dataValida = isNaN(Number(new Date(v)));
-					console.log({
-						data: v,
-					})
 
 					return dataValida;
 				});
