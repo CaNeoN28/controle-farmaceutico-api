@@ -3,6 +3,7 @@ import Farmacia from "../../types/Farmacia";
 import createFarmaciaService from "../services/create.farmacia.service";
 import findFarmaciaService from "../services/find.farmacia.service";
 import listFarmaciasService from "../services/list.farmacias.service";
+import updateFarmaciaService from "../services/update.farmacia.service";
 
 class FarmaciaControllers {
 	static EncontrarFarmaciaPorId: RequestHandler = async function (
@@ -60,7 +61,30 @@ class FarmaciaControllers {
 	};
 
 	static AtualizarFarmacia: RequestHandler = async function (req, res, next) {
-		res.send("Atualizar Farmácia");
+		const { id } = req.params;
+		const {
+			cnpj,
+			endereco,
+			horarios_servico,
+			nome_fantasia,
+			imagem_url,
+			plantoes,
+		}: Farmacia = req.body;
+
+		try {
+			const resposta = await updateFarmaciaService(id, {
+				cnpj,
+				endereco,
+				horarios_servico,
+				nome_fantasia,
+				imagem_url,
+				plantoes,
+			});
+
+			res.status(200).send(resposta);
+		} catch (error) {
+			next(error);
+		}
 	};
 
 	static RemoverFarmacia: RequestHandler = async function (req, res, next) {
