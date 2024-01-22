@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import Farmacia from "../../types/Farmacia";
 import createFarmaciaService from "../services/create.farmacia.service";
 import findFarmaciaService from "../services/find.farmacia.service";
+import listFarmaciasService from "../services/list.farmacias.service";
 
 class FarmaciaControllers {
 	static EncontrarFarmaciaPorId: RequestHandler = async function (
@@ -21,7 +22,15 @@ class FarmaciaControllers {
 	};
 
 	static ListarFarmacias: RequestHandler = async function (req, res, next) {
-		res.send("Listar farmácia");
+		const params = req.params;
+
+		try {
+			const resposta = await listFarmaciasService(params);
+
+			res.status(200).send(resposta);
+		} catch (error) {
+			next(error);
+		}
 	};
 
 	static CriarFarmacia: RequestHandler = async function (req, res, next) {
