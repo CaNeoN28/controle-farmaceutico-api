@@ -79,7 +79,7 @@ describe("A rota de cadastro de farmácias", () => {
 			"endereco.municipio": "Município é obrigatório",
 			"endereco.localizacao": "Localização é obrigatório",
 			"endereco.logradouro": "Logradouro é obrigatório",
-			"endereco.numero": "Numero é obrigatório",
+			"endereco.numero": "Número é obrigatório",
 			nome_fantasia: "Nome fantasia é obrigatório",
 		});
 	});
@@ -124,7 +124,7 @@ describe("A rota de cadastro de farmácias", () => {
 			"endereco.localizacao.x": "Latitude inválida",
 			"endereco.localizacao.y": "Longitude inválida",
 			"endereco.logradouro": "Logradouro inválido",
-			"endereco.numero": "Numero inválido",
+			"endereco.numero": "Número inválido",
 			nome_fantasia: "Nome fantasia inválido",
 			"horarios_servico.0.dia_semana": "Dia da semana inválido",
 			"horarios_servico.0.horario_entrada": "Horário de entrada inválido",
