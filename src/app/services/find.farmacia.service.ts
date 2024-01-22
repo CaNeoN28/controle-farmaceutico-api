@@ -8,6 +8,8 @@ async function findFarmaciaService(id: string) {
 		if (erro) {
 			throw erro;
 		}
+
+		return farmacia;
 	} else {
 		throw {
 			codigo: 400,

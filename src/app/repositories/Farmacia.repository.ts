@@ -5,8 +5,15 @@ import { erroParaDicionario } from "../utils/mongooseErrors";
 
 class FarmaciaRepository {
 	static async findFarmaciaId(id: string) {
-		let farmacia: any = undefined;
+		const farmacia = await FarmaciaModel.findById(id);
 		let erro: Erro | undefined = undefined;
+
+		if (!farmacia) {
+			erro = {
+				codigo: 404,
+				erro: "Farmácia não encontrada",
+			};
+		}
 
 		return {
 			farmacia,
