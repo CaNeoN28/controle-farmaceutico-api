@@ -22,7 +22,7 @@ class FarmaciaControllers {
 	};
 
 	static ListarFarmacias: RequestHandler = async function (req, res, next) {
-		const params = req.params;
+		const params = req.query;
 
 		try {
 			const resposta = await listFarmaciasService(params);
