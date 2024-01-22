@@ -100,6 +100,7 @@ class FarmaciaRepository {
 		let erro: Erro | undefined = undefined;
 
 		if (farmacia) {
+			await farmacia.deleteOne()
 		} else {
 			erro = {
 				codigo: 404,
