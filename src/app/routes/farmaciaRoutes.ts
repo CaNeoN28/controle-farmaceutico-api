@@ -13,7 +13,7 @@ farmaciaRoutes.get("/farmacias/plantao", FarmaciaControllers.ListarFarmaciaPorPl
 farmaciaRoutes.route("/farmacia/:id")
 	.get(FarmaciaControllers.EncontrarFarmaciaPorId)
 	.put(AuthenticationMiddleware, FarmaciaControllers.AtualizarFarmacia)
-	.delete(FarmaciaControllers.RemoverFarmacia)
+	.delete(AuthenticationMiddleware, FarmaciaControllers.RemoverFarmacia)
 
 
 export default farmaciaRoutes
