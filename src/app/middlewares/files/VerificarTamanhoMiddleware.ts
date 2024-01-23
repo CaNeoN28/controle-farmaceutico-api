@@ -9,20 +9,14 @@ const VerificarTamanhoMiddleware: RequestHandler = async function (
 	res,
 	next
 ) {
-	const arquivos = req.arquivos!;
+	const arquivos = req.arquivos! as UploadedFile[];
 	const arquivosAcimaDoLimite: string[] = [];
 
-	if (Array.isArray(arquivos)) {
-		arquivos.map((arquivo) => {
-			if (arquivo.size > SIZE_LIMIT) {
-				arquivosAcimaDoLimite.push(arquivo.name);
-			}
-		});
-	} else {
-		if (arquivos.size > SIZE_LIMIT) {
-			arquivosAcimaDoLimite.push(arquivos.name);
+	arquivos.map((arquivo) => {
+		if (arquivo.size > SIZE_LIMIT) {
+			arquivosAcimaDoLimite.push(arquivo.name);
 		}
-	}
+	});
 
 	if (arquivosAcimaDoLimite.length > 0) {
 		const erros: any = {};

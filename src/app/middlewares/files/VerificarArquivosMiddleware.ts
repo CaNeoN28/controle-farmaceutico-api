@@ -16,7 +16,11 @@ function VerificarArquivosMiddleware(chave: string) {
 			return res.status(400).send(`Nenhum arquivo encontrado para "${chave}"`);
 		}
 
-		req.arquivos = arquivosEspecificos;
+		if (Array.isArray(arquivosEspecificos)) {
+			req.arquivos = [...arquivosEspecificos];
+		} else {
+			req.arquivos = [arquivosEspecificos];
+		}
 
 		next();
 	} as RequestHandler;

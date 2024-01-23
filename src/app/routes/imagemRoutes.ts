@@ -4,6 +4,7 @@ import ImagensControllers from "../controllers/ImagensController";
 import AuthenticationMiddleware from "../middlewares/AuthenticationMiddleware";
 import VerificarArquivosMiddleware from "../middlewares/files/VerificarArquivosMiddleware";
 import VerificarTamanhoMiddleware from "../middlewares/files/VerificarTamanhoMiddleware";
+import PermitirExtensoesMiddleware from "../middlewares/files/PermitirExtensoesMiddleware";
 
 const imagemRouter = Router();
 
@@ -13,6 +14,7 @@ imagemRouter.post(
 	fileUpload({ createParentPath: true }),
 	VerificarArquivosMiddleware("imagem"),
 	VerificarTamanhoMiddleware,
+	PermitirExtensoesMiddleware([".jpg", ".png", ".jpeg"]),
 	ImagensControllers.EnviarImagem
 );
 
