@@ -1,34 +1,54 @@
 import UsuarioRepository from "../repositories/Usuario.repository";
-import { generateToken } from "../utils/jwt";
-import enviarEmail from "../utils/enviarEmail";
+import { verificarToken } from "../utils/jwt";
+import { criptografarSenha } from "../utils/senhas";
+import { validarSenha } from "../utils/validators";
 
-async function recuperarSenhaService(email: string | undefined) {
-	if (!email) {
+interface Payload {
+	id: string;
+	nome_usuario: string;
+}
+
+async function recuperarSenhaService(token?: string, senha?: string) {
+	if (!token) {
 		throw {
 			codigo: 400,
-			erro: "Email é obrigatório",
+			erro: "Token de recuperação inválido",
 		};
 	}
 
-	const usuario = await UsuarioRepository.findUsuario({ email });
+	const payload = verificarToken<Payload>(token);
 
-	if (usuario) {
-		if(usuario.dados_administrativos.funcao == "INATIVO"){
-			throw {
-				codigo: 403,
-				erro: "O usuário ainda está inativo, espere sua ativação"
-			}
-		}
+	if (!payload) {
+		throw {
+			codigo: 400,
+			erro: "Token de recuperação inválido",
+		};
+	}
 
-		const { email, nome_usuario } = usuario;
-		const expiraEm = 30 * 60;
-		const token = generateToken({ email, nome_usuario }, expiraEm);
+	if (!senha) {
+		throw {
+			codigo: 400,
+			erro: "Senha é obrigatório",
+		};
+	}
 
-		await enviarEmail({
-			assunto: "Link para recuperação de senha",
-			para: email,
-			texto: `Token para recuperação: ${token}`,
-		});
+	if (!validarSenha(senha)) {
+		throw {
+			codigo: 400,
+			erro: "Senha inválida",
+		};
+	}
+
+	senha = await criptografarSenha(senha)
+
+	const { id } = payload;
+
+	const { erros } = await UsuarioRepository.selfUpdateUsuario(id, {
+		senha,
+	});
+
+	if (erros) {
+		throw erros;
 	}
 }
 
