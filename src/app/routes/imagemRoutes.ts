@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, static as static_ } from "express";
 import fileUpload from "express-fileupload";
 import ImagensControllers from "../controllers/ImagensController";
 import AuthenticationMiddleware from "../middlewares/AuthenticationMiddleware";
@@ -18,9 +18,8 @@ imagemRouter.post(
 	ImagensControllers.EnviarImagem
 );
 
-imagemRouter
-	.route("/imagem/:id")
-	.get(ImagensControllers.EncontrarImagemPorId)
-	.delete(ImagensControllers.RemoverImagem);
+imagemRouter.use("/imagem", static_("files/images"));
+
+imagemRouter.delete("/imagem/:id", ImagensControllers.RemoverImagem);
 
 export default imagemRouter;

@@ -2,16 +2,9 @@ import { RequestHandler } from "express";
 import { UploadedFile } from "express-fileupload";
 import { v4 as uuidv4 } from "uuid";
 import path from "path";
+import fileSystem from "fs";
 
 class ImagensControllers {
-	static EncontrarImagemPorId: RequestHandler = async function (
-		req,
-		res,
-		next
-	) {
-		res.send("Encontrar imagem por ID");
-	};
-
 	static EnviarImagem: RequestHandler = async function (req: any, res, next) {
 		try {
 			const arquivos = req.arquivos as UploadedFile[];
