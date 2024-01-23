@@ -1,5 +1,6 @@
 import UsuarioRepository from "../repositories/Usuario.repository";
 import { verificarToken } from "../utils/jwt";
+import { criptografarSenha } from "../utils/senhas";
 import { validarSenha } from "../utils/validators";
 
 interface Payload {
@@ -37,6 +38,8 @@ async function recuperarSenhaService(token?: string, senha?: string) {
 			erro: "Senha inválida",
 		};
 	}
+
+	senha = await criptografarSenha(senha)
 
 	const { id } = payload;
 
