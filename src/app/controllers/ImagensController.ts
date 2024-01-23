@@ -32,19 +32,30 @@ class ImagensControllers {
 	};
 
 	static RemoverImagem: RequestHandler = async function (req, res, next) {
-		try {
-			const { id } = req.params;
-			fileSystem.unlink(`files/images/${id}`, (err) => {
-				if (err) {
-					console.log(err);
-					return res.status(500).send("Não foi possível remover a imagem");
+		const { id } = req.params;
+
+		fileSystem.unlink(`files/images/${id}`, (erro) => {
+			try {
+				if (erro) {
+					if (erro.code === "ENOENT")
+						throw {
+							codigo: 404,
+							erro: "Imagem não encontrada",
+						};
+					else {
+						console.log(erro);
+						throw {
+							codigo: 500,
+							erro: "Não foi possível remover a imagem",
+						};
+					}
 				} else {
 					return res.status(204).send();
 				}
-			});
-		} catch (error) {
-			console.log(error);
-		}
+			} catch (err) {
+				next(err);
+			}
+		});
 	};
 }
 export default ImagensControllers;
