@@ -24,7 +24,7 @@ function PermitirExtensoesMiddleware(extensoesPermitidas: string[]) {
 				}
 			});
 
-			return res.status(400).send({
+			return res.status(422).send({
 				mensagem: `Extensão inválida de arquivos, extensões permitidas: ${extensoesPermitidas.join(
 					", "
 				)}`,
