@@ -3,6 +3,7 @@ import autenticacaoRoutes from "./autenticacaoRoutes";
 import usuarioRoutes from "./usuarioRoutes";
 import entidadesRoutes from "./entidadesRoutes";
 import farmaciaRoutes from "./farmaciaRoutes";
+import imagemRouter from "./imagemRoutes";
 
 const route = (app: Application) => {
 	app.route("/").get((req, res) => {
@@ -13,7 +14,8 @@ const route = (app: Application) => {
 		autenticacaoRoutes,
 		farmaciaRoutes,
 		entidadesRoutes,
-		usuarioRoutes
+		usuarioRoutes,
+		imagemRouter
 	);
 };
 
