@@ -20,6 +20,6 @@ imagemRouter.post(
 
 imagemRouter.use("/imagem", static_("files/images"));
 
-imagemRouter.delete("/imagem/:id", ImagensControllers.RemoverImagem);
+imagemRouter.delete("/imagem/:id", AuthenticationMiddleware, ImagensControllers.RemoverImagem);
 
 export default imagemRouter;

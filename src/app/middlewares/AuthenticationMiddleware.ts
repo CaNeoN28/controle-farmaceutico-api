@@ -25,7 +25,7 @@ const AuthenticationMiddleware: RequestHandler = async function (
 
 		token = token.split(" ")[1];
 
-		const decoded = verificarToken<TokenData>(token)
+		const decoded = verificarToken<TokenData>(token);
 
 		if (!decoded) {
 			throw {
