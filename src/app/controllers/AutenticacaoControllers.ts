@@ -78,7 +78,7 @@ class AutenticacaoControllers {
 		const { email } = req.body;
 
 		try {
-			const resposta = recuperarSenhaService(email);
+			await recuperarSenhaService(email);
 
 			res.status(200).send(`Email enviado à ${email}`);
 		} catch (error) {
