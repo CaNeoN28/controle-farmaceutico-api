@@ -20,9 +20,9 @@ async function esqueceuSenhaService(email: string | undefined) {
 			}
 		}
 
-		const { email, nome_usuario } = usuario;
+		const { email, id } = usuario;
 		const expiraEm = 30 * 60;
-		const token = generateToken({ email, nome_usuario }, expiraEm);
+		const token = generateToken({ email, id }, expiraEm);
 
 		await enviarEmail({
 			assunto: "Link para recuperação de senha",

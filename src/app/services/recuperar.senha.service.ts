@@ -3,8 +3,8 @@ import { verificarToken } from "../utils/jwt";
 import { validarSenha } from "../utils/validators";
 
 interface Payload {
+	id: string;
 	nome_usuario: string;
-	email: string;
 }
 
 async function recuperarSenhaService(token?: string, senha?: string) {
@@ -37,6 +37,10 @@ async function recuperarSenhaService(token?: string, senha?: string) {
 			erro: "Senha inválida",
 		};
 	}
+
+	const { id } = payload;
+
+	const {} = await UsuarioRepository.selfUpdateUsuario(id, { senha });
 }
 
 export default recuperarSenhaService;
