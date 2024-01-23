@@ -6,6 +6,7 @@ import loginService from "../services/login.service";
 import { AuthenticatedRequest } from "../../types/Requests";
 import findUsuarioService from "../services/find.usuario.service";
 import selfUpdateUsuarioService from "../services/self.update.usuario.service";
+import recuperarSenhaService from "../services/recuperar.senha.service";
 
 class AutenticacaoControllers {
 	static Cadastro: RequestHandler = async function (req, res, next) {
@@ -67,14 +68,22 @@ class AutenticacaoControllers {
 				imagem_url,
 			});
 
-			res.status(200).send(resposta)
+			res.status(200).send(resposta);
 		} catch (error) {
 			next(error);
 		}
 	};
 
 	static EsqueceuSenha: RequestHandler = async function (req, res, next) {
-		res.send("Esqueceu Senha");
+		const { email } = req.body;
+
+		try {
+			const resposta = recuperarSenhaService(email);
+
+			res.status(200).send(`Email enviado à ${email}`);
+		} catch (error) {
+			next(error);
+		}
 	};
 
 	static RecuperarSenha: RequestHandler = async function (req, res, send) {
