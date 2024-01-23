@@ -91,9 +91,9 @@ class AutenticacaoControllers {
 		const { token } = req.params;
 
 		try {
-			await recuperarSenhaService()
+			await recuperarSenhaService(token);
 		} catch (error) {
-			next(error)
+			next(error);
 		}
 	};
 }
