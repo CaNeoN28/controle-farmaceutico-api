@@ -3,7 +3,7 @@ import TokenData from "../../types/TokenData";
 import Usuario from "../../types/Usuario";
 import Erro from "../../types/Erro";
 
-function generateToken(data: any) {
+function generateToken(data: any, tempoExpiracao: number) {
 	const { SECRET_KEY } = process.env;
 	const { id, email, numero_registro, nome_usuario, funcao } = data;
 	const token = jwt.sign(
@@ -16,7 +16,7 @@ function generateToken(data: any) {
 		},
 		SECRET_KEY || "",
 		{
-			expiresIn: "6h",
+			expiresIn: tempoExpiracao,
 		}
 	);
 
@@ -57,7 +57,9 @@ function generateTokenFromUser(user: any) {
 			numero_registro,
 		};
 
-		const token = generateToken(data);
+		const expiraEm = 6 * 60 * 60
+
+		const token = generateToken(data, expiraEm);
 
 		return token;
 	} catch (error) {
