@@ -11,16 +11,9 @@ class ImagensControllers {
 
 	static EnviarImagem: RequestHandler = async function (req, res, next) {
 		try {
-			const arquivo = req.files;
+			const arquivo = req.files!;
 
-			if (arquivo) {
-				const imagem = arquivo.imagem;
-			} else {
-				throw {
-					codigo: 400,
-					erro: "É necessário o envio de um arquivo",
-				};
-			}
+			console.log(arquivo)
 
 			res.status(201).send("Enviado");
 		} catch (error) {
