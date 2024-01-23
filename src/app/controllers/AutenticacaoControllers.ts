@@ -89,9 +89,10 @@ class AutenticacaoControllers {
 
 	static RecuperarSenha: RequestHandler = async function (req, res, next) {
 		const { token } = req.params;
+		const { senha } = req.body;
 
 		try {
-			await recuperarSenhaService(token);
+			await recuperarSenhaService(token, senha);
 		} catch (error) {
 			next(error);
 		}
