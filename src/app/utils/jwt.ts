@@ -57,7 +57,7 @@ function generateTokenFromUser(user: any) {
 			numero_registro,
 		};
 
-		const expiraEm = 6 * 60 * 60 * 1000
+		const expiraEm = 6 * 60 * 60
 
 		const token = generateToken(data, expiraEm);
 
