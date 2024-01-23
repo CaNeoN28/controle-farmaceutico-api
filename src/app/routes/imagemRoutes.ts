@@ -11,7 +11,7 @@ imagemRouter.post(
 	"/imagem",
 	AuthenticationMiddleware,
 	fileUpload({ createParentPath: true }),
-	VerificarArquivosMiddleware,
+	VerificarArquivosMiddleware("imagem"),
 	VerificarTamanhoMiddleware("imagem"),
 	ImagensControllers.EnviarImagem
 );

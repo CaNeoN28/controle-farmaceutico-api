@@ -6,14 +6,20 @@ const SIZE_LIMIT = MB * 1024 * 1024;
 
 function VerificarTamanhoMiddleware(chave: string) {
 	return async function (req, res, next) {
-		const arquivos = req.files![chave] as UploadedFile[];
+		const arquivos = req.files![chave];
 		const arquivosAcimaDoLimite: string[] = [];
 
-		arquivos.map((arquivo) => {
-			if (arquivo.size > SIZE_LIMIT) {
-				arquivosAcimaDoLimite.push(arquivo.name);
+		if (Array.isArray(arquivos)) {
+			arquivos.map((arquivo) => {
+				if (arquivo.size > SIZE_LIMIT) {
+					arquivosAcimaDoLimite.push(arquivo.name);
+				}
+			});
+		} else {
+			if (arquivos.size > SIZE_LIMIT) {
+				arquivosAcimaDoLimite.push(arquivos.name);
 			}
-		});
+		}
 
 		if (arquivosAcimaDoLimite.length > 0) {
 			const erros: any = {};
