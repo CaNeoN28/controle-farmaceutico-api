@@ -9,3 +9,5 @@ imagemRouter
 	.route("/imagem/:id")
 	.get(ImagensControllers.EncontrarImagemPorId)
 	.delete(ImagensControllers.RemoverImagem);
+
+export default imagemRouter;
