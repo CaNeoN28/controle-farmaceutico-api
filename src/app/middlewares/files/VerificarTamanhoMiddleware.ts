@@ -4,35 +4,37 @@ import { UploadedFile } from "express-fileupload";
 const MB = 5;
 const SIZE_LIMIT = MB * 1024 * 1024;
 
-function VerificarTamanhoMiddleware(chave: string) {
-	return async function (req, res, next) {
-		const arquivos = req.files![chave];
-		const arquivosAcimaDoLimite: string[] = [];
+const VerificarTamanhoMiddleware: RequestHandler = async function (
+	req: any,
+	res,
+	next
+) {
+	const arquivos = req.arquivos!;
+	const arquivosAcimaDoLimite: string[] = [];
 
-		if (Array.isArray(arquivos)) {
-			arquivos.map((arquivo) => {
-				if (arquivo.size > SIZE_LIMIT) {
-					arquivosAcimaDoLimite.push(arquivo.name);
-				}
-			});
-		} else {
-			if (arquivos.size > SIZE_LIMIT) {
-				arquivosAcimaDoLimite.push(arquivos.name);
+	if (Array.isArray(arquivos)) {
+		arquivos.map((arquivo) => {
+			if (arquivo.size > SIZE_LIMIT) {
+				arquivosAcimaDoLimite.push(arquivo.name);
 			}
+		});
+	} else {
+		if (arquivos.size > SIZE_LIMIT) {
+			arquivosAcimaDoLimite.push(arquivos.name);
 		}
+	}
 
-		if (arquivosAcimaDoLimite.length > 0) {
-			const erros: any = {};
+	if (arquivosAcimaDoLimite.length > 0) {
+		const erros: any = {};
 
-			arquivosAcimaDoLimite.map((a) => {
-				erros[a] = `Arquivo acima do limite permitido de ${MB}mb`;
-			});
+		arquivosAcimaDoLimite.map((a) => {
+			erros[a] = `Arquivo acima do limite permitido de ${MB}mb`;
+		});
 
-			return res.status(400).send(erros);
-		}
+		return res.status(400).send(erros);
+	}
 
-		next();
-	} as RequestHandler;
-}
+	next();
+};
 
 export default VerificarTamanhoMiddleware;
