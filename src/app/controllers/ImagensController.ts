@@ -13,8 +13,6 @@ class ImagensControllers {
 		try {
 			const arquivo = req.files!;
 
-			console.log(arquivo)
-
 			res.status(201).send("Enviado");
 		} catch (error) {
 			next(error);

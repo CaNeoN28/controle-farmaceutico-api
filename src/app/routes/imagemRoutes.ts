@@ -3,14 +3,16 @@ import fileUpload from "express-fileupload";
 import ImagensControllers from "../controllers/ImagensController";
 import AuthenticationMiddleware from "../middlewares/AuthenticationMiddleware";
 import VerificarArquivosMiddleware from "../middlewares/files/VerificarArquivosMiddleware";
+import VerificarTamanhoMiddleware from "../middlewares/files/VerificarTamanhoMiddleware";
 
 const imagemRouter = Router();
 
 imagemRouter.post(
 	"/imagem",
 	AuthenticationMiddleware,
-	VerificarArquivosMiddleware,
 	fileUpload({ createParentPath: true }),
+	VerificarArquivosMiddleware,
+	VerificarTamanhoMiddleware("imagem"),
 	ImagensControllers.EnviarImagem
 );
 
