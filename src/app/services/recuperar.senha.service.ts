@@ -40,7 +40,13 @@ async function recuperarSenhaService(token?: string, senha?: string) {
 
 	const { id } = payload;
 
-	const {} = await UsuarioRepository.selfUpdateUsuario(id, { senha });
+	const { erros } = await UsuarioRepository.selfUpdateUsuario(id, {
+		senha,
+	});
+
+	if (erros) {
+		throw erros;
+	}
 }
 
 export default recuperarSenhaService;
