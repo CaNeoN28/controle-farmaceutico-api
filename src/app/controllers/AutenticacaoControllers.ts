@@ -82,6 +82,7 @@ class AutenticacaoControllers {
 
 			res.status(200).send(`Email enviado à ${email}`);
 		} catch (error) {
+			console.log(error);
 			next(error);
 		}
 	};
