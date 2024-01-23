@@ -13,7 +13,8 @@ async function recuperarSenhaService(email: string | undefined) {
 
 	if (usuario) {
 		const { email, nome_usuario } = usuario;
-		const token = generateToken({ email, nome_usuario });
+		const expiraEm = 30 * 60 * 1000
+		const token = generateToken({ email, nome_usuario }, expiraEm);
 
 		console.log(token);
 	}
