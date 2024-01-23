@@ -93,6 +93,8 @@ class AutenticacaoControllers {
 
 		try {
 			await recuperarSenhaService(token, senha);
+
+			res.status(200).send("Senha alterada com sucesso");
 		} catch (error) {
 			next(error);
 		}
