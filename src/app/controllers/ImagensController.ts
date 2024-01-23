@@ -5,29 +5,6 @@ import path from "path";
 import fileSystem from "fs";
 
 class ImagensControllers {
-	static EncontrarImagemPorId: RequestHandler = async function (
-		req,
-		res,
-		next
-	) {
-		const { id } = req.params;
-		const caminho = path.join("files/images", id);
-		const stat = fileSystem.statSync(caminho);
-		
-		if (stat) {
-			res.writeHead(200, {
-				"Content-Type": "image/jpeg",
-				"Content-Length": stat.size,
-			});
-
-			var readStream = fileSystem.createReadStream(caminho);
-			// We replaced all the event handlers with a simple call to readStream.pipe()
-			readStream.pipe(res);
-		} else {
-			res.status(404).send("Imagem não encontrada");
-		}
-	};
-
 	static EnviarImagem: RequestHandler = async function (req: any, res, next) {
 		try {
 			const arquivos = req.arquivos as UploadedFile[];
