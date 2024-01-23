@@ -1,12 +1,12 @@
 import { RequestHandler } from "express";
 import Usuario, { IUsuario } from "../../types/Usuario";
 import createUsuarioService from "../services/create.usuario.service";
-import Erro from "../../types/Erro";
 import loginService from "../services/login.service";
 import { AuthenticatedRequest } from "../../types/Requests";
 import findUsuarioService from "../services/find.usuario.service";
 import selfUpdateUsuarioService from "../services/self.update.usuario.service";
 import recuperarSenhaService from "../services/recuperar.senha.service";
+import esqueceuSenhaService from "../services/esqueceu.senha.service";
 
 class AutenticacaoControllers {
 	static Cadastro: RequestHandler = async function (req, res, next) {
@@ -78,7 +78,7 @@ class AutenticacaoControllers {
 		const { email } = req.body;
 
 		try {
-			await recuperarSenhaService(email);
+			await esqueceuSenhaService(email);
 
 			res.status(200).send(`Email enviado à ${email}`);
 		} catch (error) {
@@ -87,8 +87,14 @@ class AutenticacaoControllers {
 		}
 	};
 
-	static RecuperarSenha: RequestHandler = async function (req, res, send) {
-		res.send("Recuperar Senha");
+	static RecuperarSenha: RequestHandler = async function (req, res, next) {
+		const { token } = req.params;
+
+		try {
+			await recuperarSenhaService()
+		} catch (error) {
+			next(error)
+		}
 	};
 }
 export default AutenticacaoControllers;

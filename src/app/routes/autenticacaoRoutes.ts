@@ -9,6 +9,6 @@ autenticacaoRoutes.post("/cadastro", AutenticacaoControllers.Cadastro);
 autenticacaoRoutes.get("/perfil", AuthenticationMiddleware, AutenticacaoControllers.VisualizarPerfil)
 autenticacaoRoutes.put("/perfil/atualizar", AuthenticationMiddleware, AutenticacaoControllers.AtualizarPerfil)
 autenticacaoRoutes.post("/esqueceu-senha", AutenticacaoControllers.EsqueceuSenha)
-autenticacaoRoutes.put("/recuperar-senha", AutenticacaoControllers.RecuperarSenha)
+autenticacaoRoutes.put("/recuperar-senha/:token", AutenticacaoControllers.RecuperarSenha)
 
 export default autenticacaoRoutes
