@@ -22,8 +22,6 @@ async function recuperarSenhaService(email: string | undefined) {
 			para: email,
 			texto: `Token para recuperação: ${token}`,
 		});
-
-		console.log(token);
 	}
 }
 
