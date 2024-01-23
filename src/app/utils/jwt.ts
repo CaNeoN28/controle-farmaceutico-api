@@ -24,18 +24,28 @@ function generateToken(data: any) {
 }
 
 function verificarToken<T>(token: string) {
-	const key = process.env.SECRET_KEY || ""
+	const key = process.env.SECRET_KEY || "";
 
-	const payload = jwt.verify(token, key) as T
-
-	return payload
+	try {
+		const payload = jwt.verify(token, key) as T;
+		return payload;
+	} catch (err) {
+		return false;
+	}
 }
 
 function generateTokenFromUser(user: any) {
-	const { email, dados_administrativos, _id, nome_usuario, numero_registro } = user;
+	const { email, dados_administrativos, _id, nome_usuario, numero_registro } =
+		user;
 
-try {
-		if (!email || !dados_administrativos || !_id || !nome_usuario || !numero_registro) {
+	try {
+		if (
+			!email ||
+			!dados_administrativos ||
+			!_id ||
+			!nome_usuario ||
+			!numero_registro
+		) {
 			throw {};
 		}
 
