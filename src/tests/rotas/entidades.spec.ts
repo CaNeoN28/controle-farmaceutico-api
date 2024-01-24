@@ -117,6 +117,31 @@ describe("Rota de listagem de entidades", () => {
 		expect(resposta.dados[0]).toMatchObject(entidade);
 	});
 
+	it("deve aceitar filtros", async () => {
+		const resposta = await request(app)
+			.get("/entidades")
+			.query("estado=Rondônia")
+			.query("municipio=Vilhena")
+			.query("nome_entidade=Ministério da Saúde")
+			.query("ativo=SIM")
+			.set("Accept", "aplication/json")
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta.dados[0]).toMatchObject(entidade);
+	});
+
+	it("deve informar todas as entidades com o ativo=TODOS", async () => {
+		const resposta = await request(app)
+			.get("/entidades")
+			.query("ativo=TODOS")
+			.set("Accept", "aplication/json")
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta.dados[0]).toMatchObject(entidade);
+	});
+
 	it("deve retornar dados de paginação", async () => {
 		const resposta = await request(app)
 			.get(`/entidades?pagina=1&limite=10`)
