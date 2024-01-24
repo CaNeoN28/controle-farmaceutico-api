@@ -6,6 +6,7 @@ import listFarmaciasService from "../services/list.farmacias.service";
 import updateFarmaciaService from "../services/update.farmacia.service";
 import deleteFarmaciaService from "../services/delete.farmacia.service";
 import findNearestFarmaciaService from "../services/find.proxima.farmacia.service";
+import listPorEscalaFarmaciaService from "../services/list.escala.farmacia.service";
 
 class FarmaciaControllers {
 	static EncontrarFarmaciaPorId: RequestHandler = async function (
@@ -114,7 +115,7 @@ class FarmaciaControllers {
 				estado,
 				latitude,
 				longitude,
-				tempo
+				tempo,
 			});
 
 			res.status(200).send(farmacia);
@@ -128,7 +129,19 @@ class FarmaciaControllers {
 		res,
 		next
 	) {
-		res.send("Listar farmácias por plantão");
+		const { municipio, estado, tempo } = req.query as any;
+
+		try {
+			const plantoes = await listPorEscalaFarmaciaService({
+				municipio,
+				estado,
+				tempo,
+			});
+
+			res.status(200).send(plantoes);
+		} catch (error) {
+			next(error);
+		}
 	};
 }
 

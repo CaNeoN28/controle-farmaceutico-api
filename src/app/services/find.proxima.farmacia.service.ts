@@ -66,7 +66,7 @@ async function findNearestFarmaciaService(params: Filtros) {
 
 	const paginacao = {
 		pagina: 1,
-		limite: 100,
+		limite: 1000,
 	};
 
 	const { dados } = await FarmaciaRepository.findFarmacias(filtros, paginacao);
