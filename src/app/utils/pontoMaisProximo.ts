@@ -19,10 +19,13 @@ function pontoMaisProximo(localizacao: Localizacao, comparados: Referencial[]) {
 		let distY = ylocal - ycomp;
 		distY = distY < 0 ? -distY : distY;
 
+		const distanciaTotal = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
+
 		return {
 			identificador: c.identificador,
 			distX,
 			distY,
+			distanciaTotal,
 		};
 	});
 
