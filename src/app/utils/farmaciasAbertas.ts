@@ -10,11 +10,41 @@ function encontrarDiaSemana(tempo: string, horarios_servico: HorariosServico) {
 		"sexta_feira",
 		"sabado",
 	];
+	const data = new Date(tempo);
 
-	const dia = new Date(tempo).getDay();
+	const dia = data.getDay();
 	const dia_semana = dias_semana[dia];
 
-	const horario_servico = horarios_servico[dia_semana as keyof HorariosServico];
+	const getHorarioServico = () => {
+		let horario = horarios_servico[dia_semana as keyof HorariosServico];
+
+		if (horario) {
+			const { horario_entrada, horario_saida } = horario;
+			const { hora, minuto } = {
+				hora: data.getHours(),
+				minuto: data.getMinutes(),
+			};
+			const [horaEntrada, minutoEntrada] = horario_entrada
+				.split(":")
+				.map((v) => Number(v));
+			const [horaSaida, minutoSaida] = horario_saida
+				.split(":")
+				.map((v) => Number(v));
+
+			if (hora >= horaEntrada && hora <= horaSaida) {
+				if (hora == horaEntrada && minuto <= minutoEntrada) return false;
+
+				if (hora == horaSaida && minuto >= minutoSaida) return false;
+
+				else return true
+			}
+
+			return false;
+		} else {
+			return false;
+		}
+	};
+	const horario_servico = getHorarioServico();
 
 	return horario_servico;
 }
@@ -54,7 +84,6 @@ function encontrarPlantao(tempo: string, plantoes?: string[]) {
 				}
 			}
 			const data = new Date([ano, mes, dia].join("/"));
-			console.log(data);
 			return data.getTime();
 		};
 
@@ -77,7 +106,6 @@ function farmaciasAbertas(
 
 		return true;
 	});
-	console.log(farmacias);
 	return farmacias;
 }
 
