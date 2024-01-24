@@ -1,15 +1,17 @@
 import app from "../../../app/app";
-import { criarUsuarioAdm } from "../../../app/utils/db/gerarDadosDiversos";
+import {
+	criarUsuarioAdm,
+	criarUsuarioInativo,
+} from "../../../app/utils/db/gerarDadosDiversos";
 import limparBanco from "../../../app/utils/db/limparBanco";
 import request from "supertest";
 
-let usuario: any = undefined;
 let email = "";
 
 beforeAll(async () => {
 	const { usuario: dados } = await criarUsuarioAdm();
+	await criarUsuarioInativo();
 
-	usuario = dados;
 	email = dados.email;
 });
 
@@ -28,6 +30,29 @@ describe("A rota esqueceu-senha", () => {
 			.expect(200)
 			.then((res) => res.text);
 
-		expect(resposta).toBe(`Token de recuperação enviado para ${email}`)
+		expect(resposta).toBe(`Token de recuperação enviado para ${email}`);
+	});
+
+	it("deve retornar erro ao não informar email", async () => {
+		const resposta = await request(app)
+			.post("/esqueceu-senha")
+			.set("Accept", "application/json")
+			.expect(400)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Email é obrigatório");
+	});
+
+	it("deve retornar erro ao não informar email", async () => {
+		const resposta = await request(app)
+			.post("/esqueceu-senha")
+			.set("Accept", "application/json")
+			.send({
+				email: "usuarioinativo@gmail.com",
+			})
+			.expect(403)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("O usuário ainda está inativo, espere sua ativação");
 	});
 });
