@@ -1,4 +1,5 @@
 import FarmaciaRepository from "../repositories/Farmacia.repository";
+import pontoMaisProximo from "../utils/pontoMaisProximo";
 
 interface Filtros {
 	municipio?: string;
@@ -10,6 +11,13 @@ interface Filtros {
 async function findNearestFarmaciaService(params: Filtros) {
 	const { municipio, estado, latitude, longitude } = params;
 	const filtros: any = {};
+
+	if (!latitude || !longitude) {
+		throw {
+			codigo: 400,
+			erro: "Latitude e longitude são obrigatórios",
+		};
+	}
 
 	if (municipio || estado) {
 		filtros.endereco = {};
@@ -30,7 +38,23 @@ async function findNearestFarmaciaService(params: Filtros) {
 
 	const { dados } = await FarmaciaRepository.findFarmacias(filtros, paginacao);
 
-	return dados;
+	const referenciais = dados.map((f) => {
+		return {
+			identificador: f.id,
+			localizacao: {
+				x: Number(f.endereco.localizacao.x),
+				y: Number(f.endereco.localizacao.y),
+			},
+		};
+	});
+	const localizacao = {
+		x: Number(latitude),
+		y: Number(longitude),
+	};
+
+	const maisProximo = pontoMaisProximo(localizacao, referenciais);
+
+	return maisProximo;
 }
 
 export default findNearestFarmaciaService;
