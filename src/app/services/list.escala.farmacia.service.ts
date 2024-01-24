@@ -1,3 +1,11 @@
-function ListPorEscalaFarmaciaService(params: string) {}
+interface Filtros {
+	municipio?: string;
+	estado?: string;
+	tempo?: string;
+}
 
-export default ListPorEscalaFarmaciaService
+async function listPorEscalaFarmaciaService(params: Filtros) {
+	
+}
+
+export default listPorEscalaFarmaciaService;
