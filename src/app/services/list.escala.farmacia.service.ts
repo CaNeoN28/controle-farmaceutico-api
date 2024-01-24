@@ -37,7 +37,7 @@ async function listPorEscalaFarmaciaService(params: Parametros) {
 		};
 	}
 
-	const escala: {
+	let escala: {
 		[key: string]: any[];
 	} = {};
 
@@ -45,19 +45,25 @@ async function listPorEscalaFarmaciaService(params: Parametros) {
 		const dias = d.plantoes.filter((p) => {
 			const dataPlantao = new Date(p);
 
-			const valido = dataPlantao.getTime() > dateTime.getTime();
+			const valido = dataPlantao.getTime() >= dateTime.getTime();
 
 			return valido;
 		});
 
-		dias.map(dia => {
-			if(escala[dia]){
-				escala[dia].push(d)
+		dias.map((dia) => {
+			if (escala[dia]) {
+				escala[dia].push(d);
 			} else {
-				escala[dia] = [d]
+				escala[dia] = [d];
 			}
-		})
+		});
 	});
+
+	const array = Object.entries(escala).sort((a, b) => {
+		return a[0] > b[0] ? 1 : -1;
+	});
+
+	escala = Object.fromEntries(array)
 
 	return escala;
 }
