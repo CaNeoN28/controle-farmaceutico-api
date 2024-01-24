@@ -394,15 +394,29 @@ describe("A rota de recuperação de farmácia próxima", () => {
 });
 
 describe("A rota de listagem de farmácias por plantão", () => {
-	it("Deve retorar uma lista com um dia de plantão e a farmácia cadastrado anteriormente", async () => {
+	it("deve retorar uma lista com um dia de plantão e a farmácia cadastrado anteriormente", async () => {
 		const resposta = await request(app)
 			.get("/farmacias/plantao")
+			.query("estado=Rondônia")
+			.query("municipio=Vilhena")
 			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
 			.expect(200)
 			.then((res) => res.body);
 
 		expect(resposta).toHaveProperty(dadosFarmacia.plantoes![0]);
+	});
+
+	it("deve retornar erro com tempo inválido", async () => {
+		const resposta = await request(app)
+			.get("/farmacias/plantao")
+			.query("tempo=tempoinvalido")
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.expect(400)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Tempo informado inválido");
 	});
 });
 
