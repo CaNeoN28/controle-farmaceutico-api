@@ -333,10 +333,65 @@ describe("A rota de recuperação de farmácia próxima", () => {
 
 		expect(resposta).toMatchObject({
 			...dadosFarmacia,
-			nome_fantasia: "Farmácia Via Láctea"
-		})
+			nome_fantasia: "Farmácia Via Láctea",
+		});
 	});
-})
+
+	it("Deve retornar erro ao informar dados de localização inválidos", async () => {
+		const resposta = await request(app)
+			.get("/farmacia/proxima")
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.expect(400)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Latitude e longitude são obrigatórios");
+	});
+
+	it("Deve retornar erro ao informar dados de localização inválidos", async () => {
+		const resposta = await request(app)
+			.get("/farmacia/proxima")
+			.query("latitude=0")
+			.query("longitude=0")
+			.query("tempo=tempoinvalida")
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.expect(400)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Tempo inválido");
+	});
+
+	it("Deve retornar erro ao informar dados de localização inválidos", async () => {
+		const resposta = await request(app)
+			.get("/farmacia/proxima")
+			.query("latitude=invalida")
+			.query("longitude=invalida")
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.expect(400)
+			.then((res) => res.body);
+
+		expect(resposta).toEqual({
+			latitude: "Latitude inválida",
+			longitude: "Longitude inválida",
+		});
+	});
+
+	it("Deve retornar erro ao procurar por uma farmácia que não esta aberta", async () => {
+		const resposta = await request(app)
+			.get("/farmacia/proxima")
+			.query("latitude=0")
+			.query("longitude=0")
+			.query(`tempo=${new Date("1999/10/10")}`)
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.expect(404)
+			.then((res) => res.text);
+
+		expect(resposta).toBe("Não há farmácias abertas próximas");
+	});
+});
 
 describe("A rota de listagem de farmácias por plantão", () => {
 	it("Deve retorar uma lista com um dia de plantão e a farmácia cadastrado anteriormente", async () => {
@@ -347,7 +402,7 @@ describe("A rota de listagem de farmácias por plantão", () => {
 			.expect(200)
 			.then((res) => res.body);
 
-		expect(resposta).toHaveProperty(dadosFarmacia.plantoes![0])
+		expect(resposta).toHaveProperty(dadosFarmacia.plantoes![0]);
 	});
 });
 
