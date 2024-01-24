@@ -138,7 +138,7 @@
     "dev": "nodemon src/server.ts",
     "test": "jest --verbose --watchAll -i",
     "test:c": "jest --coverage --watchAll -i",
-		"clearDB": "ts-node src/app/utils/db/limparBanco.ts"
+		"clearDB": "ts-node src/app/utils/db/limparBancoDev.ts"
   },
   "author": "",
   "license": "ISC",
