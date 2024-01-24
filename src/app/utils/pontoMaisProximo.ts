@@ -9,6 +9,8 @@ interface Referencial {
 }
 
 function pontoMaisProximo(localizacao: Localizacao, comparados: Referencial[]) {
+	if (comparados.length == 0) return undefined;
+
 	const distancias = comparados.map((c) => {
 		const { x: xlocal, y: ylocal } = localizacao;
 		const { x: xcomp, y: ycomp } = c.localizacao;

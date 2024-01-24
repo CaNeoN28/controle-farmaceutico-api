@@ -87,11 +87,19 @@ async function findNearestFarmaciaService(params: Filtros) {
 		y: Number(longitude),
 	};
 
-	const { identificador } = pontoMaisProximo(localizacao, referenciais);
+	const maisProximo = pontoMaisProximo(localizacao, referenciais)
 
-	const farmacia = dados.find((d) => d.id === identificador);
+	if(maisProximo){
+		const {identificador} = maisProximo
+		const farmacia = dados.find((d) => d.id === identificador);
 
-	return farmacia;
+		return farmacia;
+	}
+
+	throw {
+		codigo: 404,
+		erro : "Não há farmácias abertas próximas"
+	}
 }
 
 export default findNearestFarmaciaService;
