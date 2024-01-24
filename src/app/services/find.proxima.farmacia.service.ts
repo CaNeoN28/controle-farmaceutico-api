@@ -1,4 +1,5 @@
 import FarmaciaRepository from "../repositories/Farmacia.repository";
+import farmaciasAbertas from "../utils/farmaciasAbertas";
 import pontoMaisProximo from "../utils/pontoMaisProximo";
 
 interface Filtros {
@@ -10,14 +11,11 @@ interface Filtros {
 }
 
 async function findNearestFarmaciaService(params: Filtros) {
-	const { municipio, estado, latitude, longitude, tempo } = params;
+	let { municipio, estado, latitude, longitude, tempo } = params;
 	const filtros: any = {};
 
 	if (!tempo) {
-		throw {
-			codigo: 400,
-			erro: "Tempo é obrigatório",
-		};
+		tempo = new Date().toString()
 	}
 
 	const datetime = new Date(tempo);
@@ -55,7 +53,9 @@ async function findNearestFarmaciaService(params: Filtros) {
 
 	const { dados } = await FarmaciaRepository.findFarmacias(filtros, paginacao);
 
-	const referenciais = dados.map((f) => {
+	const farmacias = farmaciasAbertas(dados as any, tempo)
+
+	const referenciais = farmacias.map((f) => {
 		return {
 			identificador: f.id,
 			localizacao: {
