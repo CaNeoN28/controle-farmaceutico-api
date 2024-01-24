@@ -28,7 +28,7 @@ async function listPorEscalaFarmaciaService(params: Parametros) {
 	};
 
 	const { dados } = await FarmaciaRepository.findFarmacias(filtros, paginacao);
-	const dateTime = new Date(tempo);
+	let dateTime = new Date(tempo);
 
 	if (isNaN(Number(dateTime))) {
 		throw {
@@ -36,6 +36,14 @@ async function listPorEscalaFarmaciaService(params: Parametros) {
 			erro: "Tempo informado inválido",
 		};
 	}
+
+	const { dia, mes, ano } = {
+		dia: dateTime.getDate(),
+		mes: dateTime.getMonth() + 1,
+		ano: dateTime.getFullYear(),
+	};
+
+	dateTime = new Date([ano, mes, dia].join("/"))
 
 	let escala: {
 		[key: string]: any[];
@@ -63,7 +71,7 @@ async function listPorEscalaFarmaciaService(params: Parametros) {
 		return a[0] > b[0] ? 1 : -1;
 	});
 
-	escala = Object.fromEntries(array)
+	escala = Object.fromEntries(array);
 
 	return escala;
 }
