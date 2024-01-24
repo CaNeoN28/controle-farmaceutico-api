@@ -9,6 +9,12 @@ import request from "supertest";
 let tokenAdm = "";
 let idFarmacia = "";
 
+const date = new Date();
+
+const plantoes = [
+	[date.getFullYear() + 1, date.getMonth() + 1, date.getDate()].join("/"),
+];
+
 const dadosFarmacia = new Farmacia({
 	cnpj: "49487534000183",
 	endereco: {
@@ -30,8 +36,8 @@ const dadosFarmacia = new Farmacia({
 			horario_saida: "16:00",
 		},
 	},
-	plantoes: ["2024/10/10", "2024/10/20", "2024/10/30"],
-	imagem_url: ".jpg"
+	plantoes,
+	imagem_url: ".jpg",
 });
 
 beforeAll(async () => {
@@ -105,10 +111,10 @@ describe("A rota de cadastro de farmácias", () => {
 				},
 				nome_fantasia: "NI",
 				horarios_servico: {
-					"segunda_feira": {
+					segunda_feira: {
 						horario_entrada: "24:00",
-						horario_saida: "00:00"
-					}
+						horario_saida: "00:00",
+					},
 				},
 			} as Farmacia)
 			.expect(400)
@@ -125,8 +131,10 @@ describe("A rota de cadastro de farmácias", () => {
 			"endereco.logradouro": "Logradouro inválido",
 			"endereco.numero": "Número inválido",
 			nome_fantasia: "Nome fantasia inválido",
-			"horarios_servico.segunda_feira.horario_entrada": "Horário de entrada inválido",
-			"horarios_servico.segunda_feira.horario_saida": "Horário de saída inválido",
+			"horarios_servico.segunda_feira.horario_entrada":
+				"Horário de entrada inválido",
+			"horarios_servico.segunda_feira.horario_saida":
+				"Horário de saída inválido",
 		});
 	});
 
@@ -308,6 +316,19 @@ describe("A rota de atualização de farmácia", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toBe("É necessário estar autenticado para usar esta rota");
+	});
+});
+
+describe("A rota de listagem de farmácias por plantão", () => {
+	it("Deve retorar uma lista com um dia de plantão e a farmácia cadastrado anteriormente", async () => {
+		const resposta = await request(app)
+			.get("/farmacias/plantao")
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta).toHaveProperty(dadosFarmacia.plantoes![0])
 	});
 });
 
