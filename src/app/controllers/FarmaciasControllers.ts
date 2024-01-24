@@ -106,7 +106,7 @@ class FarmaciaControllers {
 		res,
 		next
 	) {
-		const { municipio, estado, longitude, latitude } = req.query as any;
+		const { municipio, estado, longitude, latitude, tempo } = req.query as any;
 
 		try {
 			const farmacia = await findNearestFarmaciaService({
@@ -114,6 +114,7 @@ class FarmaciaControllers {
 				estado,
 				latitude,
 				longitude,
+				tempo
 			});
 
 			res.status(200).send(farmacia);

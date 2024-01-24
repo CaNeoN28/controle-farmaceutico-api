@@ -6,11 +6,19 @@ interface Filtros {
 	estado?: string;
 	latitude?: string;
 	longitude?: string;
+	tempo?: string;
 }
 
 async function findNearestFarmaciaService(params: Filtros) {
-	const { municipio, estado, latitude, longitude } = params;
+	const { municipio, estado, latitude, longitude, tempo } = params;
 	const filtros: any = {};
+
+	if (!tempo) {
+		throw {
+			codigo: 400,
+			erro: "Tempo é obrigatório",
+		};
+	}
 
 	if (!latitude || !longitude) {
 		throw {
