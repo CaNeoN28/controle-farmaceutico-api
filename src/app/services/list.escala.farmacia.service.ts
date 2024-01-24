@@ -7,8 +7,12 @@ interface Parametros {
 }
 
 async function listPorEscalaFarmaciaService(params: Parametros) {
-	const { estado, municipio, tempo } = params;
+	let { estado, municipio, tempo } = params;
 	const filtros: any = {};
+
+	if (!tempo) {
+		tempo = new Date().toString();
+	}
 
 	if (estado) {
 		filtros.estado = estado;
@@ -23,7 +27,19 @@ async function listPorEscalaFarmaciaService(params: Parametros) {
 		limite: 1000,
 	};
 
-	const {dados: farmacias} = await FarmaciaRepository.findFarmacias(filtros, paginacao);
+	const { dados } = await FarmaciaRepository.findFarmacias(filtros, paginacao);
+	const dateTime = new Date(tempo);
+
+	if (isNaN(Number(dateTime))) {
+		throw {
+			codigo: 400,
+			erro: "Tempo informado inválido",
+		};
+	}
+
+	const farmacias = dados.map(d => {
+		return d
+	})
 
 	return farmacias;
 }
