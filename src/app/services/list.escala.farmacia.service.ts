@@ -37,11 +37,29 @@ async function listPorEscalaFarmaciaService(params: Parametros) {
 		};
 	}
 
-	const farmacias = dados.map(d => {
-		return d
-	})
+	const escala: {
+		[key: string]: any[];
+	} = {};
 
-	return farmacias;
+	dados.map((d) => {
+		const dias = d.plantoes.filter((p) => {
+			const dataPlantao = new Date(p);
+
+			const valido = dataPlantao.getTime() > dateTime.getTime();
+
+			return valido;
+		});
+
+		dias.map(dia => {
+			if(escala[dia]){
+				escala[dia].push(d)
+			} else {
+				escala[dia] = [d]
+			}
+		})
+	});
+
+	return escala;
 }
 
 export default listPorEscalaFarmaciaService;
