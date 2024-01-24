@@ -52,9 +52,11 @@ async function findNearestFarmaciaService(params: Filtros) {
 		y: Number(longitude),
 	};
 
-	const maisProximo = pontoMaisProximo(localizacao, referenciais);
+	const { identificador } = pontoMaisProximo(localizacao, referenciais);
 
-	return maisProximo;
+	const farmacia = dados.find((d) => d.id === identificador);
+
+	return farmacia;
 }
 
 export default findNearestFarmaciaService;

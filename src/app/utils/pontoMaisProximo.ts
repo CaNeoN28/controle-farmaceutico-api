@@ -23,13 +23,15 @@ function pontoMaisProximo(localizacao: Localizacao, comparados: Referencial[]) {
 
 		return {
 			identificador: c.identificador,
-			distX,
-			distY,
 			distanciaTotal,
 		};
 	});
 
-	return distancias;
+	const maisProximo = distancias.sort((a, b) =>
+		a.distanciaTotal < b.distanciaTotal ? -1 : 1
+	)[0];
+
+	return maisProximo;
 }
 
 export default pontoMaisProximo;
