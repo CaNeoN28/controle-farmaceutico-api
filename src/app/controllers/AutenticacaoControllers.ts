@@ -80,7 +80,7 @@ class AutenticacaoControllers {
 		try {
 			await esqueceuSenhaService(email);
 
-			res.status(200).send(`Email enviado à ${email}`);
+			res.status(200).send(`Token de recuperação enviado para ${email}`);
 		} catch (error) {
 			console.log(error);
 			next(error);
