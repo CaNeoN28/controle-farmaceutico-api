@@ -20,6 +20,15 @@ async function findNearestFarmaciaService(params: Filtros) {
 		};
 	}
 
+	const datetime = new Date(tempo);
+
+	if (isNaN(Number(datetime))) {
+		throw {
+			codigo: 400,
+			erro: "Tempo inválido",
+		};
+	}
+
 	if (!latitude || !longitude) {
 		throw {
 			codigo: 400,
