@@ -5,8 +5,8 @@ import pontoMaisProximo from "../utils/pontoMaisProximo";
 interface Filtros {
 	municipio?: string;
 	estado?: string;
-	latitude?: string;
-	longitude?: string;
+	latitude?: string | number;
+	longitude?: string | number;
 	tempo?: string;
 }
 
@@ -32,6 +32,24 @@ async function findNearestFarmaciaService(params: Filtros) {
 			codigo: 400,
 			erro: "Latitude e longitude são obrigatórios",
 		};
+	}
+
+	latitude = Number(latitude)
+	longitude = Number(longitude)
+
+	if(isNaN(latitude) || isNaN(longitude)){
+		const errosValidacao: any = {}
+
+		if(isNaN(latitude))
+			errosValidacao.latitude = "Latitude inválida"
+
+		if(isNaN(longitude))
+			errosValidacao.longitude = "Longitude inválida"
+
+		throw {
+			codigo: 400,
+			erro: errosValidacao
+		}
 	}
 
 	if (municipio || estado) {
