@@ -12,6 +12,7 @@ let idFarmacia = "";
 const date = new Date();
 
 const plantoes = [
+	[date.getFullYear(), date.getMonth() + 1, date.getDate()].join("/"),
 	[date.getFullYear() + 1, date.getMonth() + 1, date.getDate()].join("/"),
 ];
 
@@ -318,6 +319,24 @@ describe("A rota de atualização de farmácia", () => {
 		expect(resposta).toBe("É necessário estar autenticado para usar esta rota");
 	});
 });
+
+describe("A rota de recuperação de farmácia próxima", () => {
+	it("Deve retornar a farmácia cadastrada anteriormente", async () => {
+		const resposta = await request(app)
+			.get("/farmacia/proxima")
+			.query("latitude=0")
+			.query("longitude=0")
+			.set("Authorization", `Bearer ${tokenAdm}`)
+			.set("Accept", "application/json")
+			.expect(200)
+			.then((res) => res.body);
+
+		expect(resposta).toMatchObject({
+			...dadosFarmacia,
+			nome_fantasia: "Farmácia Via Láctea"
+		})
+	});
+})
 
 describe("A rota de listagem de farmácias por plantão", () => {
 	it("Deve retorar uma lista com um dia de plantão e a farmácia cadastrado anteriormente", async () => {
