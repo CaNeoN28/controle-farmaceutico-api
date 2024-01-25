@@ -19,8 +19,7 @@ const route = (app: Application) => {
 	);
 
 	app.get("*", (req, res) => {
-		const endereco = req.url;
-		res.send(`${endereco} não encontrado`);
+		res.sendFile("404.html", { root: __dirname });
 	});
 };
 
