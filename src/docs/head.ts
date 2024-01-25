@@ -1,6 +1,8 @@
 import { Application } from "express";
 import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
+import paths from "./paths";
+import components from "./components";
 
 const swaggerDefinition: swaggerJsDoc.OAS3Definition = {
 	openapi: "3.0.0",
@@ -14,6 +16,8 @@ const swaggerDefinition: swaggerJsDoc.OAS3Definition = {
 			description: "Ambiente de desenvolvimento",
 		},
 	],
+	paths,
+	components,
 	security: [
 		{
 			bearerAuth: [],
