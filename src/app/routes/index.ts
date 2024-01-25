@@ -17,6 +17,11 @@ const route = (app: Application) => {
 		usuarioRoutes,
 		imagemRouter
 	);
+
+	app.get("*", (req, res) => {
+		const endereco = req.url;
+		res.send(`${endereco} não encontrado`);
+	});
 };
 
 export default route;
