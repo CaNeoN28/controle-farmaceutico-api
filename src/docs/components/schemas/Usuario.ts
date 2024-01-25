@@ -50,4 +50,16 @@ const UsuarioGetSchema: Schema = {
 	},
 };
 
-export { UsuarioGetSchema };
+const UsuarioSchema: Schema = {
+	type: "object",
+	properties: {
+		...UsuarioGetSchema.properties,
+		senha: {
+			type: "string",
+			required: true,
+			obs: "Senha do usuário. Deve haver pelo menos 8 caractéres, 1 número, 1 letra maiúscula, 1 letra minuscula e 1 caractére especial",
+		},
+	},
+};
+
+export { UsuarioGetSchema, UsuarioSchema };
