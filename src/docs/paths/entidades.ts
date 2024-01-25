@@ -18,19 +18,22 @@ const EntidadesPaths: Paths = {
 					content: {
 						"application/json": {
 							schema: {
-								$ref: "#/components/schemas/Entidade"
-							}
-						}
-					}
+								$ref: "#/components/schemas/Entidade",
+							},
+						},
+					},
 				},
 				400: {
 					description: "Retornar erro ao informar um id inválido",
 					content: {
 						"text/html": {
-							
-						}
-					}
-				}
+							schema: {
+								type: "string",
+								example: "Id inválido",
+							},
+						},
+					},
+				},
 			},
 		},
 	},
