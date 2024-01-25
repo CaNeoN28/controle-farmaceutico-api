@@ -168,6 +168,77 @@ const EntidadesPaths: Paths = {
 			},
 		},
 	},
+
+	"/entidades": {
+		get: {
+			description: "Retorna uma listagem das entidades cadastradas",
+			tags: ["Entidades"],
+			parameters: [
+				{
+					name: "estado",
+					description:
+						"Estado salvo da entidade, deve ser informado exatamente da maneira que foi salvo",
+					example: "Rondônia",
+					in: "query",
+					schema: {
+						$type: "string",
+					},
+				},
+				{
+					name: "municipio",
+					description:
+						"Município salvo da entidade, deve ser informado exatamente da maneira que foi salvo",
+					example: "Vilhena",
+					in: "query",
+					schema: {
+						$type: "string",
+					},
+				},
+				{
+					name: "nome_entidade",
+					description:
+						"Nome da entidade, inteiro ou incompleto. O retorna é com base nas correspondências",
+					example: "Ministério da saúde",
+					in: "query",
+					schema: {
+						$type: "string",
+					},
+				},
+				{
+					name: "ativo",
+					description:
+						"Estado de ativação das entidades. Informe SIM para os ativos, NÃO para os inativos e TODOS para todos os estados",
+					example: "TODOS",
+					in: "query",
+					schema: {
+						$type: "string",
+					},
+				},
+				{
+					$ref: "#/components/parameters/Pagina",
+				},
+				{
+					$ref: "#/components/parameters/Limite",
+				},
+			],
+			responses: {
+				200: {
+					description:
+						"Retorna um documento com os dados de listagem e o array de entidades correspondentes",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/Entidades",
+							},
+						},
+					},
+				},
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
+	},
 };
 
 export default EntidadesPaths;

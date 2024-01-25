@@ -25,6 +25,30 @@ const EntidadeSchema: Schema = {
 	},
 };
 
+const EntidadesSchema: Schema = {
+	type: "object",
+	properties: {
+		dados: {
+			type: "array",
+			items: {
+				$ref: "#/components/schemas/Entidade",
+			},
+		},
+		pagina: {
+			type: "number",
+		},
+		paginas_totais: {
+			type: "number",
+		},
+		limite: {
+			type: "number",
+		},
+		documentos_totais: {
+			type: "number",
+		},
+	},
+};
+
 const EntidadeBadRequest: Schema = {
 	type: "object",
 	properties: {
@@ -40,7 +64,7 @@ const EntidadeBadRequest: Schema = {
 		ativo: {
 			type: "string",
 		},
-	}
-}
+	},
+};
 
-export { EntidadeSchema, EntidadeBadRequest };
+export { EntidadeSchema, EntidadesSchema, EntidadeBadRequest };
