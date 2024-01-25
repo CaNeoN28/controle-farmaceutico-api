@@ -1,9 +1,9 @@
 import { Components } from "swagger-jsdoc";
-import {} from "./Autenticacao";
-import { EntidadeBadRequest, EntidadeSchema } from "./Entidade";
-import {} from "./Farmacia";
-import {} from "./Usuario";
-import { BearerAuth } from "./BearerAuth";
+import {} from "./schemas/Autenticacao";
+import { EntidadeBadRequest, EntidadeSchema } from "./schemas/Entidade";
+import {} from "./schemas/Farmacia";
+import {} from "./schemas/Usuario";
+import { BearerAuth } from "./securitySchemes/BearerAuth";
 
 const components: Components = {
 	schemas: {
