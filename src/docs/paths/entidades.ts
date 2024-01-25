@@ -58,13 +58,7 @@ const EntidadesPaths: Paths = {
 				},
 			],
 			requestBody: {
-				content: {
-					"application/json": {
-						schema: {
-							$ref: "#/components/schemas/Entidade",
-						},
-					},
-				},
+				$ref: "#/components/requestBodies/Entidade",
 			},
 			responses: {
 				200: {
