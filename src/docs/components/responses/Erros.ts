@@ -12,4 +12,16 @@ const ErroAutenticacao: Response = {
 	},
 };
 
-export { ErroAutenticacao };
+const ErroNaoGerente: Response = {
+	description: "Retorna erro ao autenticar com um usuário que não é gerente",
+	content: {
+		"text/html": {
+			schema: {
+				type: "text",
+				example: "É necessário ser gerente ou superior para realizar esta ação"
+			}
+		}
+	}
+}
+
+export { ErroAutenticacao, ErroNaoGerente };
