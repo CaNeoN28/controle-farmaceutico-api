@@ -81,6 +81,9 @@ const EntidadesPaths: Paths = {
 						},
 					},
 				},
+				401: {
+					$ref: "#/components/responses/ErroAutenticacao",
+				},
 			},
 		},
 	},

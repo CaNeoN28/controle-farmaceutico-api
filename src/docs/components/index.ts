@@ -4,6 +4,7 @@ import { EntidadeBadRequest, EntidadeSchema } from "./schemas/Entidade";
 import {} from "./schemas/Farmacia";
 import {} from "./schemas/Usuario";
 import { BearerAuth } from "./securitySchemes/BearerAuth";
+import { ErroAutenticacao } from "./responses/Erros";
 import EnvioEntidade from "./requestBodies/EnvioEntidade";
 
 const components: Components = {
@@ -12,7 +13,10 @@ const components: Components = {
 		EntidadeBadRequest: EntidadeBadRequest,
 	},
 	requestBodies: {
-		Entidade: EnvioEntidade
+		Entidade: EnvioEntidade,
+	},
+	responses: {
+		ErroAutenticacao: ErroAutenticacao,
 	},
 	securitySchemes: {
 		BearerAuth,
