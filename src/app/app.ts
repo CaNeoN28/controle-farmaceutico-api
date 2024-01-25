@@ -1,15 +1,18 @@
 import express from "express";
-import cors from "cors"
+import cors from "cors";
 import route from "./routes";
 import ErrorMiddleware from "./middlewares/ErrorMiddleware";
 
 const app = express();
 
-app.use(express.json());
-app.use(cors());
+function configApp() {
+	app.use(express.json());
+	app.use(cors());
 
-route(app);
+	route(app);
 
-app.use(ErrorMiddleware);
+	app.use(ErrorMiddleware);
+}
 
 export default app;
+export { configApp };

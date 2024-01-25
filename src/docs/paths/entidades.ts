@@ -25,6 +25,11 @@ const EntidadesPaths: Paths = {
 				},
 				400: {
 					description: "Retornar erro ao informar um id inválido",
+					content: {
+						"text/html": {
+							
+						}
+					}
 				}
 			},
 		},
