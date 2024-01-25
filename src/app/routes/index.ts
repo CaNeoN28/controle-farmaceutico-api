@@ -19,7 +19,7 @@ const route = (app: Application) => {
 	);
 
 	app.get("*", (req, res) => {
-		res.sendFile("views/error404.html", { root: __dirname });
+		res.status(404).sendFile("views/error404.html", { root: __dirname });
 	});
 };
 
