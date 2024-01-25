@@ -10,7 +10,6 @@ const EntidadesPaths: Paths = {
 					description: "ID da entidade cadastrada",
 					in: "path",
 					required: true,
-					obs: "AAA"
 				},
 			],
 			responses: {
@@ -24,6 +23,9 @@ const EntidadesPaths: Paths = {
 						}
 					}
 				},
+				400: {
+					description: "Retornar erro ao informar um id inválido",
+				}
 			},
 		},
 	},
