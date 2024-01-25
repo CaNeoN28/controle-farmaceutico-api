@@ -25,4 +25,22 @@ const EntidadeSchema: Schema = {
 	},
 };
 
-export { EntidadeSchema };
+const EntidadeBadRequest: Schema = {
+	type: "object",
+	properties: {
+		nome_entidade: {
+			type: "string",
+		},
+		estado: {
+			type: "string",
+		},
+		municipio: {
+			type: "string",
+		},
+		ativo: {
+			type: "string",
+		},
+	}
+}
+
+export { EntidadeSchema, EntidadeBadRequest };

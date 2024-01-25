@@ -46,6 +46,49 @@ const EntidadesPaths: Paths = {
 				},
 			},
 		},
+		put: {
+			tags: ["Entidades"],
+			parameters: [
+				{
+					name: "id",
+					description:
+						"Atualiza a entidade informada pelo o ID. \n\n É necessário ser gerente ou superior para realizar a ação.",
+					in: "path",
+					required: true,
+				},
+			],
+			requestBody: {
+				content: {
+					"application/json": {
+						schema: {
+							$ref: "#/components/schemas/Entidade",
+						},
+					},
+				},
+			},
+			responses: {
+				200: {
+					description: "Informa os dados atualizados da entidade",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/Entidade",
+							},
+						},
+					},
+				},
+				400: {
+					description: "Retorna erro caso os dados informados sejam inválidos",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/EntidadeBadRequest",
+							},
+						},
+					},
+				},
+			},
+		},
 	},
 };
 
