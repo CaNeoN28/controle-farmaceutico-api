@@ -34,6 +34,16 @@ const EntidadesPaths: Paths = {
 						},
 					},
 				},
+				404: {
+					description:
+						"Retorna erro ao não encontrar entidade pelo ID informado",
+					content: {
+						"text/html": {
+							type: "string",
+							example: "Entidade não encontrada",
+						},
+					},
+				},
 			},
 		},
 	},
