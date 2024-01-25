@@ -18,10 +18,22 @@ const ErroNaoGerente: Response = {
 		"text/html": {
 			schema: {
 				type: "text",
-				example: "É necessário ser gerente ou superior para realizar esta ação"
-			}
-		}
-	}
-}
+				example: "É necessário ser gerente ou superior para realizar esta ação",
+			},
+		},
+	},
+};
 
-export { ErroAutenticacao, ErroNaoGerente };
+const ErroInterno: Response = {
+	description: "Retorna um erro não esperado pela API",
+	content: {
+		"text/html": {
+			schema: {
+				type: "text",
+				example: "Erro interno do servidor",
+			},
+		},
+	},
+};
+
+export { ErroAutenticacao, ErroNaoGerente, ErroInterno };

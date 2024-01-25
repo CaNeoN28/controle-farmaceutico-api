@@ -87,6 +87,9 @@ const EntidadesPaths: Paths = {
 				403: {
 					$ref: "#/components/responses/ErroNaoGerente",
 				},
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
 			},
 		},
 	},

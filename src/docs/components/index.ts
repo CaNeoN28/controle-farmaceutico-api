@@ -4,7 +4,11 @@ import { EntidadeBadRequest, EntidadeSchema } from "./schemas/Entidade";
 import {} from "./schemas/Farmacia";
 import {} from "./schemas/Usuario";
 import { BearerAuth } from "./securitySchemes/BearerAuth";
-import { ErroAutenticacao, ErroNaoGerente } from "./responses/Erros";
+import {
+	ErroAutenticacao,
+	ErroInterno,
+	ErroNaoGerente,
+} from "./responses/Erros";
 import EnvioEntidade from "./requestBodies/EnvioEntidade";
 
 const components: Components = {
@@ -17,7 +21,8 @@ const components: Components = {
 	},
 	responses: {
 		ErroAutenticacao,
-		ErroNaoGerente
+		ErroNaoGerente,
+		ErroInterno,
 	},
 	securitySchemes: {
 		BearerAuth,
