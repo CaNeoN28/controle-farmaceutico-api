@@ -92,6 +92,37 @@ const EntidadesPaths: Paths = {
 				},
 			},
 		},
+		delete: {
+			tags: ["Entidades"],
+			parameters: [
+				{
+					name: "id",
+					description:
+						"Remove uma entidade informada pelo ID\n\nÉ necessário ser gerente ou superior para realizar a ação",
+					in: "path",
+					schema: {
+						type: "string",
+					},
+				},
+			],
+			responses: {
+				204: {
+					description: "Confirma o sucesso em remover a entidade",
+				},
+				400: {
+					$ref: "#/components/responses/IDInvalido",
+				},
+				401: {
+					$ref: "#/components/responses/ErroAutenticacao",
+				},
+				403: {
+					$ref: "#/components/responses/ErroNaoGerente",
+				},
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
 	},
 };
 

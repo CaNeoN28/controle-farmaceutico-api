@@ -36,4 +36,16 @@ const ErroInterno: Response = {
 	},
 };
 
-export { ErroAutenticacao, ErroNaoGerente, ErroInterno };
+const IDInvalido: Response = {
+	description: "Retorna erro ao informar ID inválido",
+	content: {
+		"text/html": {
+			schema: {
+				type: "text",
+				example: "Id inválida",
+			},
+		},
+	},
+};
+
+export { ErroAutenticacao, ErroNaoGerente, ErroInterno, IDInvalido };

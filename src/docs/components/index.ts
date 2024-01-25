@@ -8,6 +8,7 @@ import {
 	ErroAutenticacao,
 	ErroInterno,
 	ErroNaoGerente,
+	IDInvalido,
 } from "./responses/Erros";
 import EnvioEntidade from "./requestBodies/EnvioEntidade";
 
@@ -23,6 +24,7 @@ const components: Components = {
 		ErroAutenticacao,
 		ErroNaoGerente,
 		ErroInterno,
+		IDInvalido,
 	},
 	securitySchemes: {
 		BearerAuth,
