@@ -1,5 +1,25 @@
 import { Paths } from "swagger-jsdoc";
 
-const EntidadesPaths: Paths = {};
+const EntidadesPaths: Paths = {
+	"/entidade/{id}": {
+		get: {
+			tags: ["Entidades"],
+			parameters: [
+				{
+					name: "id",
+					description: "ID da entidade cadastrada",
+					in: "path",
+					required: true,
+					obs: "AAA"
+				},
+			],
+			responses: {
+				200: {
+					description: "Recupera uma entidade cadastrada usando seu ID",
+				},
+			},
+		},
+	},
+};
 
 export default EntidadesPaths;
