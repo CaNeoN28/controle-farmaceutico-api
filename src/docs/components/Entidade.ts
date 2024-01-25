@@ -1,5 +1,28 @@
 import { Schema } from "swagger-jsdoc";
 
-const EntidadeSchema: Schema = {};
+const EntidadeSchema: Schema = {
+	type: "object",
+	properties: {
+		nome_entidade: {
+			type: "string",
+			required: true,
+			obs: "Deve possuir mais do que 3 caractéres",
+		},
+		estado: {
+			type: "string",
+			required: true,
+			obs: "Deve ser um estado válido do Brasil",
+		},
+		municipio: {
+			type: "string",
+			required: true,
+			obs: "Deve ser um município válido do Brasil, estando dentro do estado informado",
+		},
+		ativo: {
+			type: "boolean",
+			padrao: true,
+		},
+	},
+};
 
 export { EntidadeSchema };
