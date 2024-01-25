@@ -28,20 +28,41 @@ const AutenticacaoPaths: Paths = {
 					content: {
 						"application/json": {
 							schema: {
-								type:"object",
+								type: "object",
 								properties: {
 									usuario: {
-										$ref: "#/components/schemas/UsuarioGet"
+										$ref: "#/components/schemas/UsuarioGet",
 									},
 									token: {
-										type: "string"
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+										type: "string",
+									},
+								},
+							},
+						},
+					},
+				},
+				401: {
+					description: "Erro informado ao informar dados incorretos",
+					content: {
+						"text/html": {
+							schema: {
+								type: "string",
+							},
+						},
+					},
+				},
+				403: {
+					description:
+						"Erro de não autorização, por conta do usuário inativo pelo token não poder ser gerado",
+					content: {
+						"text/html": {
+							schema: {
+								type: "string",
+							},
+						},
+					},
+				},
+			},
 		},
 	},
 };
