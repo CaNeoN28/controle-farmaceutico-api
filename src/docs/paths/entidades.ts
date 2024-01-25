@@ -3,6 +3,7 @@ import { Paths } from "swagger-jsdoc";
 const EntidadesPaths: Paths = {
 	"/entidade/{id}": {
 		get: {
+			description: "Recupera uma entidade",
 			tags: ["Entidades"],
 			parameters: [
 				{
@@ -47,6 +48,7 @@ const EntidadesPaths: Paths = {
 			},
 		},
 		put: {
+			description: "Atualiza uma entidade",
 			tags: ["Entidades"],
 			parameters: [
 				{
@@ -93,6 +95,7 @@ const EntidadesPaths: Paths = {
 			},
 		},
 		delete: {
+			description: "Remove uma entidade",
 			tags: ["Entidades"],
 			parameters: [
 				{
@@ -111,6 +114,47 @@ const EntidadesPaths: Paths = {
 				},
 				400: {
 					$ref: "#/components/responses/IDInvalido",
+				},
+				401: {
+					$ref: "#/components/responses/ErroAutenticacao",
+				},
+				403: {
+					$ref: "#/components/responses/ErroNaoGerente",
+				},
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
+	},
+
+	"/entidade": {
+		post: {
+			description: "Cadastra uma entidade",
+			tags: ["Entidades"],
+			requestBody: {
+				$ref: "#/components/requestBodies/Entidade",
+			},
+			responses: {
+				201: {
+					description: "Cadastra uma entidade e a retorna",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/Entidade",
+							},
+						},
+					},
+				},
+				400: {
+					description: "Retorna erros de validação dos dados",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/EntidadeBadRequest",
+							},
+						},
+					},
 				},
 				401: {
 					$ref: "#/components/responses/ErroAutenticacao",
