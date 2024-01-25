@@ -3,10 +3,13 @@ import {} from "./Autenticacao";
 import {} from "./Entidade";
 import {} from "./Farmacia";
 import {} from "./Usuario";
+import { BearerAuth } from "./BearerAuth";
 
 const components: Components = {
 	schemas: {},
-	securitySchemes: {},
+	securitySchemes: {
+		BearerAuth,
+	},
 };
 
 export default components;
