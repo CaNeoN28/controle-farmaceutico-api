@@ -16,6 +16,13 @@ const EntidadesPaths: Paths = {
 			responses: {
 				200: {
 					description: "Recupera uma entidade cadastrada usando seu ID",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/Entidade"
+							}
+						}
+					}
 				},
 			},
 		},
