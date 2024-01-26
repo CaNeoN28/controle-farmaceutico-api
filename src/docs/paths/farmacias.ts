@@ -145,7 +145,7 @@ const FarmaciasPaths: Paths = {
 		},
 		delete: {
 			tags: ["Farmácias"],
-			summary: "Remove uma farmácia",
+			summary: "Remove uma farmácia pelo seu ID",
 			description:
 				"Remove uma farmácia pelo ID informado. É necessário estar autenticado.",
 			security: [{ BearerAuth: [] }],
@@ -178,35 +178,41 @@ const FarmaciasPaths: Paths = {
 				{
 					name: "bairro",
 					in: "query",
-					description: "Bairro cadastrado no endereço da farmácia. Não precisa ser inteiro, dados incompletos retornam farmácias com dado semelhante.",
+					description:
+						"Bairro cadastrado no endereço da farmácia. Não precisa ser inteiro, dados incompletos retornam farmácias com dado semelhante.",
 					schema: {
-						type: "string"
-					}
-				}, {
+						type: "string",
+					},
+				},
+				{
 					name: "estado",
 					in: "query",
-					description: "Estado cadastrado no endereço da farmácia. Não precisa ser inteiro, dados incompletos retornam farmácias com dado semelhante.",
+					description:
+						"Estado cadastrado no endereço da farmácia. Não precisa ser inteiro, dados incompletos retornam farmácias com dado semelhante.",
 					schema: {
-						type: "string"
-					}
-				}, {
+						type: "string",
+					},
+				},
+				{
 					name: "municipio",
 					in: "query",
-					description: "Município cadastrado no endereço da farmácia. Não precisa ser inteiro, dados incompletos retornam farmácias com dado semelhante.",
+					description:
+						"Município cadastrado no endereço da farmácia. Não precisa ser inteiro, dados incompletos retornam farmácias com dado semelhante.",
 					schema: {
-						type: "string"
-					}
+						type: "string",
+					},
 				},
 				{
 					name: "nome_fantasia",
 					in: "query",
-					description: "Nome fantasia da farmácia. Não precisa ser inteiro, dados incompletos retornam farmácias com dado semelhante.",
+					description:
+						"Nome fantasia da farmácia. Não precisa ser inteiro, dados incompletos retornam farmácias com dado semelhante.",
 					schema: {
-						type: "string"
-					}
+						type: "string",
+					},
 				},
 				Pagina,
-				Limite
+				Limite,
 			],
 			responses: {
 				200: {
@@ -225,7 +231,101 @@ const FarmaciasPaths: Paths = {
 			},
 		},
 	},
-	"/farmacia/proxima": {},
+	"/farmacia/proxima": {
+		get: {
+			tags: ["Farmácias"],
+			summary: "Recupera a farmácia mais próxima",
+			description:
+				"Recupera a farmácia mais próxima do usuário, usando dados de localização e endereço.",
+			security: [],
+			parameters: [
+				{
+					name: "municipio",
+					in: "query",
+					description:
+						"Município cadastrado no endereço da farmácia. Usado para diminuir o tempo de procura",
+					schema: {
+						type: "string",
+					},
+				},
+				{
+					name: "estado",
+					in: "query",
+					description:
+						"Estado cadastrado no endereço da farmácia. Usado para diminuir o tempo de procura",
+					schema: {
+						type: "string",
+					},
+				},
+				{
+					name: "latitude",
+					in: "query",
+					required: true,
+					description:
+						"Latitude do usuário. Usado para calcular a distância entre as farmácias",
+					schema: {
+						type: "string",
+					},
+				},
+				{
+					name: "longitude",
+					in: "query",
+					required: true,
+					description:
+						"Longitude do usuário. Usado para calcular a distância entre as farmácias",
+					schema: {
+						type: "string",
+					},
+				},
+				{
+					name: "tempo",
+					in: "query",
+					description:
+						"Usado para decidir qual farmácia está aberta no momento da requisição. Se não for informado, o horário padrão da api será usado",
+					schema: {
+						type: "string",
+					},
+				},
+			],
+			responses: {
+				200: {
+					description: "Retorna os dados da farmácia",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/Farmacia",
+							},
+						},
+					},
+				},
+				400: {
+					description:
+						"Retorna os erros de validação de tempo, latitude e longitude",
+					content: {
+						"application/json": {
+							schema: {
+								type: "object",
+								properties: {
+									latitude: {
+										type: "string",
+									},
+									longitude: {
+										type: "string",
+									},
+									tempo: {
+										type: "string",
+									},
+								},
+							},
+						},
+					},
+				},
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
+	},
 	"/farmacias/plantao": {},
 };
 
