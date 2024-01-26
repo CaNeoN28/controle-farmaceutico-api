@@ -187,6 +187,87 @@ const AutenticacaoPaths: Paths = {
 			},
 		},
 	},
+	"/perfil/atualizar": {
+		put: {
+			tags: ["Autenticação"],
+			summary: "Atualiza os dados do usuário autenticado",
+			description:
+				"Rota utilizada para atualização de alguns dados pelo próprio usuário autenticado. É necessário estar autenticado.",
+			requestBody: {
+				content: {
+					"application/json": {
+						schema: {
+							type: "object",
+							properties: {
+								nome_usuario: {
+									type: "string",
+								},
+								email: {
+									type: "string",
+								},
+								senha: {
+									type: "string",
+								},
+								imagem_url: {
+									type: "string",
+								},
+							},
+						},
+					},
+				},
+			},
+			responses: {
+				200: {
+					description: "Retorna os dados atualizados do usuário",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/UsuarioGet",
+							},
+						},
+					},
+				},
+				400: {
+					description: "Retorna erro de validação dos dados de atualização",
+					content: {
+						"application/json": {
+							schema: {
+								type: "object",
+								properties: {
+									nome_usuario: {
+										type: "string",
+									},
+									email: {
+										type: "string",
+									},
+									senha: {
+										type: "string",
+									},
+								},
+							},
+						},
+					},
+				},
+				401: {
+					$ref: "#/components/responses/ErroAutenticacao",
+				},
+				409: {
+					description:
+						"Retorna erro ao tentar alterar o email e nome de usuário para um já existente",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/UsuarioConflict",
+							},
+						},
+					},
+				},
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
+	},
 };
 
 export default AutenticacaoPaths;
