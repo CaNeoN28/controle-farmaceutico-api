@@ -96,6 +96,52 @@ const FarmaciasPaths: Paths = {
 				},
 			},
 		},
+		put: {
+			tags: ["Farmácias"],
+			summary: "Atualiza uma farmácia pelo seu ID",
+			description:
+				"Atualiza uma farmácia pelo seu ID e retorna os dados atualizados. É necessário estar autenticado para usar esta rota",
+			security: [{ BearerAuth: [] }],
+			parameters: ParametrosId,
+			requestBody: {
+				content: {
+					"application/json": {
+						schema: {
+							$ref: "#/components/schemas/Farmacia",
+						},
+					},
+				},
+			},
+			responses: {
+				200: {
+					description: "Retorna os dados atualizados",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/Farmacia",
+							},
+						},
+					},
+				},
+				400: {
+					description: "Retorna os erros de validação",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/FarmaciaBadRequest",
+							},
+						},
+					},
+				},
+				401: {
+					$ref: "#/components/responses/ErroAutenticacao",
+				},
+				404: FarmaciaNaoEncontrada,
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
 	},
 	"/farmacias": {},
 	"/farmacia/proxima": {},
