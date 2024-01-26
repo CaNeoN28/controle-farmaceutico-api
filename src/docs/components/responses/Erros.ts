@@ -42,7 +42,7 @@ const IDInvalido: Response = {
 		"text/html": {
 			schema: {
 				type: "text",
-				example: "Id inválida",
+				example: "Id inválido",
 			},
 		},
 	},
