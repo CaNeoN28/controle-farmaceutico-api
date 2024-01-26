@@ -132,7 +132,43 @@ const UsuariosPaths: Paths = {
 			},
 		},
 	},
-	"/usuario/{id}": {},
+	"/usuario/{id}": {
+		get: {
+			tags: ["Usuários"],
+			summary: "Recupera um usuário pelo seu ID",
+			description:
+				"Retorna um usuário por meio do ID informado. É necessário estar autenticado.",
+			parameters: [
+				{
+					name: "id",
+					in: "path",
+					required: true,
+					description: "ID do usuário cadastrado",
+					schema: {
+						type: "string",
+					},
+				},
+			],
+			responses: {
+				200: {
+					description: "Retorna os dados do usuário informado",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/UsuarioGet",
+							},
+						},
+					},
+				},
+				401: {
+					$ref: "#/components/responses/ErroAutenticacao",
+				},
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
+	},
 };
 
 export default UsuariosPaths;
