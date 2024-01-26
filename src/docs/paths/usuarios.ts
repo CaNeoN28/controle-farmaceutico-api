@@ -219,6 +219,41 @@ const UsuariosPaths: Paths = {
 				},
 			},
 		},
+		delete: {
+			tags: ["Usuários"],
+			summary: "Remove um usuário",
+			description:
+				"Remove um usuário pelo seu ID. É necessário estar autenticado, ser um gerente ou superior, e ser pelo menos do nível do usuário.",
+			parameters: ParametrosId,
+			responses: {
+				204: {
+					description: "Remove o usuário",
+				},
+				400: {
+					$ref: "#/components/responses/IDInvalido",
+				},
+				401: {
+					$ref: "#/components/responses/ErroAutenticacao",
+				},
+				403: {
+					$ref: "#/components/responses/ErroNaoGerente",
+				},
+				404: {
+					description: "Retorna erro se não for possível encontrar usuário",
+					content: {
+						"text/html": {
+							schema: {
+								type:"string",
+								example: "Usuário não encontrado",
+							}
+						},
+					},
+				},
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
 	},
 };
 
