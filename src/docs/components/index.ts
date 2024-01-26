@@ -6,7 +6,12 @@ import {
 	EntidadesSchema,
 } from "./schemas/Entidade";
 import {} from "./schemas/Farmacia";
-import { UsuarioGetSchema, UsuarioSchema } from "./schemas/Usuario";
+import {
+	UsuarioBadRequest,
+	UsuarioConflict,
+	UsuarioGetSchema,
+	UsuarioSchema,
+} from "./schemas/Usuario";
 import { BearerAuth } from "./securitySchemes/BearerAuth";
 import { Limite, Pagina } from "./parameters/Paginacao";
 import {
@@ -23,7 +28,9 @@ const components: Components = {
 		Entidades: EntidadesSchema,
 		EntidadeBadRequest: EntidadeBadRequest,
 		UsuarioGet: UsuarioGetSchema,
-		Usuario: UsuarioSchema
+		UsuarioBadRequest: UsuarioBadRequest,
+		UsuarioConflict: UsuarioConflict,
+		Usuario: UsuarioSchema,
 	},
 	parameters: {
 		Limite,

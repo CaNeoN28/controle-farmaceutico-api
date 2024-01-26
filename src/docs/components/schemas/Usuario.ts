@@ -62,4 +62,49 @@ const UsuarioSchema: Schema = {
 	},
 };
 
-export { UsuarioGetSchema, UsuarioSchema };
+const UsuarioBadRequest: Schema = {
+	type: "object",
+	properties: {
+		cpf: {
+			type: "string",
+		},
+		"dados_administrativos.entidade_relacionada": {
+			type: "string",
+		},
+		"dados_administrativos.funcao": {
+			type: "string",
+		},
+		email: {
+			type: "string",
+		},
+		imagem_url: {
+			type: "string",
+		},
+		nome_completo: {
+			type: "string",
+		},
+		nome_usuario: {
+			type: "string",
+		},
+		numero_registro: {
+			type: "string",
+		},
+		senha: {
+			type: "string",
+		},
+	},
+};
+
+const UsuarioConflict: Schema = {
+	type: "object",
+	properties: {
+		email: {
+			type: "string",
+		},
+		nome_usuario: {
+			type: "string",
+		},
+	},
+};
+
+export { UsuarioGetSchema, UsuarioSchema, UsuarioBadRequest, UsuarioConflict };

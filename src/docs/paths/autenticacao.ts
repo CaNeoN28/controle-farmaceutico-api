@@ -65,6 +65,102 @@ const AutenticacaoPaths: Paths = {
 			},
 		},
 	},
+	"/cadastro": {
+		post: {
+			tags: ["Autenticação"],
+			summary: "Cadastra um usuário como inativo",
+			requestBody: {
+				content: {
+					"application/json": {
+						schema: {
+							type: "object",
+							properties: {
+								dados_administrativos: {
+									type: "object",
+									properties: {
+										entidade_relacionada: {
+											type: "string",
+											required: true,
+											obs: "Deve ser um ID válido do mongoose, referente a uma entidade",
+										},
+									},
+								},
+								cpf: {
+									type: "string",
+									required: true,
+									obs: "Deve ser um CPF válido",
+								},
+								email: {
+									type: "string",
+									required: true,
+									obs: "Deve ser um email válido",
+								},
+								imagem_url: {
+									type: "string",
+									obs: "Url da imagem de perfil do usuário",
+								},
+								nome_completo: {
+									type: "string",
+									required: true,
+									obs: "Deve ter pelo menos 3 caractéres",
+								},
+								nome_usuario: {
+									type: "string",
+									required: true,
+									obs: "Nome usado para entrar na plataforma.\n\nDeve ter pelo menos 3 caractéres.\n\nNão deve começar com acentos.",
+								},
+								numero_registro: {
+									type: "string",
+									required: true,
+									obs: "Número de registro informado pela entidade",
+								},
+								senha: {
+									type: "string",
+									required: true,
+									obs: "Senha do usuário. Deve haver pelo menos 8 caractéres, 1 número, 1 letra maiúscula, 1 letra minuscula e 1 caractére especial",
+								},
+							},
+						},
+					},
+				},
+			},
+			responses: {
+				201: {
+					description: "Retorna os dados do usuário cadastro",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/UsuarioGet",
+							},
+						},
+					},
+				},
+				400: {
+					description: "Retorna os erros de validação do cadastro",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/UsuarioBadRequest",
+							},
+						},
+					},
+				},
+				409: {
+					description: "Erro ao informar um email ou senha já existentes",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/UsuarioConflict",
+							},
+						},
+					},
+				},
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
+	},
 };
 
 export default AutenticacaoPaths;
