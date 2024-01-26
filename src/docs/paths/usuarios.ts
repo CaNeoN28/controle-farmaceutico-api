@@ -1,4 +1,4 @@
-import { Paths, Parameter } from "swagger-jsdoc";
+import { Paths, Parameter, Response } from "swagger-jsdoc";
 
 const ParametrosId: Parameter[] = [
 	{
@@ -11,6 +11,18 @@ const ParametrosId: Parameter[] = [
 		},
 	},
 ];
+
+const NotFound: Response = {
+	description: "Retorna erro se não for possível encontrar usuário",
+	content: {
+		"text/html": {
+			schema: {
+				type:"string",
+				example: "Usuário não encontrado",
+			}
+		},
+	},
+}
 
 const UsuariosPaths: Paths = {
 	"/usuario": {
@@ -162,9 +174,13 @@ const UsuariosPaths: Paths = {
 						},
 					},
 				},
+				400: {
+					$ref : "#/components/responses/IDInvalido"
+				},
 				401: {
 					$ref: "#/components/responses/ErroAutenticacao",
 				},
+				404: NotFound,
 				500: {
 					$ref: "#/components/responses/ErroInterno",
 				},
@@ -203,6 +219,9 @@ const UsuariosPaths: Paths = {
 				403: {
 					$ref: "#/components/responses/ErroNaoGerente",
 				},
+				404: {
+
+				},
 				409: {
 					description:
 						"Retorna erro ao tentar alterar email e nome de usuário para um já existente",
@@ -238,17 +257,7 @@ const UsuariosPaths: Paths = {
 				403: {
 					$ref: "#/components/responses/ErroNaoGerente",
 				},
-				404: {
-					description: "Retorna erro se não for possível encontrar usuário",
-					content: {
-						"text/html": {
-							schema: {
-								type:"string",
-								example: "Usuário não encontrado",
-							}
-						},
-					},
-				},
+				404: NotFound,
 				500: {
 					$ref: "#/components/responses/ErroInterno",
 				},
