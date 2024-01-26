@@ -112,4 +112,85 @@ const FarmaciaSchema: Schema = {
 	},
 };
 
-export { FarmaciaSchema };
+const FarmaciaBadRequest: Schema = {
+	type: "object",
+	properties: {
+		cnpj: {
+			type: "string",
+		},
+		nome_fantasia: {
+			type: "string",
+		},
+		"endereco.cep": {
+			type: "string",
+		},
+		"endereco.estado": {
+			type: "string",
+		},
+		"endereco.municipio": {
+			type: "string",
+		},
+		"endereco.bairro": {
+			type: "string",
+		},
+		"endereco.logradouro": {
+			type: "string",
+		},
+		"endereco.numero": {
+			type: "string",
+		},
+		"endereco.localizacao.x": {
+			type: "string",
+		},
+		"endereco.localizacao.y": {
+			type: "string",
+		},
+		plantoes: {
+			type: "string",
+		},
+		"horarios_servico.segunda_feira.horario_entrada": {
+			type: "string",
+		},
+		"horarios_servico.segunda_feira.horario_saida": {
+			type: "string",
+		},
+		"horarios_servico.terca.horario_entrada": {
+			type: "string",
+		},
+		"horarios_servico.terca.horario_saida": {
+			type: "string",
+		},
+		"horarios_servico.quarta.horario_entrada": {
+			type: "string",
+		},
+		"horarios_servico.quarta.horario_saida": {
+			type: "string",
+		},
+		"horarios_servico.quinta.horario_entrada": {
+			type: "string",
+		},
+		"horarios_servico.quinta.horario_saida": {
+			type: "string",
+		},
+		"horarios_servico.sexta.horario_entrada": {
+			type: "string",
+		},
+		"horarios_servico.sexta.horario_saida": {
+			type: "string",
+		},
+		"horarios_servico.sabado.horario_entrada": {
+			type: "string",
+		},
+		"horarios_servico.sabado.horario_saida": {
+			type: "string",
+		},
+		"horarios_servico.domingo.horario_entrada": {
+			type: "string",
+		},
+		"horarios_servico.domingo.horario_saida": {
+			type: "string",
+		},
+	},
+};
+
+export { FarmaciaSchema, FarmaciaBadRequest };
