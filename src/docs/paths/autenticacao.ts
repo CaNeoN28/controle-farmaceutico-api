@@ -1,74 +1,12 @@
 import { Paths } from "swagger-jsdoc";
 
 const AutenticacaoPaths: Paths = {
-	"/login": {
-		post: {
-			tags: ["Autenticação"],
-			summary: "Realiza login e retorna token de autenticação",
-			requestBody: {
-				content: {
-					"application/json": {
-						schema: {
-							type: "object",
-							properties: {
-								nome_usuario: {
-									type: "string",
-								},
-								senha: {
-									type: "string",
-								},
-							},
-						},
-					},
-				},
-			},
-			responses: {
-				200: {
-					description: "Retorna os dados de usuário e o token de autenticação",
-					content: {
-						"application/json": {
-							schema: {
-								type: "object",
-								properties: {
-									usuario: {
-										$ref: "#/components/schemas/UsuarioGet",
-									},
-									token: {
-										type: "string",
-									},
-								},
-							},
-						},
-					},
-				},
-				401: {
-					description: "Erro informado ao informar dados incorretos",
-					content: {
-						"text/html": {
-							schema: {
-								type: "string",
-							},
-						},
-					},
-				},
-				403: {
-					description:
-						"Erro de não autorização, por conta do usuário inativo pelo token não poder ser gerado",
-					content: {
-						"text/html": {
-							schema: {
-								type: "string",
-							},
-						},
-					},
-				},
-			},
-		},
-	},
 	"/cadastro": {
 		post: {
 			tags: ["Autenticação"],
 			summary: "Cadastra um usuário como inativo",
+			description:
+				"Rota de auto-cadastro de usuário. Informe os dados e o usuário será cadastrado com seus dados administrativos inativos, sendo necessário a verificação de um gerente ou superior.",
 			requestBody: {
 				content: {
 					"application/json": {
@@ -157,6 +95,72 @@ const AutenticacaoPaths: Paths = {
 				},
 				500: {
 					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
+	},
+	"/login": {
+		post: {
+			tags: ["Autenticação"],
+			summary: "Realiza login e retorna token de autenticação",
+			description:
+				"Recebe email e senha de usuário para realizar autenticação e retorna os dados do usuário e o token de autorização. O usuário não pode estar com os dados administrativos inativos.",
+			requestBody: {
+				content: {
+					"application/json": {
+						schema: {
+							type: "object",
+							properties: {
+								nome_usuario: {
+									type: "string",
+								},
+								senha: {
+									type: "string",
+								},
+							},
+						},
+					},
+				},
+			},
+			responses: {
+				200: {
+					description: "Retorna os dados de usuário e o token de autenticação",
+					content: {
+						"application/json": {
+							schema: {
+								type: "object",
+								properties: {
+									usuario: {
+										$ref: "#/components/schemas/UsuarioGet",
+									},
+									token: {
+										type: "string",
+									},
+								},
+							},
+						},
+					},
+				},
+				401: {
+					description: "Erro informado ao informar dados incorretos",
+					content: {
+						"text/html": {
+							schema: {
+								type: "string",
+							},
+						},
+					},
+				},
+				403: {
+					description:
+						"Erro de não autorização, por conta do usuário inativo pelo token não poder ser gerado",
+					content: {
+						"text/html": {
+							schema: {
+								type: "string",
+							},
+						},
+					},
 				},
 			},
 		},
