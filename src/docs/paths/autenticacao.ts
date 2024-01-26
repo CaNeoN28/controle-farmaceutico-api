@@ -161,6 +161,32 @@ const AutenticacaoPaths: Paths = {
 			},
 		},
 	},
+	"/perfil": {
+		get: {
+			tags: ["Autenticação"],
+			summary: "Retorna os dados do usuário autenticado",
+			description:
+				"Rota capaz de retornar os dados de somente um usuário, aquele que está autenticado. É necessário estar autenticado.",
+			responses: {
+				200: {
+					description: "Retorna com sucesso os dados do usuário",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/UsuarioGet",
+							},
+						},
+					},
+				},
+				401: {
+					$ref: "#/components/responses/ErroAutenticacao",
+				},
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
+	},
 };
 
 export default AutenticacaoPaths;
