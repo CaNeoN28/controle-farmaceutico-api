@@ -5,7 +5,7 @@ import {
 	EntidadeSchema,
 	EntidadesSchema,
 } from "./schemas/Entidade";
-import {} from "./schemas/Farmacia";
+import { FarmaciaSchema } from "./schemas/Farmacia";
 import {
 	UsuarioBadRequest,
 	UsuarioConflict,
@@ -28,6 +28,7 @@ const components: Components = {
 		Entidade: EntidadeSchema,
 		Entidades: EntidadesSchema,
 		EntidadeBadRequest: EntidadeBadRequest,
+		Farmacia: FarmaciaSchema,
 		UsuarioGet: UsuarioGetSchema,
 		Usuarios: UsuariosSchema,
 		UsuarioBadRequest: UsuarioBadRequest,

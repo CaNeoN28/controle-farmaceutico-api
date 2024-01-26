@@ -2,7 +2,6 @@ import { Paths } from "swagger-jsdoc";
 
 const FarmaciasPaths: Paths = {
 	"/farmacia": {
-		post: {},
 	},
 	"/farmacia/{id}": {
 		parameters: {
@@ -11,18 +10,12 @@ const FarmaciasPaths: Paths = {
 			required: true,
 			description: "ID da farmácia",
 		},
-		get: {},
-		put: {},
-		delete: {},
 	},
 	"/farmacias": {
-		get: {},
 	},
 	"/farmacia/proxima": {
-		get: {},
 	},
 	"/farmacias/plantao": {
-		get: {},
 	},
 };
 
