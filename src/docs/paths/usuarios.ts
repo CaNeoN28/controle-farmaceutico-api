@@ -1,5 +1,9 @@
 import { Paths } from "swagger-jsdoc";
 
-const UsuariosPaths: Paths = {};
+const UsuariosPaths: Paths = {
+	"/usuario": {},
+	"/usuarios": {},
+	"/usuario/{id}": {},
+};
 
 export default UsuariosPaths;
