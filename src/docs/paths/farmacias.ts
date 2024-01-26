@@ -1,4 +1,25 @@
-import { Paths } from "swagger-jsdoc";
+import { Parameter, Paths, Response } from "swagger-jsdoc";
+
+const ParametrosId: Parameter[] = [
+	{
+		name: "id",
+		in: "path",
+		required: true,
+		description: "ID da farmácia",
+	},
+];
+
+const FarmaciaNaoEncontrada: Response = {
+	description: "Retorna erro ao não encontrar farmácia",
+	content: {
+		"text/html": {
+			schema: {
+				type: "string",
+				example: "Farmácia não encontrada",
+			},
+		},
+	},
+};
 
 const FarmaciasPaths: Paths = {
 	"/farmacia": {
@@ -49,11 +70,31 @@ const FarmaciasPaths: Paths = {
 		},
 	},
 	"/farmacia/{id}": {
-		parameters: {
-			name: "id",
-			in: "path",
-			required: true,
-			description: "ID da farmácia",
+		get: {
+			tags: ["Farmácias"],
+			summary: "Recupera uma farmácia pelo seu ID",
+			description: "Recupera uma única farmácia do banco de dados pelo seu ID.",
+			security: [],
+			parameters: ParametrosId,
+			responses: {
+				200: {
+					description: "Retorna os dados da farmácia",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/Farmacia",
+							},
+						},
+					},
+				},
+				400: {
+					$ref: "#/components/responses/IDInvalido",
+				},
+				404: FarmaciaNaoEncontrada,
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
 		},
 	},
 	"/farmacias": {},
