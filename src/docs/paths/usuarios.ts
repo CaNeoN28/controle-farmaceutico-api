@@ -1,4 +1,16 @@
-import { Paths } from "swagger-jsdoc";
+import { Paths, Parameter } from "swagger-jsdoc";
+
+const ParametrosId: Parameter[] = [
+	{
+		name: "id",
+		in: "path",
+		required: true,
+		description: "ID do usuário cadastrado",
+		schema: {
+			type: "string",
+		},
+	},
+];
 
 const UsuariosPaths: Paths = {
 	"/usuario": {
@@ -138,17 +150,7 @@ const UsuariosPaths: Paths = {
 			summary: "Recupera um usuário pelo seu ID",
 			description:
 				"Retorna um usuário por meio do ID informado. É necessário estar autenticado.",
-			parameters: [
-				{
-					name: "id",
-					in: "path",
-					required: true,
-					description: "ID do usuário cadastrado",
-					schema: {
-						type: "string",
-					},
-				},
-			],
+			parameters: ParametrosId,
 			responses: {
 				200: {
 					description: "Retorna os dados do usuário informado",
@@ -162,6 +164,55 @@ const UsuariosPaths: Paths = {
 				},
 				401: {
 					$ref: "#/components/responses/ErroAutenticacao",
+				},
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
+		put: {
+			tags: ["Usuários"],
+			summary: "Atualiza um usuário",
+			description:
+				"Atualiza um usuário pelo ID informado. É necessário estar autenticado se ser gerente ou superior. Não é possível aumentar o nível do usuário para ser superior aquele que está atualizando. Não é possível alterar os dados de um usuário de nível superior",
+			parameters: ParametrosId,
+			responses: {
+				200: {
+					description: "Retorna os dados atualizados de um dado",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/UsuarioGet",
+							},
+						},
+					},
+				},
+				400: {
+					description: "Retorna os erros de validação do usuário",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/UsuarioBadRequest",
+							},
+						},
+					},
+				},
+				401: {
+					$ref: "#/components/responses/ErroAutenticacao",
+				},
+				403: {
+					$ref: "#/components/responses/ErroNaoGerente",
+				},
+				409: {
+					description:
+						"Retorna erro ao tentar alterar email e nome de usuário para um já existente",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/UsuarioConflict",
+							},
+						},
+					},
 				},
 				500: {
 					$ref: "#/components/responses/ErroInterno",
