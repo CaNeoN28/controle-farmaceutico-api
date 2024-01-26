@@ -11,6 +11,7 @@ import {
 	UsuarioConflict,
 	UsuarioGetSchema,
 	UsuarioSchema,
+	UsuariosSchema,
 } from "./schemas/Usuario";
 import { BearerAuth } from "./securitySchemes/BearerAuth";
 import { Limite, Pagina } from "./parameters/Paginacao";
@@ -28,6 +29,7 @@ const components: Components = {
 		Entidades: EntidadesSchema,
 		EntidadeBadRequest: EntidadeBadRequest,
 		UsuarioGet: UsuarioGetSchema,
+		Usuarios: UsuariosSchema,
 		UsuarioBadRequest: UsuarioBadRequest,
 		UsuarioConflict: UsuarioConflict,
 		Usuario: UsuarioSchema,

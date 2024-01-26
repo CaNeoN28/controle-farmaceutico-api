@@ -62,6 +62,31 @@ const UsuarioSchema: Schema = {
 	},
 };
 
+const UsuariosSchema: Schema = {
+	type: "object",
+	properties: {
+		dados: {
+			type: "array",
+			items: {
+				$ref: "#/components/schemas/UsuarioGet",
+			},
+		},
+		pagina: {
+			type: "number",
+		},
+		paginas_totais: {
+			type: "number",
+		},
+		limite: {
+			type: "number",
+		},
+		documentos_totais: {
+			type: "number",
+		},
+	},
+};
+
+
 const UsuarioBadRequest: Schema = {
 	type: "object",
 	properties: {
@@ -107,4 +132,4 @@ const UsuarioConflict: Schema = {
 	},
 };
 
-export { UsuarioGetSchema, UsuarioSchema, UsuarioBadRequest, UsuarioConflict };
+export { UsuarioGetSchema, UsuarioSchema, UsuariosSchema, UsuarioBadRequest, UsuarioConflict };

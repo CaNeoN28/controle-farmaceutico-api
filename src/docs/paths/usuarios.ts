@@ -6,7 +6,7 @@ const UsuariosPaths: Paths = {
 			tags: ["Usuários"],
 			summary: "Cadastra um usuário",
 			description:
-				"Rota que realiza o cadastro de um usuário. O nível do usuário não pode ser maior do que aquele que está cadastrando.",
+				"Rota que realiza o cadastro de um usuário. O nível do usuário não pode ser maior do que aquele que está cadastrando. É necessário estar autenticado e ser no mínimo gerente",
 			requestBody: {
 				content: {
 					"application/json": {
@@ -68,7 +68,70 @@ const UsuariosPaths: Paths = {
 			},
 		},
 	},
-	"/usuarios": {},
+	"/usuarios": {
+		get: {
+			tags: ["Usuários"],
+			summary: "Listagem de usuários cadastrados",
+			description:
+				"Retorna dados de paginação e uma lista dos usuários cadastrados filtrados pelos parâmetros informados. É necessário estar autenticado.",
+			parameters: [
+				{
+					name: "cpf",
+					in: "query",
+					description:
+						"CPF do usuário cadastrado. Funciona por meio de semelhança, informar apenas uma parte retorna todos os parecidos",
+					schema: {
+						type: "string",
+					},
+				},
+				{
+					name: "entidade_relacionada",
+					in: "query",
+					description: "ID da entidade relacionada ao usuário",
+					schema: {
+						type: "string",
+					},
+				},
+				{
+					name: "funcao",
+					in: "query",
+					description: "Função ou nível do usuário",
+					schema: {
+						type: "string",
+						enum: ["INATIVO", "USUARIO", "GERENTE", "ADMINISTRADOR"],
+					},
+				},
+				{
+					name: "nome_usuario",
+					in: "query",
+					description:
+						"Nome de usuário cadastrado, funciona por meio de semelhança",
+					schema: {
+						type: "string",
+					},
+				},
+			],
+			responses: {
+				200: {
+					description:
+						"Retorno dos dados de paginação e da lista de usuários correspondentes",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/Usuarios",
+							},
+						},
+					},
+				},
+				401: {
+					$ref: "#/components/responses/ErroAutenticacao",
+				},
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
+	},
 	"/usuario/{id}": {},
 };
 
