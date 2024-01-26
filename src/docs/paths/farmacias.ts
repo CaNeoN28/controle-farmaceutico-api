@@ -1,4 +1,5 @@
 import { Parameter, Paths, Response } from "swagger-jsdoc";
+import { Limite, Pagina } from "../components/parameters/Paginacao";
 
 const ParametrosId: Parameter[] = [
 	{
@@ -166,7 +167,64 @@ const FarmaciasPaths: Paths = {
 			},
 		},
 	},
-	"/farmacias": {},
+	"/farmacias": {
+		get: {
+			tags: ["Farmácias"],
+			summary: "Listagem das farmácias cadastradas",
+			description:
+				"Retorna os dados de paginação e a lista das farmácias encontradas com base nos filtros informados.",
+			security: [],
+			parameters: [
+				{
+					name: "bairro",
+					in: "query",
+					description: "Bairro cadastrado no endereço da farmácia. Não precisa ser inteiro, dados incompletos retornam farmácias com dado semelhante.",
+					schema: {
+						type: "string"
+					}
+				}, {
+					name: "estado",
+					in: "query",
+					description: "Estado cadastrado no endereço da farmácia. Não precisa ser inteiro, dados incompletos retornam farmácias com dado semelhante.",
+					schema: {
+						type: "string"
+					}
+				}, {
+					name: "municipio",
+					in: "query",
+					description: "Município cadastrado no endereço da farmácia. Não precisa ser inteiro, dados incompletos retornam farmácias com dado semelhante.",
+					schema: {
+						type: "string"
+					}
+				},
+				{
+					name: "nome_fantasia",
+					in: "query",
+					description: "Nome fantasia da farmácia. Não precisa ser inteiro, dados incompletos retornam farmácias com dado semelhante.",
+					schema: {
+						type: "string"
+					}
+				},
+				Pagina,
+				Limite
+			],
+			responses: {
+				200: {
+					description: "Retorna os dados de paginação e as farmácias",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/Farmacias",
+							},
+						},
+					},
+				},
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
+	},
 	"/farmacia/proxima": {},
 	"/farmacias/plantao": {},
 };

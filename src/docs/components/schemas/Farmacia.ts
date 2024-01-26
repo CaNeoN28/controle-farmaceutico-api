@@ -112,6 +112,30 @@ const FarmaciaSchema: Schema = {
 	},
 };
 
+const FarmaciasSchema: Schema = {
+	type: "object",
+	properties: {
+		dados: {
+			type: "array",
+			items: {
+				$ref: "#/components/schemas/Farmacia",
+			},
+		},
+		pagina: {
+			type: "number",
+		},
+		paginas_totais: {
+			type: "number",
+		},
+		limite: {
+			type: "number",
+		},
+		documentos_totais: {
+			type: "number",
+		},
+	},
+}
+
 const FarmaciaBadRequest: Schema = {
 	type: "object",
 	properties: {
@@ -193,4 +217,4 @@ const FarmaciaBadRequest: Schema = {
 	},
 };
 
-export { FarmaciaSchema, FarmaciaBadRequest };
+export { FarmaciaSchema, FarmaciasSchema, FarmaciaBadRequest };
