@@ -100,7 +100,7 @@ const FarmaciasPaths: Paths = {
 			tags: ["Farmácias"],
 			summary: "Atualiza uma farmácia pelo seu ID",
 			description:
-				"Atualiza uma farmácia pelo seu ID e retorna os dados atualizados. É necessário estar autenticado para usar esta rota",
+				"Atualiza uma farmácia pelo ID informado e retorna os dados atualizados. É necessário estar autenticado",
 			security: [{ BearerAuth: [] }],
 			parameters: ParametrosId,
 			requestBody: {
@@ -132,6 +132,29 @@ const FarmaciasPaths: Paths = {
 							},
 						},
 					},
+				},
+				401: {
+					$ref: "#/components/responses/ErroAutenticacao",
+				},
+				404: FarmaciaNaoEncontrada,
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
+		delete: {
+			tags: ["Farmácias"],
+			summary: "Remove uma farmácia",
+			description:
+				"Remove uma farmácia pelo ID informado. É necessário estar autenticado.",
+			security: [{ BearerAuth: [] }],
+			parameters: ParametrosId,
+			responses: {
+				204: {
+					description: "Remove a farmácia",
+				},
+				400: {
+					$ref: "#/components/responses/IDInvalido",
 				},
 				401: {
 					$ref: "#/components/responses/ErroAutenticacao",
