@@ -8,35 +8,36 @@ interface Data {
 }
 
 async function loginService(data: Data) {
-	const {usuario, senhaCorreta} = await UsuarioRepository.login(data);
+	const { usuario, senhaCorreta } = await UsuarioRepository.login(data);
 
 	if (usuario && senhaCorreta) {
-		if(usuario.dados_administrativos.funcao == "INATIVO"){
+		if (usuario.dados_administrativos.funcao == "INATIVO") {
 			throw {
 				codigo: 403,
-				erro: "O usuário ainda não foi verificado"
-			} as Erro
+				erro: "O usuário ainda não foi verificado",
+			} as Erro;
 		}
 
 		const token = generateTokenFromUser(usuario);
 
-		if(!token){
+		if (!token) {
 			throw {
 				codigo: 403,
-				erro: "Usuário inválido"
-			}
+				erro: "Usuário inválido",
+			};
 		}
 
 		return {
 			usuario: {
 				...usuario,
-				senha: undefined
+				senha: undefined,
+				token_recuperacao: undefined,
 			},
 			token: token,
 		};
 	}
 
-	throw {codigo: 401, erro: "Não foi possível realizar autenticação"} as Erro
+	throw { codigo: 401, erro: "Não foi possível realizar autenticação" } as Erro;
 }
 
 export default loginService;

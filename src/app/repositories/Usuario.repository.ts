@@ -30,6 +30,7 @@ class UsuarioRepository {
 	static async login(data: Login) {
 		const usuario = await UsuarioModel.findOne({
 			nome_usuario: data.nome_usuario,
+			token_recuperacao: false,
 		});
 		let senhaCorreta = false;
 
@@ -55,7 +56,10 @@ class UsuarioRepository {
 			} as Erro;
 		}
 
-		const usuario = await UsuarioModel.findById(id, { senha: false });
+		const usuario = await UsuarioModel.findById(id, {
+			senha: false,
+			token_recuperacao: false,
+		});
 
 		return usuario;
 	}
@@ -68,6 +72,7 @@ class UsuarioRepository {
 
 		const usuarios = await UsuarioModel.find(filtros, {
 			senha: false,
+			token_recuperacao: false,
 		})
 			.limit(limite)
 			.skip(pular);
@@ -97,7 +102,8 @@ class UsuarioRepository {
 				erro = {
 					codigo: 403,
 					erro: {
-						"dados_administrativos.funcao": "Não é possível criar um usuário com nível maior que o seu"
+						"dados_administrativos.funcao":
+							"Não é possível criar um usuário com nível maior que o seu",
 					},
 				};
 
@@ -208,7 +214,10 @@ class UsuarioRepository {
 				} else {
 					await usuario.updateOne(data, { runValidators: true });
 
-					usuario = await UsuarioModel.findById(id)!;
+					usuario = await UsuarioModel.findById(id, {
+						senha: false,
+						token_recuperacao: false,
+					})!;
 				}
 			} else {
 				erro = {
@@ -253,7 +262,7 @@ class UsuarioRepository {
 				};
 			} else {
 				usuario = await UsuarioModel.findByIdAndUpdate(id, data, {
-					fields: { senha: false },
+					fields: { senha: false, token_recuperacao: false },
 					new: true,
 					runValidators: true,
 				});

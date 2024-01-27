@@ -10,7 +10,7 @@ async function createUsuarioService(data: Usuario, criadorId?: string) {
 
 	if (senha) {
 		const senhaValida = validarSenha(senha);
-		
+
 		if (!senhaValida) {
 			if (!erro) {
 				erro = {
@@ -18,28 +18,29 @@ async function createUsuarioService(data: Usuario, criadorId?: string) {
 					erro: {},
 				};
 			}
-			
+
 			erro.erro.senha = "Senha inválida";
 		}
-		
-		data.senha = await criptografarSenha(senha)
+
+		data.senha = await criptografarSenha(senha);
 	}
 
 	const resposta = await UsuarioRepository.createUsuario(data, criadorId);
 
 	const usuario = {
 		...resposta.usuario,
-		senha: undefined
-	}
+		senha: undefined,
+		token_recuperacao: undefined,
+	};
 
-	if(resposta.erro) {
+	if (resposta.erro) {
 		erro = {
 			codigo: resposta.erro.codigo,
 			erro: {
 				...erro?.erro,
-				...resposta.erro.erro
-			}
-		}
+				...resposta.erro.erro,
+			},
+		};
 	}
 
 	if (erro) {
