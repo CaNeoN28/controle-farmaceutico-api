@@ -1,5 +1,17 @@
 import { Paths } from "swagger-jsdoc";
 
+const ParametrosId = [
+	{
+		name: "id",
+		in: "path",
+		description: "Nome da imagem, informado pela rota de envio",
+		required: true,
+		schema: {
+			type: "string",
+		},
+	},
+];
+
 const ImagensPaths: Paths = {
 	"/imagem": {
 		post: {
@@ -61,17 +73,7 @@ const ImagensPaths: Paths = {
 			description:
 				"Retorna uma imagem enviada à API. Seu nome funciona como ID, nas não é a mesma coisa.",
 			security: [],
-			parameters: [
-				{
-					name: "id",
-					in: "path",
-					description: "Nome da imagem, informado pela rota de envio",
-					required: true,
-					schema: {
-						type: "string",
-					},
-				},
-			],
+			parameters: ParametrosId,
 			responses: {
 				200: {
 					description: "Retorna a imagem com sucesso",
@@ -85,6 +87,36 @@ const ImagensPaths: Paths = {
 					description: "Retorna erro se a imagem não for encontrada",
 					content: {
 						"text/html": {},
+					},
+				},
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
+		delete: {
+			tags: ["Imagens"],
+			summary: "Remove uma imagem da API",
+			description:
+				"Remove uma imagem da API pelo seu nome. É preciso estar autenticado.",
+			security: [{ BearerAuth: [] }],
+			parameters: ParametrosId,
+			responses: {
+				204: {
+					description: "Remove com sucesso a imagem",
+				},
+				401: {
+					$ref: "#/components/responses/ErroAutenticacao",
+				},
+				404: {
+					description: "Retorna erro se não for possível encontrar a imagem",
+					content: {
+						"text/html": {
+							schema: {
+								type: "string",
+								example: "Imagem não encontrada",
+							},
+						},
 					},
 				},
 				500: {
