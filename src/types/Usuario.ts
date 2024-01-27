@@ -9,6 +9,7 @@ interface IUsuario {
 	numero_registro: string;
 	senha: string;
 	imagem_url?: string;
+	token?: string;
 	dados_administrativos?: {
 		funcao?: Funcao;
 		entidade_relacionada: Types.ObjectId;
@@ -34,6 +35,7 @@ class Usuario implements IUsuario {
 		funcao?: Funcao;
 		entidade_relacionada: Types.ObjectId;
 	};
+	token_recuperacao?: string | undefined;
 
 	constructor(usuario: Usuario) {
 		const {
@@ -45,6 +47,7 @@ class Usuario implements IUsuario {
 			nome_usuario,
 			numero_registro,
 			senha,
+			token_recuperacao,
 		} = usuario;
 
 		this.cpf = cpf;
@@ -62,6 +65,7 @@ class Usuario implements IUsuario {
 		this.nome_usuario = nome_usuario;
 		this.numero_registro = numero_registro;
 		this.senha = senha;
+		this.token_recuperacao = token_recuperacao;
 	}
 }
 

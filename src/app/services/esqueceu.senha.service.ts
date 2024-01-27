@@ -13,16 +13,18 @@ async function esqueceuSenhaService(email: string | undefined) {
 	const usuario = await UsuarioRepository.findUsuario({ email });
 
 	if (usuario) {
-		if(usuario.dados_administrativos.funcao == "INATIVO"){
+		if (usuario.dados_administrativos.funcao == "INATIVO") {
 			throw {
 				codigo: 403,
-				erro: "O usuário ainda está inativo, espere sua ativação"
-			}
+				erro: "O usuário ainda está inativo, espere sua ativação",
+			};
 		}
 
 		const { email, id } = usuario;
 		const expiraEm = 30 * 60;
 		const token = generateToken({ email, id }, expiraEm);
+
+		await UsuarioRepository.selfUpdateUsuario(id, { token_recuperacao: token });
 
 		await enviarEmail({
 			assunto: "Link para recuperação de senha",
@@ -32,4 +34,4 @@ async function esqueceuSenhaService(email: string | undefined) {
 	}
 }
 
-export default esqueceuSenhaService
+export default esqueceuSenhaService;

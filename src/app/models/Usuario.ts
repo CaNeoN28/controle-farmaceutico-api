@@ -87,6 +87,9 @@ const UsuarioSchema = new mongoose.Schema({
 		type: String,
 		required: [true, "Senha é obrigatório"],
 		minlength: [8, "Senha inválida"]
+	},
+	token_recuperacao: {
+		type: String
 	}
 });
 
