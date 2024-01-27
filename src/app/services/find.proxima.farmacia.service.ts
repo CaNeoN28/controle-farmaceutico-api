@@ -1,3 +1,4 @@
+import Erro from "../../types/Erro";
 import FarmaciaRepository from "../repositories/Farmacia.repository";
 import farmaciasAbertas from "../utils/farmaciasAbertas";
 import pontoMaisProximo from "../utils/pontoMaisProximo";
@@ -13,42 +14,63 @@ interface Filtros {
 async function findNearestFarmaciaService(params: Filtros) {
 	let { municipio, estado, latitude, longitude, tempo } = params;
 	const filtros: any = {};
+	let erros: Erro | undefined = undefined;
 
 	if (!tempo) {
-		tempo = new Date().toString()
+		tempo = new Date().toString();
 	}
 
 	const datetime = new Date(tempo);
 
 	if (isNaN(Number(datetime))) {
-		throw {
+		erros = {
 			codigo: 400,
-			erro: "Tempo inválido",
-		};
+			erro: {
+				tempo: "Tempo inválido"
+			}
+		}
 	}
 
-	if (!latitude || !longitude) {
-		throw {
+	if(!latitude){
+		erros = {
 			codigo: 400,
-			erro: "Latitude e longitude são obrigatórios",
-		};
+			erro: {
+				...erros?.erro,
+				latitude: "Latitude é obrigatória"
+			}
+		}
 	}
 
-	latitude = Number(latitude)
-	longitude = Number(longitude)
-
-	if(isNaN(latitude) || isNaN(longitude)){
-		const errosValidacao: any = {}
-
-		if(isNaN(latitude))
-			errosValidacao.latitude = "Latitude inválida"
-
-		if(isNaN(longitude))
-			errosValidacao.longitude = "Longitude inválida"
-
-		throw {
+	if(!longitude){
+		erros = {
 			codigo: 400,
-			erro: errosValidacao
+			erro: {
+				...erros?.erro,
+				longitude: "Longitude é obrigatória"
+			}
+		}
+	}
+
+	latitude = Number(latitude);
+	longitude = Number(longitude);
+
+	if(isNaN(latitude)){
+		erros = {
+			codigo: 400,
+			erro: {
+				...erros?.erro,
+				latitude: "Latitude inválida"
+			}
+		}
+	}
+
+	if(isNaN(longitude)){
+		erros = {
+			codigo: 400,
+			erro: {
+				...erros?.erro,
+				longitude: "Longitude inválida"
+			}
 		}
 	}
 
@@ -69,9 +91,13 @@ async function findNearestFarmaciaService(params: Filtros) {
 		limite: 1000,
 	};
 
+	if(erros){
+		throw erros
+	}
+
 	const { dados } = await FarmaciaRepository.findFarmacias(filtros, paginacao);
 
-	const farmacias = farmaciasAbertas(dados as any, tempo)
+	const farmacias = farmaciasAbertas(dados as any, tempo);
 
 	const referenciais = farmacias.map((f) => {
 		return {
@@ -87,10 +113,10 @@ async function findNearestFarmaciaService(params: Filtros) {
 		y: Number(longitude),
 	};
 
-	const maisProximo = pontoMaisProximo(localizacao, referenciais)
+	const maisProximo = pontoMaisProximo(localizacao, referenciais);
 
-	if(maisProximo){
-		const {identificador} = maisProximo
+	if (maisProximo) {
+		const { identificador } = maisProximo;
 		const farmacia = dados.find((d) => d.id === identificador);
 
 		return farmacia;
@@ -98,8 +124,8 @@ async function findNearestFarmaciaService(params: Filtros) {
 
 	throw {
 		codigo: 404,
-		erro : "Não há farmácias abertas próximas"
-	}
+		erro: "Não há farmácias abertas próximas",
+	};
 }
 
 export default findNearestFarmaciaService;
