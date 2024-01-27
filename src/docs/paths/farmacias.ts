@@ -326,7 +326,75 @@ const FarmaciasPaths: Paths = {
 			},
 		},
 	},
-	"/farmacias/plantao": {},
+	"/farmacias/plantao": {
+		get: {
+			tags: ["Farmácias"],
+			summary: "Lista as farmácias por dia de plantão",
+			description:
+				"Retorna um documento cujo as chaves são os dias de plantão e valor é um array com as farmácias abertas naquele dia. Usa alguns filtros para diminuir a busca.",
+			security: [],
+			parameters: [
+				{
+					name: "municipio",
+					in: "path",
+					obs: "Município cadastrado no endereço da farmácia.",
+					schema: {
+						type: "string",
+					},
+				},
+				{
+					name: "estado",
+					in: "path",
+					obs: "Estado cadastrado no endereço da farmácia.",
+					schema: {
+						type: "string",
+					},
+				},
+				{
+					name: "tempo",
+					in: "path",
+					obs: "Momento em que é feita a requisição para começar pelo dia atual. Se não for informado é usado o horário padrão da API",
+					schema: {
+						type: "string",
+					},
+				},
+			],
+			responses: {
+				200: {
+					description: "Retorna a lista com os dias de plantão",
+					content: {
+						"application/json": {
+							schema: {
+								type: "object",
+								properties: {
+									["data_plantao"]: {
+										type: "array",
+										items: {
+											$ref: "#/components/schemas/Farmacia",
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+				400: {
+					description: "Retorna erro ao informar um horário inválido",
+					content: {
+						"text/html": {
+							schema: {
+								type: "string",
+								example: "Tempo informado inválido",
+							},
+						},
+					},
+				},
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
+	},
 };
 
 export default FarmaciasPaths;
