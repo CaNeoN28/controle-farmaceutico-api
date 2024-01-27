@@ -13,13 +13,13 @@ async function listFarmaciasService(params: any) {
 	const filtros: any = {};
 
 	if (bairro) {
-		filtros.bairro = new RegExp(bairro, "i");
+		filtros["endereco.bairro"] = new RegExp(bairro, "i");
 	}
 	if (estado) {
-		filtros.estado = new RegExp(estado, "i");
+		filtros["endereco.estado"] = new RegExp(estado, "i");
 	}
 	if (municipio) {
-		filtros.municipio = new RegExp(municipio, "i");
+		filtros["endereco.municipio"] = new RegExp(municipio, "i");
 	}
 	if (nome_fantasia) {
 		filtros.nome_fantasia = new RegExp(nome_fantasia, "i");
