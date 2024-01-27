@@ -282,6 +282,7 @@ const AutenticacaoPaths: Paths = {
 			summary: "Envia um email para recuperação",
 			description:
 				"Envia um email com token para recuperar senha. Não retorna erros se não encontrar o usuário, mas retorna erros se for um usuário inválido.",
+			security: [],
 			requestBody: {
 				content: {
 					"application/json": {
@@ -327,6 +328,64 @@ const AutenticacaoPaths: Paths = {
 							schema: {
 								type: "string",
 								example: "O usuário ainda está inativo, espere sua ativação",
+							},
+						},
+					},
+				},
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
+	},
+
+	"/recuperar-senha/{token}": {
+		post: {
+			tags: ["Autenticação"],
+			summary: "Atualiza a senha pelo token",
+			description: "Atualiza somente a senha se o token correto for informado.",
+			security: [],
+			parameters: [
+				{
+					name: "token",
+					in: "path",
+					required: true,
+					obs: "Token gerado pela rota /esqueceu-senha",
+				},
+			],
+			requestBody: {
+				content: {
+					"application/json": {
+						schema: {
+							type: "object",
+							properties: {
+								senha: {
+									type: "string",
+									required: true,
+								},
+							},
+						},
+					},
+				},
+			},
+			responses: {
+				200: {
+					description: "Altera a senha com sucesso",
+					content: {
+						"text/html": {
+							schema: {
+								type: "string",
+								example: "Senha alterada com sucesso",
+							},
+						},
+					},
+				},
+				400: {
+					description: "Retorna erros de validação",
+					content: {
+						"text/html": {
+							schema: {
+								type: "string",
 							},
 						},
 					},
