@@ -3,8 +3,9 @@ import { Paths } from "swagger-jsdoc";
 const EntidadesPaths: Paths = {
 	"/entidade/{id}": {
 		get: {
-			description: "Recupera uma entidade",
 			tags: ["Entidades"],
+			summary: "Recupera uma entidade pelo seu ID",
+			description: "Retorna uma única entidade do banco de dados pelo o ID informado.",
 			parameters: [
 				{
 					name: "id",
@@ -48,13 +49,14 @@ const EntidadesPaths: Paths = {
 			},
 		},
 		put: {
-			description: "Atualiza uma entidade",
 			tags: ["Entidades"],
+			summary: "Atualiza uma entidade pelo seu ID",
+			description: "Atualiza uma entidade pelo ID informado. É necessário estar autenticado e ser pelo menos gerente para realizar a ação.",
 			parameters: [
 				{
 					name: "id",
 					description:
-						"Atualiza a entidade informada pelo o ID. \n\n É necessário ser gerente ou superior para realizar a ação.",
+						"ID da Entidade no banco de dados",
 					in: "path",
 					required: true,
 				},
@@ -95,13 +97,14 @@ const EntidadesPaths: Paths = {
 			},
 		},
 		delete: {
-			description: "Remove uma entidade",
 			tags: ["Entidades"],
+			summary: "Remove uma entidade pelo seu ID",
+			description: "Remove uma entidade pelo ID informado. É necessário estar autenticado e ser pelo menos gerente para realizar a ação.",
 			parameters: [
 				{
 					name: "id",
 					description:
-						"Remove uma entidade informada pelo ID\n\nÉ necessário ser gerente ou superior para realizar a ação",
+						"ID da entidade no banco de dados",
 					in: "path",
 					schema: {
 						type: "string",
@@ -130,8 +133,9 @@ const EntidadesPaths: Paths = {
 
 	"/entidade": {
 		post: {
-			description: "Cadastra uma entidade",
 			tags: ["Entidades"],
+			summary: "Cadastra uma entidade",
+			description: "Cadastra uma entidade no banco de dados e retorna seus dados. É necessário estar autenticado e ser pelo menos gerente para realizar a ação.",
 			requestBody: {
 				$ref: "#/components/requestBodies/Entidade",
 			},
@@ -171,8 +175,9 @@ const EntidadesPaths: Paths = {
 
 	"/entidades": {
 		get: {
-			description: "Retorna uma listagem das entidades cadastradas",
 			tags: ["Entidades"],
+			summary: "Listagem das entidades cadastradas",
+			description: "Retorna dados de paginação e uma lista com as entidades cadastradas.",
 			parameters: [
 				{
 					name: "estado",

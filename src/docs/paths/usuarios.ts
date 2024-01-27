@@ -17,12 +17,12 @@ const NotFound: Response = {
 	content: {
 		"text/html": {
 			schema: {
-				type:"string",
+				type: "string",
 				example: "Usuário não encontrado",
-			}
+			},
 		},
 	},
-}
+};
 
 const UsuariosPaths: Paths = {
 	"/usuario": {
@@ -175,7 +175,7 @@ const UsuariosPaths: Paths = {
 					},
 				},
 				400: {
-					$ref : "#/components/responses/IDInvalido"
+					$ref: "#/components/responses/IDInvalido",
 				},
 				401: {
 					$ref: "#/components/responses/ErroAutenticacao",
@@ -188,7 +188,7 @@ const UsuariosPaths: Paths = {
 		},
 		put: {
 			tags: ["Usuários"],
-			summary: "Atualiza um usuário",
+			summary: "Atualiza um usuário pelo seu ID",
 			description:
 				"Atualiza um usuário pelo ID informado. É necessário estar autenticado se ser gerente ou superior. Não é possível aumentar o nível do usuário para ser superior aquele que está atualizando. Não é possível alterar os dados de um usuário de nível superior",
 			parameters: ParametrosId,
@@ -219,9 +219,7 @@ const UsuariosPaths: Paths = {
 				403: {
 					$ref: "#/components/responses/ErroNaoGerente",
 				},
-				404: {
-
-				},
+				404: {},
 				409: {
 					description:
 						"Retorna erro ao tentar alterar email e nome de usuário para um já existente",
@@ -240,7 +238,7 @@ const UsuariosPaths: Paths = {
 		},
 		delete: {
 			tags: ["Usuários"],
-			summary: "Remove um usuário",
+			summary: "Remove um usuário pelo seu ID",
 			description:
 				"Remove um usuário pelo seu ID. É necessário estar autenticado, ser um gerente ou superior, e ser pelo menos do nível do usuário.",
 			parameters: ParametrosId,
