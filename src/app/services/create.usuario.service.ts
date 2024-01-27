@@ -4,7 +4,7 @@ import { validarSenha } from "../utils/validators";
 import Erro from "../../types/Erro";
 import { criptografarSenha } from "../utils/senhas";
 
-async function createUsuarioService(data: Usuario) {
+async function createUsuarioService(data: Usuario, criadorId?: string) {
 	const senha = data.senha as string;
 	let erro: Erro | undefined = undefined;
 
@@ -25,7 +25,7 @@ async function createUsuarioService(data: Usuario) {
 		data.senha = await criptografarSenha(senha)
 	}
 
-	const resposta = await UsuarioRepository.createUsuario(data);
+	const resposta = await UsuarioRepository.createUsuario(data, criadorId);
 
 	const usuario = {
 		...resposta.usuario,

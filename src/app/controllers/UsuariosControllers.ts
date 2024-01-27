@@ -34,7 +34,11 @@ class UsuariosControllers {
 		}
 	};
 
-	static CriarUsuario: RequestHandler = async function (req, res, next) {
+	static CriarUsuario: RequestHandler = async function (
+		req: AuthenticatedRequest,
+		res,
+		next
+	) {
 		const {
 			cpf,
 			email,
@@ -45,6 +49,8 @@ class UsuariosControllers {
 			dados_administrativos,
 			imagem_url,
 		} = req.body as Usuario;
+
+		const { id: criadorId } = req.user!;
 
 		const data = {
 			cpf,
@@ -58,7 +64,7 @@ class UsuariosControllers {
 		};
 
 		try {
-			const resposta = await createUsuarioService(data);
+			const resposta = await createUsuarioService(data, criadorId);
 
 			return res.status(201).send(resposta);
 		} catch (error) {
