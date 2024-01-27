@@ -4,7 +4,7 @@ import { validarSenha } from "../utils/validators";
 import Erro from "../../types/Erro";
 import { criptografarSenha } from "../utils/senhas";
 
-async function createUsuarioService(data: Usuario, criadorId: string) {
+async function createUsuarioService(data: Usuario, criadorId?: string) {
 	const senha = data.senha as string;
 	let erro: Erro | undefined = undefined;
 

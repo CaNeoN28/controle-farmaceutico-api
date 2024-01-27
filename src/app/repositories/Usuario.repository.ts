@@ -80,9 +80,30 @@ class UsuarioRepository {
 			paginas_totais,
 		};
 	}
-	static async createUsuario(data: Usuario, criadorId: string) {
+	static async createUsuario(data: Usuario, criadorId?: string) {
+		const criador = await UsuarioModel.findById(criadorId);
 		const usuario = new UsuarioModel(data);
 		let erro: Erro | undefined = undefined;
+
+		if (
+			criador &&
+			data.dados_administrativos &&
+			data.dados_administrativos.funcao
+		) {
+			const nivelCriador = PERMISSOES[criador.dados_administrativos.funcao];
+			const nivelUsuario = PERMISSOES[data.dados_administrativos.funcao];
+
+			if (nivelCriador < nivelUsuario) {
+				erro = {
+					codigo: 403,
+					erro: {
+						"dados_administrativos.funcao": "Não é possível criar um usuário com nível maior que o seu"
+					},
+				};
+
+				return { usuario, erro };
+			}
+		}
 
 		const primeiroUsuario = (await UsuarioModel.find()).length == 0;
 
