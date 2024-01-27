@@ -276,6 +276,67 @@ const AutenticacaoPaths: Paths = {
 			},
 		},
 	},
+	"/esqueceu-senha": {
+		post: {
+			tags: ["Autenticação"],
+			summary: "Envia um email para recuperação",
+			description:
+				"Envia um email com token para recuperar senha. Não retorna erros se não encontrar o usuário, mas retorna erros se for um usuário inválido.",
+			requestBody: {
+				content: {
+					"application/json": {
+						schema: {
+							type: "object",
+							properties: {
+								email: {
+									type: "string",
+									required: true,
+								},
+							},
+						},
+					},
+				},
+			},
+			responses: {
+				200: {
+					description: "Envia ou não um email para o usuário",
+					content: {
+						"text/html": {
+							schema: {
+								type: "string",
+								example: "Token de recuperação enviado",
+							},
+						},
+					},
+				},
+				400: {
+					description: "Retorna erro se o email for inválido",
+					content: {
+						"text/html": {
+							schema: {
+								type: "string",
+								example: "Email é obrigatório",
+							},
+						},
+					},
+				},
+				403: {
+					description: "Retorna erro se o usuário for inativo",
+					content: {
+						"text/html": {
+							schema: {
+								type: "string",
+								example: "O usuário ainda está inativo, espere sua ativação",
+							},
+						},
+					},
+				},
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
+	},
 };
 
 export default AutenticacaoPaths;
