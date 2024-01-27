@@ -7,6 +7,7 @@ const AutenticacaoPaths: Paths = {
 			summary: "Cadastra um usuário como inativo",
 			description:
 				"Rota de auto-cadastro de usuário. Informe os dados e o usuário será cadastrado com seus dados administrativos inativos, sendo necessário a verificação de um gerente ou superior.",
+			security: [],
 			requestBody: {
 				content: {
 					"application/json": {
@@ -105,6 +106,7 @@ const AutenticacaoPaths: Paths = {
 			summary: "Realiza login e retorna token de autenticação",
 			description:
 				"Recebe email e senha de usuário para realizar autenticação e retorna os dados do usuário e o token de autorização. O usuário não pode estar com os dados administrativos inativos.",
+			security: [],
 			requestBody: {
 				content: {
 					"application/json": {
@@ -171,6 +173,7 @@ const AutenticacaoPaths: Paths = {
 			summary: "Retorna os dados do usuário autenticado",
 			description:
 				"Rota capaz de retornar os dados de somente um usuário, aquele que está autenticado. É necessário estar autenticado.",
+			security: [{ BearerAuth: [] }],
 			responses: {
 				200: {
 					description: "Retorna com sucesso os dados do usuário",
@@ -197,6 +200,7 @@ const AutenticacaoPaths: Paths = {
 			summary: "Atualiza os dados do usuário autenticado",
 			description:
 				"Rota utilizada para atualização de alguns dados pelo próprio usuário autenticado. É necessário estar autenticado.",
+			security: [{ BearerAuth: [] }],
 			requestBody: {
 				content: {
 					"application/json": {

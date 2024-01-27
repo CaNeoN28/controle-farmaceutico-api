@@ -31,6 +31,7 @@ const UsuariosPaths: Paths = {
 			summary: "Cadastra um usuário",
 			description:
 				"Rota que realiza o cadastro de um usuário. O nível do usuário não pode ser maior do que aquele que está cadastrando. É necessário estar autenticado e ser no mínimo gerente",
+			security: [{ BearerAuth: [] }],
 			requestBody: {
 				content: {
 					"application/json": {
@@ -98,6 +99,7 @@ const UsuariosPaths: Paths = {
 			summary: "Listagem de usuários cadastrados",
 			description:
 				"Retorna dados de paginação e uma lista dos usuários cadastrados filtrados pelos parâmetros informados. É necessário estar autenticado.",
+			security: [{ BearerAuth: [] }],
 			parameters: [
 				{
 					name: "cpf",
@@ -162,6 +164,7 @@ const UsuariosPaths: Paths = {
 			summary: "Recupera um usuário pelo seu ID",
 			description:
 				"Retorna um usuário por meio do ID informado. É necessário estar autenticado.",
+			security: [{ BearerAuth: [] }],
 			parameters: ParametrosId,
 			responses: {
 				200: {
@@ -191,6 +194,7 @@ const UsuariosPaths: Paths = {
 			summary: "Atualiza um usuário pelo seu ID",
 			description:
 				"Atualiza um usuário pelo ID informado. É necessário estar autenticado se ser gerente ou superior. Não é possível aumentar o nível do usuário para ser superior aquele que está atualizando. Não é possível alterar os dados de um usuário de nível superior",
+			security: [{ BearerAuth: [] }],
 			parameters: ParametrosId,
 			responses: {
 				200: {
@@ -241,6 +245,7 @@ const UsuariosPaths: Paths = {
 			summary: "Remove um usuário pelo seu ID",
 			description:
 				"Remove um usuário pelo seu ID. É necessário estar autenticado, ser um gerente ou superior, e ser pelo menos do nível do usuário.",
+			security: [{ BearerAuth: [] }],
 			parameters: ParametrosId,
 			responses: {
 				204: {

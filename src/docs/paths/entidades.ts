@@ -1,11 +1,54 @@
 import { Paths } from "swagger-jsdoc";
 
 const EntidadesPaths: Paths = {
+	"/entidade": {
+		post: {
+			tags: ["Entidades"],
+			summary: "Cadastra uma entidade",
+			description: "Cadastra uma entidade no banco de dados e retorna seus dados. É necessário estar autenticado e ser pelo menos gerente para realizar a ação.",
+			security: [{BearerAuth: []}],
+			requestBody: {
+				$ref: "#/components/requestBodies/Entidade",
+			},
+			responses: {
+				201: {
+					description: "Cadastra uma entidade e a retorna",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/Entidade",
+							},
+						},
+					},
+				},
+				400: {
+					description: "Retorna erros de validação dos dados",
+					content: {
+						"application/json": {
+							schema: {
+								$ref: "#/components/schemas/EntidadeBadRequest",
+							},
+						},
+					},
+				},
+				401: {
+					$ref: "#/components/responses/ErroAutenticacao",
+				},
+				403: {
+					$ref: "#/components/responses/ErroNaoGerente",
+				},
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
+	},
 	"/entidade/{id}": {
 		get: {
 			tags: ["Entidades"],
 			summary: "Recupera uma entidade pelo seu ID",
 			description: "Retorna uma única entidade do banco de dados pelo o ID informado.",
+			security: [],
 			parameters: [
 				{
 					name: "id",
@@ -52,6 +95,7 @@ const EntidadesPaths: Paths = {
 			tags: ["Entidades"],
 			summary: "Atualiza uma entidade pelo seu ID",
 			description: "Atualiza uma entidade pelo ID informado. É necessário estar autenticado e ser pelo menos gerente para realizar a ação.",
+			security: [{BearerAuth: []}],
 			parameters: [
 				{
 					name: "id",
@@ -100,6 +144,7 @@ const EntidadesPaths: Paths = {
 			tags: ["Entidades"],
 			summary: "Remove uma entidade pelo seu ID",
 			description: "Remove uma entidade pelo ID informado. É necessário estar autenticado e ser pelo menos gerente para realizar a ação.",
+			security: [{BearerAuth: []}],
 			parameters: [
 				{
 					name: "id",
@@ -130,54 +175,12 @@ const EntidadesPaths: Paths = {
 			},
 		},
 	},
-
-	"/entidade": {
-		post: {
-			tags: ["Entidades"],
-			summary: "Cadastra uma entidade",
-			description: "Cadastra uma entidade no banco de dados e retorna seus dados. É necessário estar autenticado e ser pelo menos gerente para realizar a ação.",
-			requestBody: {
-				$ref: "#/components/requestBodies/Entidade",
-			},
-			responses: {
-				201: {
-					description: "Cadastra uma entidade e a retorna",
-					content: {
-						"application/json": {
-							schema: {
-								$ref: "#/components/schemas/Entidade",
-							},
-						},
-					},
-				},
-				400: {
-					description: "Retorna erros de validação dos dados",
-					content: {
-						"application/json": {
-							schema: {
-								$ref: "#/components/schemas/EntidadeBadRequest",
-							},
-						},
-					},
-				},
-				401: {
-					$ref: "#/components/responses/ErroAutenticacao",
-				},
-				403: {
-					$ref: "#/components/responses/ErroNaoGerente",
-				},
-				500: {
-					$ref: "#/components/responses/ErroInterno",
-				},
-			},
-		},
-	},
-
 	"/entidades": {
 		get: {
 			tags: ["Entidades"],
 			summary: "Listagem das entidades cadastradas",
 			description: "Retorna dados de paginação e uma lista com as entidades cadastradas.",
+			security: [],
 			parameters: [
 				{
 					name: "estado",
