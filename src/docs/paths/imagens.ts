@@ -54,7 +54,45 @@ const ImagensPaths: Paths = {
 			},
 		},
 	},
-	"/imagem/{id}": {},
+	"/imagem/{id}": {
+		get: {
+			tags: ["Imagens"],
+			summary: "Recupera uma imagem da API",
+			description:
+				"Retorna uma imagem enviada à API. Seu nome funciona como ID, nas não é a mesma coisa.",
+			security: [],
+			parameters: [
+				{
+					name: "id",
+					in: "path",
+					description: "Nome da imagem, informado pela rota de envio",
+					required: true,
+					schema: {
+						type: "string",
+					},
+				},
+			],
+			responses: {
+				200: {
+					description: "Retorna a imagem com sucesso",
+					content: {
+						"image/png": {},
+						"image/jpg": {},
+						"image/jpeg": {},
+					},
+				},
+				404: {
+					description: "Retorna erro se a imagem não for encontrada",
+					content: {
+						"text/html": {},
+					},
+				},
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		},
+	},
 };
 
 export default ImagensPaths;
