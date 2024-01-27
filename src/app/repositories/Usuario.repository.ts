@@ -80,7 +80,7 @@ class UsuarioRepository {
 			paginas_totais,
 		};
 	}
-	static async createUsuario(data: Usuario) {
+	static async createUsuario(data: Usuario, criadorId: string) {
 		const usuario = new UsuarioModel(data);
 		let erro: Erro | undefined = undefined;
 
