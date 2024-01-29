@@ -1,0 +1,12 @@
+FROM node:latest
+ENV PORT 3030
+ENV DB_URL mongodb://controle-db:27017
+
+COPY package.json package.json
+
+RUN npm install
+
+COPY . .
+RUN npm run build
+
+CMD ["node", "build/server.js"]

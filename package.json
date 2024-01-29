@@ -140,6 +140,7 @@
   "main": "src/server.ts",
   "scripts": {
     "dev": "nodemon src/server.ts",
+		"build": "tsc -p .",
     "test": "jest --verbose --watchAll -i",
     "test:c": "jest --coverage --watchAll -i",
     "clearDB": "ts-node src/app/utils/db/limparBancoDev.ts"
