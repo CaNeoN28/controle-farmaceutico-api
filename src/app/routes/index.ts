@@ -7,7 +7,7 @@ import imagemRouter from "./imagemRoutes";
 
 const route = (app: Application) => {
 	app.route("/").get((req, res) => {
-		res.send("Bem vindo");
+		res.redirect("/docs")
 	});
 
 	app.use(
