@@ -25,6 +25,8 @@ async function ConnectDB() {
 	mongoose.connection.once("open", () => {
 		console.log("Conexão com o banco de dados estabelecida");
 	});
+
+	return mongoose.connection
 }
 
 export default ConnectDB;

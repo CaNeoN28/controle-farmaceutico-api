@@ -5639,4 +5639,4 @@ function validarCidade(cidade: string, estado: string) {
 	return !!cidadeValida;
 }
 
-export { validarCidade, validarEstado };
+export { validarCidade, validarEstado, estados };

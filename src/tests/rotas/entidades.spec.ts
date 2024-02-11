@@ -8,6 +8,7 @@ import {
 	criarUsuario,
 	criarUsuarioAdm,
 } from "../../app/utils/db/gerarDadosDiversos";
+import jest from "jest"
 
 let usuario: any = undefined;
 let token = "";
