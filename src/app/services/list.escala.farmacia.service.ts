@@ -15,11 +15,11 @@ async function listPorEscalaFarmaciaService(params: Parametros) {
 	}
 
 	if (estado) {
-		filtros.estado = estado;
+		filtros["endereco.estado"] = estado;
 	}
 
 	if (municipio) {
-		filtros.municipio = municipio;
+		filtros["endereco.municipio"] = municipio;
 	}
 
 	const paginacao = {
@@ -43,7 +43,7 @@ async function listPorEscalaFarmaciaService(params: Parametros) {
 		ano: dateTime.getFullYear(),
 	};
 
-	dateTime = new Date([ano, mes, dia].join("/"))
+	dateTime = new Date([ano, mes, dia].join("/"));
 
 	let escala: {
 		[key: string]: any[];

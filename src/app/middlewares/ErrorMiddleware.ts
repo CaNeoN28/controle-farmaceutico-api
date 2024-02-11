@@ -7,6 +7,8 @@ const ErrorMiddleware: ErrorRequestHandler = async function (err: Erro, req, res
 
 		res.status(codigo).send(erro)
 	} catch (error){
+		console.log(error)
+		
 		res.status(500).send("Erro interno do servidor")
 	}
 }
