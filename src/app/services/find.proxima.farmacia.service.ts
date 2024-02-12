@@ -26,52 +26,52 @@ async function findNearestFarmaciaService(params: Filtros) {
 		erros = {
 			codigo: 400,
 			erro: {
-				tempo: "Tempo inválido"
-			}
-		}
+				tempo: "Tempo inválido",
+			},
+		};
 	}
 
-	if(!latitude){
+	if (!latitude) {
 		erros = {
 			codigo: 400,
 			erro: {
 				...erros?.erro,
-				latitude: "Latitude é obrigatória"
-			}
-		}
+				latitude: "Latitude é obrigatória",
+			},
+		};
 	}
 
-	if(!longitude){
+	if (!longitude) {
 		erros = {
 			codigo: 400,
 			erro: {
 				...erros?.erro,
-				longitude: "Longitude é obrigatória"
-			}
-		}
+				longitude: "Longitude é obrigatória",
+			},
+		};
 	}
 
 	latitude = Number(latitude);
 	longitude = Number(longitude);
 
-	if(isNaN(latitude)){
+	if (isNaN(latitude)) {
 		erros = {
 			codigo: 400,
 			erro: {
 				...erros?.erro,
-				latitude: "Latitude inválida"
-			}
-		}
+				latitude: "Latitude inválida",
+			},
+		};
 	}
 
-	if(isNaN(longitude)){
+	if (isNaN(longitude)) {
 		erros = {
 			codigo: 400,
 			erro: {
 				...erros?.erro,
-				longitude: "Longitude inválida"
-			}
-		}
+				longitude: "Longitude inválida",
+			},
+		};
 	}
 
 	if (municipio || estado) {
@@ -91,8 +91,8 @@ async function findNearestFarmaciaService(params: Filtros) {
 		limite: 1000,
 	};
 
-	if(erros){
-		throw erros
+	if (erros) {
+		throw erros;
 	}
 
 	const { dados } = await FarmaciaRepository.findFarmacias(filtros, paginacao);
@@ -108,18 +108,20 @@ async function findNearestFarmaciaService(params: Filtros) {
 			},
 		};
 	});
+
 	const localizacao = {
 		x: Number(latitude),
 		y: Number(longitude),
 	};
 
-	const maisProximo = pontoMaisProximo(localizacao, referenciais);
+	const proximos = pontoMaisProximo(localizacao, referenciais);
 
-	if (maisProximo) {
-		const { identificador } = maisProximo;
-		const farmacia = dados.find((d) => d.id === identificador);
+	if (proximos) {
+		const farmacias = proximos.slice(0, 10).map((p) => {
+			return dados.find((d) => d.id === p.identificador);
+		});
 
-		return farmacia;
+		return farmacias;
 	}
 
 	throw {

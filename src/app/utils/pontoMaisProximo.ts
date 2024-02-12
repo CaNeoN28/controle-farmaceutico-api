@@ -29,11 +29,11 @@ function pontoMaisProximo(localizacao: Localizacao, comparados: Referencial[]) {
 		};
 	});
 
-	const maisProximo = distancias.sort((a, b) =>
+	const proximos = distancias.sort((a, b) =>
 		a.distanciaTotal < b.distanciaTotal ? -1 : 1
-	)[0];
+	);
 
-	return maisProximo;
+	return proximos;
 }
 
 export default pontoMaisProximo;
