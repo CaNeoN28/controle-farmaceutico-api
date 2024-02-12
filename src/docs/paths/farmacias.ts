@@ -360,6 +360,8 @@ const FarmaciasPaths: Paths = {
 						type: "string",
 					},
 				},
+				Pagina,
+				Limite,
 			],
 			responses: {
 				200: {
