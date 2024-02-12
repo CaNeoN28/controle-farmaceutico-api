@@ -1,6 +1,7 @@
 import Erro from "../../types/Erro";
 import FarmaciaRepository from "../repositories/Farmacia.repository";
 import farmaciasAbertas from "../utils/farmaciasAbertas";
+import { extrairPaginacao } from "../utils/paginacao";
 import pontoMaisProximo from "../utils/pontoMaisProximo";
 
 interface Filtros {
@@ -9,6 +10,8 @@ interface Filtros {
 	latitude?: string | number;
 	longitude?: string | number;
 	tempo?: string;
+	pagina?: number;
+	limite?: number;
 }
 
 async function findNearestFarmaciaService(params: Filtros) {
@@ -117,11 +120,27 @@ async function findNearestFarmaciaService(params: Filtros) {
 	const proximos = pontoMaisProximo(localizacao, referenciais);
 
 	if (proximos) {
-		const farmacias = proximos.slice(0, 10).map((p) => {
+		const paginacao = extrairPaginacao(params);
+		const { limite, pagina } = {
+			limite: paginacao.limite || 1,
+			pagina: paginacao.pagina || 10,
+		};
+
+		const documentos_totais = proximos?.length;
+		const paginas_totais = Math.ceil(documentos_totais / limite);
+		const skip = (pagina - 1) * limite;
+
+		const farmacias = proximos.slice(skip, limite + skip).map((p) => {
 			return dados.find((d) => d.id === p.identificador);
 		});
 
-		return farmacias;
+		return {
+			dados: farmacias,
+			documentos_totais,
+			limite,
+			pagina,
+			paginas_totais,
+		};
 	}
 
 	throw {
