@@ -122,8 +122,8 @@ async function findNearestFarmaciaService(params: Filtros) {
 	if (proximos) {
 		const paginacao = extrairPaginacao(params);
 		const { limite, pagina } = {
-			limite: paginacao.limite || 1,
-			pagina: paginacao.pagina || 10,
+			limite: paginacao.limite || 10,
+			pagina: paginacao.pagina || 1,
 		};
 
 		const documentos_totais = proximos?.length;

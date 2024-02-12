@@ -132,13 +132,15 @@ class FarmaciaControllers {
 		res,
 		next
 	) {
-		const { municipio, estado, tempo } = req.query as any;
+		const { municipio, estado, tempo, pagina, limite } = req.query as any;
 
 		try {
 			const plantoes = await listPorEscalaFarmaciaService({
 				municipio,
 				estado,
 				tempo,
+				pagina,
+				limite
 			});
 
 			res.status(200).send(plantoes);

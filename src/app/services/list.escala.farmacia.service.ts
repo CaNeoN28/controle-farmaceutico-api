@@ -1,9 +1,12 @@
 import FarmaciaRepository from "../repositories/Farmacia.repository";
+import { extrairPaginacao } from "../utils/paginacao";
 
 interface Parametros {
 	municipio?: string;
 	estado?: string;
 	tempo?: string;
+	pagina?: number;
+	limite?: number;
 }
 
 async function listPorEscalaFarmaciaService(params: Parametros) {
@@ -67,13 +70,31 @@ async function listPorEscalaFarmaciaService(params: Parametros) {
 		});
 	});
 
-	const array = Object.entries(escala).sort((a, b) => {
+	const p = extrairPaginacao(params);
+	const { limite, pagina } = {
+		limite: p.limite || 10,
+		pagina: p.pagina || 1,
+	};
+
+	const dias = Object.entries(escala);
+
+	const documentos_totais = dias.length;
+	const paginas_totais = Math.ceil(documentos_totais / limite);
+	const skip = (pagina - 1) * limite;
+
+	const array = dias.slice(skip, skip + limite).sort((a, b) => {
 		return a[0] > b[0] ? 1 : -1;
 	});
 
 	escala = Object.fromEntries(array);
 
-	return escala;
+	return {
+		dados: escala,
+		documentos_totais,
+		limite,
+		pagina,
+		paginas_totais,
+	};
 }
 
 export default listPorEscalaFarmaciaService;
