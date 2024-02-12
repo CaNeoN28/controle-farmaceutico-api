@@ -82,9 +82,12 @@ async function listPorEscalaFarmaciaService(params: Parametros) {
 	const paginas_totais = Math.ceil(documentos_totais / limite);
 	const skip = (pagina - 1) * limite;
 
-	const array = dias.slice(skip, skip + limite).sort((a, b) => {
-		return a[0] > b[0] ? 1 : -1;
-	});
+	const array = dias.sort((a, b) => {
+		const dataA = Number(new Date(a[0]))
+		const dataB = Number(new Date(b[0]))
+
+		return dataA > dataB ? 1 : -1;
+	}).slice(skip, skip + limite);
 
 	escala = Object.fromEntries(array);
 
