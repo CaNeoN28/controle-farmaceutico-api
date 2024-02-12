@@ -231,12 +231,12 @@ const FarmaciasPaths: Paths = {
 			},
 		},
 	},
-	"/farmacia/proxima": {
+	"/farmacias/proximas": {
 		get: {
 			tags: ["Farmácias"],
-			summary: "Recupera a farmácia mais próxima",
+			summary: "Recupera as farmácias mais próximas",
 			description:
-				"Recupera a farmácia mais próxima do usuário, usando dados de localização e endereço.",
+				"Recupera as farmácias mais próxima do usuário, usando dados de localização e endereço.",
 			security: [],
 			parameters: [
 				{
@@ -286,6 +286,8 @@ const FarmaciasPaths: Paths = {
 						type: "string",
 					},
 				},
+				Pagina,
+				Limite,
 			],
 			responses: {
 				200: {

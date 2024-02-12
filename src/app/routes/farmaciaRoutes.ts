@@ -7,7 +7,7 @@ const farmaciaRoutes = Router()
 farmaciaRoutes.get("/farmacias", FarmaciaControllers.ListarFarmacias)
 farmaciaRoutes.post("/farmacia", AuthenticationMiddleware, FarmaciaControllers.CriarFarmacia)
 
-farmaciaRoutes.get("/farmacia/proxima", FarmaciaControllers.EncontrarFarmaciaProxima)
+farmaciaRoutes.get("/farmacias/proximas", FarmaciaControllers.EncontrarFarmaciasProximas)
 farmaciaRoutes.get("/farmacias/plantao", FarmaciaControllers.ListarFarmaciaPorPlantao)
 
 farmaciaRoutes.route("/farmacia/:id")

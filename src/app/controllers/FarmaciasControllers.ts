@@ -102,7 +102,7 @@ class FarmaciaControllers {
 		}
 	};
 
-	static EncontrarFarmaciaProxima: RequestHandler = async function (
+	static EncontrarFarmaciasProximas: RequestHandler = async function (
 		req,
 		res,
 		next
