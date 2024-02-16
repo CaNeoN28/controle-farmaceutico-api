@@ -38,8 +38,8 @@ export default async function farmaciasSeed(instancias: number) {
 				cep: Math.floor(Math.random() * 10000000 + 10000000),
 				estado,
 				localizacao: {
-					x: faker.address.latitude(),
-					y: faker.address.longitude(),
+					x: -12 - Math.random(),
+					y: -60 - Math.random(),
 				},
 				logradouro: faker.address.streetName(),
 				municipio,
