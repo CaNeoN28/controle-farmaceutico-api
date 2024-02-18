@@ -77,16 +77,12 @@ async function findNearestFarmaciaService(params: Filtros) {
 		};
 	}
 
-	if (municipio || estado) {
-		filtros.endereco = {};
+	if (municipio) {
+		filtros["endereco.municipio"] = municipio;
+	}
 
-		if (municipio) {
-			filtros.endereco.municipio = municipio;
-		}
-
-		if (estado) {
-			filtros.endereco.estado = estado;
-		}
+	if (estado) {
+		filtros["endereco.estado"] = estado;
 	}
 
 	const paginacao = {
