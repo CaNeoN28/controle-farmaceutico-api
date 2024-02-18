@@ -36,13 +36,13 @@ export default async function farmaciasSeed(instancias: number) {
 			endereco: {
 				bairro: faker.address.streetName(),
 				cep: Math.floor(Math.random() * 10000000 + 10000000),
-				estado,
+				estado: "Rondônia",
 				localizacao: {
 					x: -12 - Math.random(),
 					y: -60 - Math.random(),
 				},
 				logradouro: faker.address.streetName(),
-				municipio,
+				municipio: "Vilhena",
 				numero: Math.floor(Math.random() * 10000),
 			},
 			horarios_servico: {
