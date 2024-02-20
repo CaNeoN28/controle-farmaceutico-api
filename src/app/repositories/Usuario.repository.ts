@@ -30,7 +30,6 @@ class UsuarioRepository {
 	static async login(data: Login) {
 		const usuario = await UsuarioModel.findOne({
 			nome_usuario: data.nome_usuario,
-			token_recuperacao: false,
 		});
 		let senhaCorreta = false;
 
