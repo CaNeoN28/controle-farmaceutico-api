@@ -18,7 +18,7 @@ class ImagensControllers {
 				const nome_completo = uuid + extensao;
 				const caminho = path.join("files/images", nome_completo);
 
-				relacao_arquivos[a.name] = "/imagem" + nome_completo;
+				relacao_arquivos[a.name] = "/imagem/" + nome_completo;
 
 				a.mv(caminho, (err) => {
 					res.status(500).send(err);
