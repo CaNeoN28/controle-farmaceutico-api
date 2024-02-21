@@ -10,7 +10,6 @@ const imagemRouter = Router();
 
 imagemRouter.post(
 	"/imagem",
-	AuthenticationMiddleware,
 	fileUpload({ createParentPath: true }),
 	VerificarArquivosMiddleware("imagem"),
 	VerificarTamanhoMiddleware,
@@ -20,6 +19,6 @@ imagemRouter.post(
 
 imagemRouter.use("/imagem", static_("files/images"));
 
-imagemRouter.delete("/imagem/:id", AuthenticationMiddleware, ImagensControllers.RemoverImagem);
+imagemRouter.delete("/imagem/:id", ImagensControllers.RemoverImagem);
 
 export default imagemRouter;
