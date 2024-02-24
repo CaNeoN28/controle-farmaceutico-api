@@ -140,11 +140,12 @@ class FarmaciaControllers {
 				estado,
 				tempo,
 				pagina,
-				limite
+				limite,
 			});
 
 			res.status(200).send(plantoes);
 		} catch (error) {
+			console.log(error);
 			next(error);
 		}
 	};

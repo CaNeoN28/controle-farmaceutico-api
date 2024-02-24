@@ -13,6 +13,7 @@ async function listPorEscalaFarmaciaService(params: Parametros) {
 	let { estado, municipio, tempo } = params;
 
 	const filtros: any = {};
+	const select: any = {};
 
 	if (!tempo) {
 		tempo = new Date().toString();
@@ -50,12 +51,16 @@ async function listPorEscalaFarmaciaService(params: Parametros) {
 
 	dados.map((d) => {
 		d.plantoes.map((p) => {
-			const dia = p.entrada.toDateString();
+			const {entrada, saida} = p
 
-			if (escala[dia]) {
-				escala[dia].push(d);
-			} else {
-				escala[dia] = [d];
+			if(saida >= dateTime){
+				const diaStr = entrada.toDateString();
+
+				if (escala[diaStr]) {
+					escala[diaStr].push(d);
+				} else {
+					escala[diaStr] = [d];
+				}
 			}
 		});
 	});

@@ -32,7 +32,7 @@ class FarmaciaRepository {
 
 		const farmacias = await FarmaciaModel.find(filtros)
 			.limit(limite)
-			.skip(pular);
+			.skip(pular)
 
 		return {
 			dados: farmacias,
@@ -100,7 +100,7 @@ class FarmaciaRepository {
 		let erro: Erro | undefined = undefined;
 
 		if (farmacia) {
-			await farmacia.deleteOne()
+			await farmacia.deleteOne();
 		} else {
 			erro = {
 				codigo: 404,
