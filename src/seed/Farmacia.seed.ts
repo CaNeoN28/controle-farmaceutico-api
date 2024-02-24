@@ -21,6 +21,7 @@ export default async function farmaciasSeed(instancias: number) {
 
 		for (let j = 0; j < 5; j++) {
 			const entrada = faker.date.future();
+			entrada.setHours(7, 0)
 			const saida = new Date(Number(entrada) + 24 * 60 * 60 * 1000);
 
 			plantoes.push({

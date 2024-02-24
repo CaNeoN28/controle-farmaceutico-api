@@ -84,7 +84,7 @@ async function listPorEscalaFarmaciaService(params: Parametros) {
 	escala = Object.fromEntries(array);
 
 	return {
-		escala,
+		dados: escala,
 		documentos_totais,
 		limite,
 		pagina,
