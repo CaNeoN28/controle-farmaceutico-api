@@ -14,6 +14,11 @@ type HorariosServico = {
 	};
 };
 
+interface IPlantao {
+	entrada: Date;
+	saida: Date;
+}
+
 interface IFarmacia {
 	cnpj: string;
 	nome_fantasia: string;
@@ -31,7 +36,7 @@ interface IFarmacia {
 		};
 	};
 	horarios_servico?: HorariosServico;
-	plantoes?: string[];
+	plantoes?: IPlantao[];
 }
 
 class Farmacia implements IFarmacia {
@@ -47,7 +52,7 @@ class Farmacia implements IFarmacia {
 		localizacao: { x: string; y: string };
 	};
 	horarios_servico: HorariosServico;
-	plantoes?: string[];
+	plantoes?: IPlantao[];
 	imagem_url?: string;
 
 	constructor(data: IFarmacia) {

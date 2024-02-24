@@ -112,12 +112,12 @@ const HorarioServico = new mongoose.Schema(
 	{
 		horario_entrada: {
 			type: String,
-			required: [true, "Horário de entrada é obrigatório"]
+			required: [true, "Horário de entrada é obrigatório"],
 		},
 		horario_saida: {
 			type: String,
-			required: [true, "Horário de saída é obrigatório"]
-		}
+			required: [true, "Horário de saída é obrigatório"],
+		},
 	},
 	{
 		_id: false,
@@ -127,25 +127,39 @@ const HorarioServico = new mongoose.Schema(
 const HorariosServicoSchema = new mongoose.Schema(
 	{
 		segunda_feira: {
-			type: HorarioServico
+			type: HorarioServico,
 		},
 		terca_feira: {
-			type: HorarioServico
+			type: HorarioServico,
 		},
 		quarta_feira: {
-			type: HorarioServico
+			type: HorarioServico,
 		},
 		quinta_feira: {
-			type: HorarioServico
+			type: HorarioServico,
 		},
 		sexta_feira: {
-			type: HorarioServico
+			type: HorarioServico,
 		},
 		sabado: {
-			type: HorarioServico
+			type: HorarioServico,
 		},
 		domingo: {
-			type: HorarioServico
+			type: HorarioServico,
+		},
+	},
+	{ _id: false }
+);
+
+const Plantao = new mongoose.Schema(
+	{
+		entrada: {
+			type: Date,
+			required: [true, "Entrada é obrigatória"],
+		},
+		saida: {
+			type: Date,
+			required: [true, "Saída é obrigatória"],
 		},
 	},
 	{ _id: false }
@@ -170,20 +184,8 @@ const FarmaciaSchema = new mongoose.Schema({
 		default: {},
 	},
 	plantoes: {
-		type: [String],
+		type: [Plantao],
 		default: [],
-		validate: {
-			validator: (v: Array<string>) => {
-				const valido = !v.find((v) => {
-					const dataValida = isNaN(Number(new Date(v)));
-
-					return dataValida;
-				});
-
-				return valido;
-			},
-			message: "Dia de plantão inválido",
-		},
 	},
 	horarios_servico: {
 		type: HorariosServicoSchema,

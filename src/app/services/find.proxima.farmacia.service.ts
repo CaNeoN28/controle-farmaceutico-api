@@ -9,7 +9,7 @@ interface Filtros {
 	estado?: string;
 	latitude?: string | number;
 	longitude?: string | number;
-	tempo?: string;
+	tempo?: Date;
 	pagina?: number;
 	limite?: number;
 }
@@ -20,7 +20,7 @@ async function findNearestFarmaciaService(params: Filtros) {
 	let erros: Erro | undefined = undefined;
 
 	if (!tempo) {
-		tempo = new Date().toString();
+		tempo = new Date();
 	}
 
 	const datetime = new Date(tempo);
@@ -84,6 +84,8 @@ async function findNearestFarmaciaService(params: Filtros) {
 	if (estado) {
 		filtros["endereco.estado"] = estado;
 	}
+
+	filtros["plantoes.saida"] = { $gte: datetime };
 
 	const paginacao = {
 		pagina: 1,

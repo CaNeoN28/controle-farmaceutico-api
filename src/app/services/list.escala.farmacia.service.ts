@@ -11,11 +11,15 @@ interface Parametros {
 
 async function listPorEscalaFarmaciaService(params: Parametros) {
 	let { estado, municipio, tempo } = params;
+
 	const filtros: any = {};
 
 	if (!tempo) {
 		tempo = new Date().toString();
 	}
+
+	let dateTime = new Date(tempo);
+	console.log(dateTime);
 
 	if (estado) {
 		filtros["endereco.estado"] = estado;
@@ -25,13 +29,14 @@ async function listPorEscalaFarmaciaService(params: Parametros) {
 		filtros["endereco.municipio"] = municipio;
 	}
 
+	filtros["plantoes.saida"] = { $gte: dateTime };
+
 	const paginacao = {
 		pagina: 1,
 		limite: 1000,
 	};
 
 	const { dados } = await FarmaciaRepository.findFarmacias(filtros, paginacao);
-	let dateTime = new Date(tempo);
 
 	if (isNaN(Number(dateTime))) {
 		throw {
@@ -40,28 +45,14 @@ async function listPorEscalaFarmaciaService(params: Parametros) {
 		};
 	}
 
-	const { dia, mes, ano } = {
-		dia: dateTime.getDate(),
-		mes: dateTime.getMonth() + 1,
-		ano: dateTime.getFullYear(),
-	};
-
-	dateTime = new Date([ano, mes, dia].join("/"));
-
 	let escala: {
 		[key: string]: any[];
 	} = {};
 
 	dados.map((d) => {
-		const dias = d.plantoes.filter((p) => {
-			const dataPlantao = new Date(p);
+		d.plantoes.map((p) => {
+			const dia = p.entrada.toDateString();
 
-			const valido = dataPlantao.getTime() >= dateTime.getTime();
-
-			return valido;
-		});
-
-		dias.map((dia) => {
 			if (escala[dia]) {
 				escala[dia].push(d);
 			} else {
@@ -82,17 +73,19 @@ async function listPorEscalaFarmaciaService(params: Parametros) {
 	const paginas_totais = Math.ceil(documentos_totais / limite);
 	const skip = (pagina - 1) * limite;
 
-	const array = dias.sort((a, b) => {
-		const dataA = Number(new Date(a[0]))
-		const dataB = Number(new Date(b[0]))
+	const array = dias
+		.sort((a, b) => {
+			const dataA = Number(new Date(a[0]));
+			const dataB = Number(new Date(b[0]));
 
-		return dataA > dataB ? 1 : -1;
-	}).slice(skip, skip + limite);
+			return dataA > dataB ? 1 : -1;
+		})
+		.slice(skip, skip + limite);
 
 	escala = Object.fromEntries(array);
 
 	return {
-		dados: escala,
+		escala,
 		documentos_totais,
 		limite,
 		pagina,

@@ -17,18 +17,16 @@ export default async function farmaciasSeed(instancias: number) {
 			};
 		};
 
-		const plantoes: string[] = [];
+		const plantoes: { entrada: Date; saida: Date }[] = [];
 
 		for (let j = 0; j < 5; j++) {
-			const date = faker.date.future();
+			const entrada = faker.date.future();
+			const saida = new Date(Number(entrada) + 24 * 60 * 60 * 1000);
 
-			const { dia, mes, ano } = {
-				dia: date.getDate(),
-				mes: date.getMonth() + 1,
-				ano: date.getFullYear(),
-			};
-
-			plantoes.push(`${ano}/${mes}/${dia}`);
+			plantoes.push({
+				entrada,
+				saida
+			});
 		}
 
 		const Farmacia = new FarmaciaModel({
