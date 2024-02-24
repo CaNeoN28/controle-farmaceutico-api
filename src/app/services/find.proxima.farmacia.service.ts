@@ -9,7 +9,7 @@ interface Filtros {
 	estado?: string;
 	latitude?: string | number;
 	longitude?: string | number;
-	tempo?: Date;
+	tempo?: string;
 	pagina?: number;
 	limite?: number;
 }
@@ -20,7 +20,7 @@ async function findNearestFarmaciaService(params: Filtros) {
 	let erros: Erro | undefined = undefined;
 
 	if (!tempo) {
-		tempo = new Date();
+		tempo = new Date().toString();
 	}
 
 	const datetime = new Date(tempo);
@@ -98,7 +98,7 @@ async function findNearestFarmaciaService(params: Filtros) {
 
 	const { dados } = await FarmaciaRepository.findFarmacias(filtros, paginacao);
 
-	const farmacias = farmaciasAbertas(dados as any, tempo);
+	const farmacias = farmaciasAbertas(dados as any, datetime);
 
 	const referenciais = farmacias.map((f) => {
 		return {

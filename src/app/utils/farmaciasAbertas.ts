@@ -69,7 +69,7 @@ function farmaciasAbertas(
 	farmacias = farmacias.filter((f) => {
 		const diaSemana = encontrarDiaSemana(tempo, f.horarios_servico);
 		const plantao = encontrarPlantao(tempo, f.plantoes);
-		
+
 		if (!diaSemana && !plantao) {
 			return false;
 		}

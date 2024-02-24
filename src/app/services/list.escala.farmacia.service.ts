@@ -19,7 +19,6 @@ async function listPorEscalaFarmaciaService(params: Parametros) {
 	}
 
 	let dateTime = new Date(tempo);
-	console.log(dateTime);
 
 	if (estado) {
 		filtros["endereco.estado"] = estado;
