@@ -41,7 +41,6 @@ const EnderecoSchema = new mongoose.Schema(
 	{
 		cep: {
 			type: String,
-			required: [true, "CEP é obrigatório"],
 			validate: {
 				validator: validarCEP,
 				message: "CEP inválido",
