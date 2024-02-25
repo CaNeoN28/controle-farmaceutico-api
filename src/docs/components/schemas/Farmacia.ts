@@ -6,7 +6,6 @@ const Endereco: Schema = {
 	properties: {
 		cep: {
 			type: "string",
-			required: true,
 			obs: "Deve ser um cep com 8 dígitos",
 		},
 		estado: {
@@ -100,8 +99,19 @@ const FarmaciaSchema: Schema = {
 		plantoes: {
 			type: "array",
 			items: {
-				type: "string",
-				obs: "Deve ser uma data válida",
+				type: "object",
+				properties: {
+					entrada: {
+						type: "string",
+						required: true,
+						obs: "Horário de entrada do plantão",
+					},
+					saida: {
+						type: "string",
+						required: true,
+						obs: "Horário de saída do plantão",
+					},
+				},
 			},
 		},
 		horarios_servico: HorariosServico,
@@ -134,7 +144,7 @@ const FarmaciasSchema: Schema = {
 			type: "number",
 		},
 	},
-}
+};
 
 const FarmaciaBadRequest: Schema = {
 	type: "object",
