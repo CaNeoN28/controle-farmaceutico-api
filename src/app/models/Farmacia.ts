@@ -66,10 +66,15 @@ const EnderecoSchema = new mongoose.Schema(
 						{};
 
 					if (!dados.op) {
-						(municipio = dados.municipio), (estado = dados.estado);
+						municipio = dados.municipio 
+						estado = dados.estado;
 					} else {
 						municipio = dados._update.$set.municipio;
 						estado = dados._update.$set.estado;
+					}
+
+					if(!municipio && !estado){
+						return true
 					}
 
 					const valido = validarCidade(municipio!, estado!);
