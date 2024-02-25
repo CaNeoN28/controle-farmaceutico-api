@@ -12,8 +12,10 @@ let idFarmacia = "";
 const date = new Date();
 
 const plantoes = [
-	[date.getFullYear(), date.getMonth() + 1, date.getDate()].join("/"),
-	[date.getFullYear() + 1, date.getMonth() + 1, date.getDate()].join("/"),
+	{
+		entrada: date,
+		saida: new Date(Number(date) + 1000 * 60 * 60 * 24)
+	},
 ];
 
 const dadosFarmacia = new Farmacia({
@@ -404,7 +406,7 @@ describe("A rota de listagem de farmácias por plantão", () => {
 			.expect(200)
 			.then((res) => res.body);
 
-		expect(resposta).toHaveProperty(dadosFarmacia.plantoes![0]);
+		expect(resposta).toHaveProperty(date.toDateString());
 	});
 
 	it("deve retornar erro com tempo inválido", async () => {
