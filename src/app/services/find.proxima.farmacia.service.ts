@@ -85,8 +85,6 @@ async function findNearestFarmaciaService(params: Filtros) {
 		filtros["endereco.estado"] = estado;
 	}
 
-	filtros["plantoes.saida"] = { $gte: datetime };
-
 	const paginacao = {
 		pagina: 1,
 		limite: 1000,
