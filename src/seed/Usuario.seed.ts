@@ -14,7 +14,7 @@ export default async function usuarioSeed(
 	const idsUsuarios: string[] = [];
 
 	const adm = new UsuarioModel({
-		cpf: faker.br.cpf,
+		cpf: faker.br.cpf(),
 		dados_administrativos: {
 			entidade_relacionada:
 				idsEntidades[Math.floor(Math.random() * idsEntidades.length)],
@@ -30,7 +30,9 @@ export default async function usuarioSeed(
 	try {
 		await adm.save();
 		idsUsuarios.push(adm.id);
-	} catch {}
+	} catch (err) {
+		console.log(err)
+	}
 
 	for (let i = 0; i < instancias; i++) {
 		const entidade_relacionada =
