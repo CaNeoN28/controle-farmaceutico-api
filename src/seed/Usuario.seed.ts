@@ -8,10 +8,29 @@ export default async function usuarioSeed(
 	instancias: number,
 	idsEntidades: string[]
 ) {
-	await UsuarioModel.deleteMany()
+	await UsuarioModel.deleteMany();
 
 	const funcoes: Funcao[] = ["ADMINISTRADOR", "GERENTE", "INATIVO", "USUARIO"];
 	const idsUsuarios: string[] = [];
+
+	const adm = new UsuarioModel({
+		cpf: faker.br.cpf,
+		dados_administrativos: {
+			entidade_relacionada:
+				idsEntidades[Math.floor(Math.random() * idsEntidades.length)],
+			funcao: "ADMINISTRADOR",
+		},
+		email: "administrador@gmail.com",
+		nome_completo: "Administrador",
+		nome_usuario: "administrador",
+		numero_registro: "1",
+		senha: await criptografarSenha("12345678Asdf."),
+	});
+
+	try {
+		await adm.save();
+		idsUsuarios.push(adm.id);
+	} catch {}
 
 	for (let i = 0; i < instancias; i++) {
 		const entidade_relacionada =
@@ -41,8 +60,7 @@ export default async function usuarioSeed(
 		try {
 			await Usuario.save();
 			idsUsuarios.push(Usuario.id);
-		} catch (e) {
-		}
+		} catch (e) {}
 	}
 
 	return idsUsuarios;
