@@ -183,12 +183,12 @@ class UsuarioRepository {
 
 		const emailExiste = await UsuarioModel.findOne({
 			email: data.email,
-			id: { $ne: id },
+			_id: { $ne: id },
 		});
 
 		const nomeUsuarioExiste = await UsuarioModel.findOne({
 			nome_usuario: data.nome_usuario,
-			id: { $ne: id },
+			_id: { $ne: id },
 		});
 
 		if (nomeUsuarioExiste || emailExiste) {
@@ -274,12 +274,12 @@ class UsuarioRepository {
 			let usuario: any = undefined;
 			const emailExiste = await UsuarioModel.findOne({
 				email: data.email,
-				id: { $ne: id },
+				_id: { $ne: id },
 			});
 
 			const nomeExiste = await UsuarioModel.findOne({
 				nome_usuario: data.nome_usuario,
-				id: { $ne: id },
+				_id: { $ne: id },
 			});
 
 			if (emailExiste || nomeExiste) {
