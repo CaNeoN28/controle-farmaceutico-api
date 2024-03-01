@@ -43,7 +43,9 @@ class UsuarioRepository {
 		};
 	}
 	static async findUsuario(params: FiltrosUsuario) {
-		const usuario = await UsuarioModel.findOne(params, { senha: false });
+		const usuario = await UsuarioModel.findOne(params, {
+			senha: false,
+		}).populate("dados_administrativos.entidade_relacionada");
 
 		return usuario;
 	}
@@ -58,7 +60,7 @@ class UsuarioRepository {
 		const usuario = await UsuarioModel.findById(id, {
 			senha: false,
 			token_recuperacao: false,
-		});
+		}).populate("dados_administrativos.entidade_relacionada");
 
 		return usuario;
 	}
@@ -74,7 +76,8 @@ class UsuarioRepository {
 			token_recuperacao: false,
 		})
 			.limit(limite)
-			.skip(pular);
+			.skip(pular)
+			.populate("dados_administrativos.entidade_relacionada");
 
 		return {
 			dados: usuarios,
