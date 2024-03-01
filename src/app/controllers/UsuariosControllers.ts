@@ -22,11 +22,12 @@ class UsuariosControllers {
 		}
 	};
 
-	static ListarUsuarios: RequestHandler = async function (req, res, next) {
+	static ListarUsuarios: RequestHandler = async function (req: AuthenticatedRequest, res, next) {
 		const params = req.query;
+		const {id: idLogado} = req.user!
 
 		try {
-			const resposta = await listUsuariosService(params);
+			const resposta = await listUsuariosService(params, idLogado);
 
 			return res.status(200).send(resposta);
 		} catch (error) {

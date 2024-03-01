@@ -64,17 +64,24 @@ class UsuarioRepository {
 
 		return usuario;
 	}
-	static async findUsuarios(filtros: FiltrosUsuario, paginacao: Paginacao) {
+	static async findUsuarios(
+		filtros: FiltrosUsuario,
+		paginacao: Paginacao,
+		idLogado: string
+	) {
 		const { limite, pagina } = paginacao;
 
 		const documentos_totais = await UsuarioModel.countDocuments(filtros);
 		const pular = limite * (pagina - 1);
 		const paginas_totais = calcularPaginas(documentos_totais, limite);
 
-		const usuarios = await UsuarioModel.find(filtros, {
-			senha: false,
-			token_recuperacao: false,
-		})
+		const usuarios = await UsuarioModel.find(
+			{ ...filtros, _id: { $ne: idLogado } },
+			{
+				senha: false,
+				token_recuperacao: false,
+			}
+		)
 			.limit(limite)
 			.skip(pular)
 			.populate("dados_administrativos.entidade_relacionada");
