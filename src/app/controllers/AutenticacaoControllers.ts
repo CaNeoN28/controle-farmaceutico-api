@@ -7,6 +7,8 @@ import findUsuarioService from "../services/find.usuario.service";
 import selfUpdateUsuarioService from "../services/self.update.usuario.service";
 import recuperarSenhaService from "../services/recuperar.senha.service";
 import esqueceuSenhaService from "../services/esqueceu.senha.service";
+import { verificarToken } from "../utils/jwt";
+import verificarTokenRecuperacaoService from "../services/verificar.recuperacao.service";
 
 class AutenticacaoControllers {
 	static Cadastro: RequestHandler = async function (req, res, next) {
@@ -83,6 +85,23 @@ class AutenticacaoControllers {
 			res.status(200).send(`Token de recuperação enviado para ${email}`);
 		} catch (error) {
 			console.log(error);
+			next(error);
+		}
+	};
+
+	static VerificarTokenRecuperacao: RequestHandler = async function (
+		req,
+		res,
+		next
+	) {
+		console.log(req.headers)
+		const token = req.headers.authorization || "";
+
+		try {
+			await verificarTokenRecuperacaoService(token);
+
+			res.status(201).send();
+		} catch (error) {
 			next(error);
 		}
 	};

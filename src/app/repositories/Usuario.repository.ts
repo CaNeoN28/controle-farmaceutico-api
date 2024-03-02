@@ -358,6 +358,13 @@ class UsuarioRepository {
 
 		return erro;
 	}
+	static async verificarToken(nome_usuario: string) {
+		const usuario = await UsuarioModel.findOne({ nome_usuario });
+
+		return {
+			usuario,
+		};
+	}
 	static async recuperarSenha(id: string, token: string, senha: string) {
 		try {
 			let erros: Erro | undefined = undefined;
@@ -370,7 +377,7 @@ class UsuarioRepository {
 			) {
 				await usuario.updateOne({
 					senha,
-					token_recuperacao: null
+					token_recuperacao: null,
 				});
 			} else {
 				erros = {
