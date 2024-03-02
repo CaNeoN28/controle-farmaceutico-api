@@ -1,4 +1,5 @@
 import Erro from "../../types/Erro";
+import ImagemRepository from "../repositories/Imagem.repository";
 import UsuarioRepository from "../repositories/Usuario.repository";
 
 async function deleteUsuarioService(id: string, idGerenciador: string) {
@@ -9,11 +10,18 @@ async function deleteUsuarioService(id: string, idGerenciador: string) {
 		};
 	}
 
-	const erro = await UsuarioRepository.deleteUsuario(id, idGerenciador);
+	const {erro, usuario} = await UsuarioRepository.deleteUsuario(id, idGerenciador);
 
 	if (erro) {
 		throw erro;
 	}
+
+	if (usuario && usuario.imagem_url)
+			await ImagemRepository.removerImagem(
+				"usuario",
+				usuario.id,
+				usuario.imagem_url
+			);
 }
 
 export default deleteUsuarioService;

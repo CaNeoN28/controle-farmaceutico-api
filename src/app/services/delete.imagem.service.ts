@@ -7,18 +7,11 @@ async function deleteImagemService(
 	id_finalidade: string,
 	caminho: string
 ) {
-	const imagemExiste = await ImagemRepository.removerImagem(
+	await ImagemRepository.removerImagem(
 		finalidade,
 		id_finalidade,
 		caminho
 	);
-
-	if (!imagemExiste) {
-		throw {
-			codigo: 404,
-			erro: "Imagem não encontrada",
-		} as Erro;
-	}
 
 	try {
 		fileSystem.unlink(`files/imagens/${caminho}`, (erro) => {

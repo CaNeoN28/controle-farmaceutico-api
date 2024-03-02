@@ -31,6 +31,7 @@ export default class ImagemRepository {
 			await imagem.save();
 		}
 	}
+
 	static async confirmarImagem(
 		finalidade: string,
 		id_finalidade: string,
@@ -60,7 +61,7 @@ export default class ImagemRepository {
 			alvo = usuario;
 		}
 
-		if (!alvo || alvo.imagem_url !== caminho) {
+		if (!alvo || alvo.imagem_url && alvo.imagem_url !== caminho) {
 			erro = {
 				codigo: 400,
 				erro: "Não foi possível salvar imagem",
@@ -90,8 +91,9 @@ export default class ImagemRepository {
 						confirmacao_expira: null,
 					});
 
-					await imagem.save();
 				}
+
+				await imagem.save();
 			}
 		}
 
@@ -103,6 +105,12 @@ export default class ImagemRepository {
 		id_finalidade: string,
 		caminho: string
 	) {
+		console.log({
+			finalidade,
+			id_finalidade,
+			caminho
+		})
+
 		const imagem = await ImagemModel.findOne({
 			finalidade,
 			id_finalidade,
@@ -111,10 +119,6 @@ export default class ImagemRepository {
 
 		if (imagem) {
 			await imagem.deleteOne();
-
-			return true;
 		}
-
-		return false;
 	}
 }

@@ -325,6 +325,7 @@ class UsuarioRepository {
 	}
 	static async deleteUsuario(id: string, idGerenciador: string) {
 		let erro: Erro | undefined = undefined;
+		let usuario: any = undefined
 
 		if (!validarID<string>(id)) {
 			erro = {
@@ -332,7 +333,7 @@ class UsuarioRepository {
 				erro: "Id inválido",
 			};
 		} else {
-			const usuario = await UsuarioModel.findById(id);
+			usuario = await UsuarioModel.findById(id);
 			const gerenciador = (await UsuarioModel.findById(idGerenciador))!;
 
 			if (!usuario) {
@@ -356,7 +357,7 @@ class UsuarioRepository {
 			}
 		}
 
-		return erro;
+		return {erro, usuario};
 	}
 	static async verificarToken(nome_usuario: string) {
 		const usuario = await UsuarioModel.findOne({ nome_usuario });

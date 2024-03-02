@@ -1,5 +1,6 @@
 import Erro from "../../types/Erro";
 import FarmaciaRepository from "../repositories/Farmacia.repository";
+import ImagemRepository from "../repositories/Imagem.repository";
 import { validarID } from "../utils/validators";
 
 async function deleteFarmaciaService(id: string) {
@@ -13,6 +14,13 @@ async function deleteFarmaciaService(id: string) {
 				erro: erro.erro,
 			};
 		}
+
+		if (farmacia && farmacia.imagem_url)
+			await ImagemRepository.removerImagem(
+				"farmacia",
+				farmacia.id,
+				farmacia.imagem_url
+			);
 	} else {
 		erros = {
 			codigo: 400,
