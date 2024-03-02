@@ -94,7 +94,6 @@ class AutenticacaoControllers {
 		res,
 		next
 	) {
-		console.log(req.headers)
 		const token = req.headers.authorization || "";
 
 		try {
