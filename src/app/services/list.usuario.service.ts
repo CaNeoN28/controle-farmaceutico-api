@@ -2,7 +2,7 @@ import { FiltrosUsuario } from "../../types/Usuario";
 import UsuarioRepository from "../repositories/Usuario.repository";
 import { extrairPaginacao } from "../utils/paginacao";
 
-async function listUsuariosService(params: any) {
+async function listUsuariosService(params: any, idLogado: string) {
 	const { entidade_relacionada, cpf, funcao, nome_usuario }: FiltrosUsuario =
 		params;
 	const filtros: any = {};
@@ -28,7 +28,7 @@ async function listUsuariosService(params: any) {
 		pagina: pagina || 1,
 	};
 
-	const resposta = await UsuarioRepository.findUsuarios(filtros, paginacao);
+	const resposta = await UsuarioRepository.findUsuarios(filtros, paginacao, idLogado);
 
 	return resposta;
 }

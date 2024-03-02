@@ -43,7 +43,9 @@ class UsuarioRepository {
 		};
 	}
 	static async findUsuario(params: FiltrosUsuario) {
-		const usuario = await UsuarioModel.findOne(params, { senha: false });
+		const usuario = await UsuarioModel.findOne(params, {
+			senha: false,
+		}).populate("dados_administrativos.entidade_relacionada");
 
 		return usuario;
 	}
@@ -58,23 +60,31 @@ class UsuarioRepository {
 		const usuario = await UsuarioModel.findById(id, {
 			senha: false,
 			token_recuperacao: false,
-		});
+		}).populate("dados_administrativos.entidade_relacionada");
 
 		return usuario;
 	}
-	static async findUsuarios(filtros: FiltrosUsuario, paginacao: Paginacao) {
+	static async findUsuarios(
+		filtros: FiltrosUsuario,
+		paginacao: Paginacao,
+		idLogado: string
+	) {
 		const { limite, pagina } = paginacao;
 
 		const documentos_totais = await UsuarioModel.countDocuments(filtros);
 		const pular = limite * (pagina - 1);
 		const paginas_totais = calcularPaginas(documentos_totais, limite);
 
-		const usuarios = await UsuarioModel.find(filtros, {
-			senha: false,
-			token_recuperacao: false,
-		})
+		const usuarios = await UsuarioModel.find(
+			{ ...filtros, _id: { $ne: idLogado } },
+			{
+				senha: false,
+				token_recuperacao: false,
+			}
+		)
 			.limit(limite)
-			.skip(pular);
+			.skip(pular)
+			.populate("dados_administrativos.entidade_relacionada");
 
 		return {
 			dados: usuarios,
@@ -171,66 +181,89 @@ class UsuarioRepository {
 		let gerenciador = (await UsuarioModel.findById(idGerenciador))!;
 		let erro: Erro | undefined = undefined;
 
-		try {
-			if (usuario) {
-				const DA_ANTIGOS = usuario.dados_administrativos;
-				let DA_NOVOS = data.dados_administrativos;
+		const emailExiste = await UsuarioModel.findOne({
+			email: data.email,
+			_id: { $ne: id },
+		});
 
-				if (DA_NOVOS) {
-					DA_NOVOS = {
-						funcao: DA_NOVOS.funcao || DA_ANTIGOS.funcao,
-						entidade_relacionada:
-							DA_NOVOS.entidade_relacionada || DA_ANTIGOS.entidade_relacionada,
-					};
+		const nomeUsuarioExiste = await UsuarioModel.findOne({
+			nome_usuario: data.nome_usuario,
+			_id: { $ne: id },
+		});
 
-					data.dados_administrativos = DA_NOVOS;
-				}
+		if (nomeUsuarioExiste || emailExiste) {
+			erro = {
+				codigo: 409,
+				erro: {
+					email: emailExiste ? "Email já cadastrado" : undefined,
+					nome_usuario: nomeUsuarioExiste
+						? "Nome de usuário já cadastrado"
+						: undefined,
+				},
+			};
+		} else {
+			try {
+				if (usuario) {
+					const DA_ANTIGOS = usuario.dados_administrativos;
+					let DA_NOVOS = data.dados_administrativos;
 
-				let permissaoNova = undefined;
+					if (DA_NOVOS) {
+						DA_NOVOS = {
+							funcao: DA_NOVOS.funcao || DA_ANTIGOS.funcao,
+							entidade_relacionada:
+								DA_NOVOS.entidade_relacionada ||
+								DA_ANTIGOS.entidade_relacionada,
+						};
 
-				if (data.dados_administrativos && data.dados_administrativos.funcao) {
-					permissaoNova = PERMISSOES[data.dados_administrativos.funcao];
-				}
+						data.dados_administrativos = DA_NOVOS;
+					}
 
-				const permissaoUsuario =
-					PERMISSOES[usuario.dados_administrativos.funcao];
-				const permissaoGerenciador =
-					PERMISSOES[gerenciador.dados_administrativos.funcao];
+					let permissaoNova = undefined;
 
-				if (permissaoNova && permissaoNova > permissaoGerenciador) {
-					erro = {
-						codigo: 403,
-						erro: {
-							"dados_administrativos.funcao":
-								"Não foi possível alterar a função do usuário",
-						},
-					};
-				} else if (permissaoGerenciador < permissaoUsuario) {
-					erro = {
-						codigo: 403,
-						erro: "Não é possível alterar os dados de um usuário de nível superior",
-					};
+					if (data.dados_administrativos && data.dados_administrativos.funcao) {
+						permissaoNova = PERMISSOES[data.dados_administrativos.funcao];
+					}
+
+					const permissaoUsuario =
+						PERMISSOES[usuario.dados_administrativos.funcao];
+					const permissaoGerenciador =
+						PERMISSOES[gerenciador.dados_administrativos.funcao];
+
+					if (permissaoNova && permissaoNova > permissaoGerenciador) {
+						erro = {
+							codigo: 403,
+							erro: {
+								"dados_administrativos.funcao":
+									"Não foi possível alterar a função do usuário",
+							},
+						};
+					} else if (permissaoGerenciador < permissaoUsuario) {
+						erro = {
+							codigo: 403,
+							erro: "Não é possível alterar os dados de um usuário de nível superior",
+						};
+					} else {
+						await usuario.updateOne(data, { runValidators: true });
+
+						usuario = await UsuarioModel.findById(id, {
+							senha: false,
+							token_recuperacao: false,
+						})!;
+					}
 				} else {
-					await usuario.updateOne(data, { runValidators: true });
-
-					usuario = await UsuarioModel.findById(id, {
-						senha: false,
-						token_recuperacao: false,
-					})!;
+					erro = {
+						codigo: 404,
+						erro: "Usuário não encontrado",
+					};
 				}
-			} else {
+			} catch (error) {
+				const { codigo, erros } = erroParaDicionario("Usuário", error);
+
 				erro = {
-					codigo: 404,
-					erro: "Usuário não encontrado",
+					codigo: codigo,
+					erro: erros,
 				};
 			}
-		} catch (error) {
-			const { codigo, erros } = erroParaDicionario("Usuário", error);
-
-			erro = {
-				codigo: codigo,
-				erro: erros,
-			};
 		}
 
 		return { usuario, erros: erro };
@@ -241,12 +274,12 @@ class UsuarioRepository {
 			let usuario: any = undefined;
 			const emailExiste = await UsuarioModel.findOne({
 				email: data.email,
-				id: { $ne: id },
+				_id: { $ne: id },
 			});
 
 			const nomeExiste = await UsuarioModel.findOne({
 				nome_usuario: data.nome_usuario,
-				id: { $ne: id },
+				_id: { $ne: id },
 			});
 
 			if (emailExiste || nomeExiste) {

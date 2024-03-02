@@ -25,7 +25,9 @@ const VerificarTamanhoMiddleware: RequestHandler = async function (
 			erros[a] = `Arquivo acima do limite permitido de ${MB}mb`;
 		});
 
-		return res.status(400).send(erros);
+		return res
+			.status(400)
+			.send({ mensagem: "Arquivos acima do limite de envio", erros });
 	}
 
 	next();

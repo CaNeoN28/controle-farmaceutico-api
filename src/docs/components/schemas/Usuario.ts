@@ -7,9 +7,7 @@ const UsuarioGetSchema: Schema = {
 			type: "object",
 			properties: {
 				entidade_relacionada: {
-					type: "string",
-					required: true,
-					obs: "Deve ser um ID válido do mongoose, referente a uma entidade",
+					$ref: "#/components/schemas/Entidade",
 				},
 				funcao: {
 					type: "string",
@@ -54,6 +52,21 @@ const UsuarioSchema: Schema = {
 	type: "object",
 	properties: {
 		...UsuarioGetSchema.properties,
+		dados_administrativos: {
+			type: "object",
+			properties: {
+				funcao: {
+					type: "string",
+					required: true,
+					obs: "Nível de privilégio do usuário, pode ser INATIVO, USUARIO, GERENTE e ADMINISTRADOR",
+				},
+				entidade_relacionada: {
+					type: "string",
+					required: true,
+					obs: "Deve ser um ID válido do mongoose, referente a uma entidade",
+				},
+			},
+		},
 		senha: {
 			type: "string",
 			required: true,
@@ -85,7 +98,6 @@ const UsuariosSchema: Schema = {
 		},
 	},
 };
-
 
 const UsuarioBadRequest: Schema = {
 	type: "object",
@@ -132,4 +144,10 @@ const UsuarioConflict: Schema = {
 	},
 };
 
-export { UsuarioGetSchema, UsuarioSchema, UsuariosSchema, UsuarioBadRequest, UsuarioConflict };
+export {
+	UsuarioGetSchema,
+	UsuarioSchema,
+	UsuariosSchema,
+	UsuarioBadRequest,
+	UsuarioConflict,
+};
