@@ -7,35 +7,28 @@ async function deleteImagemService(
 	id_finalidade: string,
 	caminho: string
 ) {
-	await ImagemRepository.removerImagem(
-		finalidade,
-		id_finalidade,
-		caminho
-	);
+	await ImagemRepository.removerImagem(finalidade, id_finalidade, caminho);
 
-	try {
-		fileSystem.unlink(`files/imagens/${caminho}`, (erro) => {
-			try {
-				if (erro) {
-					if (erro.code === "ENOENT")
-						throw {
-							codigo: 404,
-							erro: "Imagem não encontrada",
-						};
-					else {
-						console.log(erro);
-						throw {
-							codigo: 500,
-							erro: "Não foi possível remover a imagem",
-						};
-					}
-				}
-			} catch (err) {
-				throw err;
+	let erro: any = undefined;
+
+	fileSystem.unlink(`files/imagens/${caminho}`, (err) => {
+		if (err) {
+			if (err.code === "ENOENT")
+				erro = {
+					codigo: 404,
+					erro: "Imagem não encontrada",
+				};
+			else {
+				erro = {
+					codigo: 500,
+					erro: "Não foi possível remover a imagem",
+				};
 			}
-		});
-	} catch (err) {
-		throw err;
+		}
+	});
+
+	if (erro) {
+		throw erro;
 	}
 }
 
