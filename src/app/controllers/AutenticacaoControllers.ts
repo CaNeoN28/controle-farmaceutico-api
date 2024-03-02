@@ -107,7 +107,7 @@ class AutenticacaoControllers {
 	};
 
 	static RecuperarSenha: RequestHandler = async function (req, res, next) {
-		const { token } = req.params;
+		const token = req.headers.authorization;
 		const { senha } = req.body;
 
 		try {
