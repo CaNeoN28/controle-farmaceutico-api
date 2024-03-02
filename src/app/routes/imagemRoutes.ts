@@ -17,6 +17,15 @@ imagemRouter.post(
 	ImagensControllers.CriarImagem
 );
 
+imagemRouter.put(
+	"/:finalidade/:id_finalidade/imagem/:caminho",
+	fileUpload({ createParentPath: true }),
+	VerificarArquivosMiddleware("imagem"),
+	VerificarTamanhoMiddleware,
+	PermitirExtensoesMiddleware([".jpg", ".png", ".jpeg"]),
+	ImagensControllers.ConfirmarEnvio
+);
+
 imagemRouter.use("/imagem", static_("files/images"));
 
 imagemRouter.delete("/imagem/:id", ImagensControllers.RemoverImagem);

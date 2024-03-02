@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import path from "path";
 import fileSystem from "fs";
 import criarImagemService from "../services/create.imagem.service";
+import confirmarImagemService from "../services/confirmar.imagem.service";
 
 class ImagensControllers {
 	static CriarImagem: RequestHandler = async function (req: any, res, next) {
@@ -13,7 +14,20 @@ class ImagensControllers {
 
 			const relacao_arquivos = await criarImagemService(arquivos, finalidade);
 
-			res.status(200).send(relacao_arquivos);
+			res.status(201).send(relacao_arquivos);
+		} catch (err) {
+			next(err);
+		}
+	};
+
+	static ConfirmarEnvio: RequestHandler = async function (req: any, res, next) {
+		const { finalidade, id_finalidade, caminho } = req.params;
+		const arquivos = req.arquivos as UploadedFile[];
+
+		try {
+			await confirmarImagemService(finalidade, id_finalidade, caminho, arquivos[0]);
+
+			res.status(201).send();
 		} catch (err) {
 			next(err);
 		}

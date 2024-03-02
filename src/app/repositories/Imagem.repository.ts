@@ -31,7 +31,23 @@ export default class ImagemRepository {
 		finalidade: string,
 		id_finalidade: string,
 		caminho: string
-	) {}
+	) {
+		const imagem = await ImagemModel.findOne({
+			finalidade,
+			caminho_imagem: caminho,
+		});
+
+		if (imagem) {
+			await imagem.updateOne({
+				id_finalidade,
+				confirmacao_expira: null,
+			});
+
+			await imagem.save();
+		}
+
+		return imagem;
+	}
 
 	static async removerImagem(
 		finalidade: string,
