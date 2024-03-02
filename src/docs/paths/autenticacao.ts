@@ -338,8 +338,41 @@ const AutenticacaoPaths: Paths = {
 			},
 		},
 	},
-
-	"/recuperar-senha/{token}": {
+	"/verificar-token": {
+		get: {
+			tags: ["Autenticação"],
+			summary: "Verifica o token de atualização de senha",
+			description: "Valida o token e retorna erro se ele não for válido ou estiver expirado.",
+			security: [],
+			parameters: [
+				{
+					name: "token",
+					in: "header",
+					required: true,
+					obs: "Token gerado pela rota /esqueceu-senha",
+				},
+			],
+			responses: {
+				201: {
+					description: "Token é valido e pode ser usado",
+				},
+				401: {
+					description: "Retorna erro de não autorização",
+					content: {
+						"text/html": {
+							schema: {
+								type: "string",
+							},
+						},
+					},
+				},
+				500: {
+					$ref: "#/components/responses/ErroInterno",
+				},
+			},
+		}
+	},
+	"/recuperar-senha": {
 		put: {
 			tags: ["Autenticação"],
 			summary: "Atualiza a senha pelo token",
@@ -348,7 +381,7 @@ const AutenticacaoPaths: Paths = {
 			parameters: [
 				{
 					name: "token",
-					in: "path",
+					in: "header",
 					required: true,
 					obs: "Token gerado pela rota /esqueceu-senha",
 				},
