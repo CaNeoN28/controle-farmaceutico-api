@@ -8,10 +8,10 @@ import criarImagemService from "../services/create.imagem.service";
 class ImagensControllers {
 	static CriarImagem: RequestHandler = async function (req: any, res, next) {
 		try {
-			const { finalidade = "" } = req.params as { finalidade?: string };
+			const { finalidade } = req.params as { finalidade?: string };
 			const arquivos = req.arquivos as UploadedFile[];
 
-			const relacao_arquivos = await criarImagemService(finalidade, arquivos)
+			const relacao_arquivos = await criarImagemService(arquivos, finalidade);
 
 			res.status(200).send(relacao_arquivos);
 		} catch (err) {

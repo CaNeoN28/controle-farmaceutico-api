@@ -2,11 +2,19 @@ import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import ImagemRepository from "../repositories/Imagem.repository";
 import { UploadedFile } from "express-fileupload";
+import Erro from "../../types/Erro";
 
 export default async function criarImagemService(
-	finalidade: string,
-	arquivos: UploadedFile[]
+	arquivos: UploadedFile[],
+	finalidade?: string,
 ) {
+	if(!finalidade){
+		throw {
+			codigo: 400,
+			erro: "Finalidade é obrigatório"
+		} as Erro
+	}
+
 	const relacao_arquivos: {
 		[key: string]: string;
 	} = {};
