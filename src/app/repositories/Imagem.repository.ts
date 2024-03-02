@@ -60,7 +60,7 @@ export default class ImagemRepository {
 			alvo = usuario;
 		}
 
-		if (!alvo || alvo.imagem_url) {
+		if (!alvo || alvo.imagem_url !== caminho) {
 			erro = {
 				codigo: 400,
 				erro: "Não foi possível salvar imagem",
