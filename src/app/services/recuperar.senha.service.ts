@@ -42,26 +42,11 @@ async function recuperarSenhaService(token?: string, senha?: string) {
 	senha = await criptografarSenha(senha);
 
 	const { id } = payload;
-	const usuario = await UsuarioRepository.findUsuarioId(id);
-
-	if (usuario) {
-		if (!usuario.token_recuperacao) {
-			throw {
-				codigo: 400,
-				erro: "Token de recuperação inválido",
-			};
-		}
-		if (usuario.token_recuperacao != token)
-			throw {
-				codigo: 400,
-				erro: "Token de recuperação inválido",
-			};
-	}
-
-	const { erros } = await UsuarioRepository.selfUpdateUsuario(id, {
-		senha,
-		token_recuperacao: null,
-	});
+	const { erros } = await UsuarioRepository.recuperarSenha(
+		id,
+		token,
+		senha
+	);
 
 	if (erros) {
 		throw erros;

@@ -358,6 +358,42 @@ class UsuarioRepository {
 
 		return erro;
 	}
+	static async recuperarSenha(id: string, token: string, senha: string) {
+		try {
+			let erros: Erro | undefined = undefined;
+			const usuario = await UsuarioModel.findById(id);
+
+			if (
+				usuario &&
+				usuario.token_recuperacao &&
+				usuario.token_recuperacao === token
+			) {
+				await usuario.updateOne({
+					senha,
+					token_recuperacao: null
+				});
+			} else {
+				erros = {
+					codigo: 400,
+					erro: "Token de recuperação inválido",
+				};
+			}
+
+			return {
+				erros,
+			};
+		} catch (error) {
+			const { erros, codigo } = erroParaDicionario("Usuario", error);
+
+			return {
+				codigo,
+				erros: {
+					codigo,
+					erro: erros,
+				},
+			};
+		}
+	}
 }
 
 export default UsuarioRepository;

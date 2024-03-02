@@ -340,7 +340,7 @@ const AutenticacaoPaths: Paths = {
 	},
 
 	"/recuperar-senha/{token}": {
-		post: {
+		put: {
 			tags: ["Autenticação"],
 			summary: "Atualiza a senha pelo token",
 			description: "Atualiza somente a senha se o token correto for informado.",
