@@ -1,10 +1,14 @@
+import mongoose, { isValidObjectId, model } from "mongoose";
 import ImagemModel from "../models/Imagem";
+import Erro from "../../types/Erro";
+import FarmaciaRepository from "./Farmacia.repository";
+import UsuarioRepository from "./Usuario.repository";
 
 export default class ImagemRepository {
 	static async criarImagem(finalidade: string, nome_arquivo: string) {
 		const date = new Date();
 		const imagem_nao_utilizada = await ImagemModel.findOne({
-			confirmacao_expira: { $lt: date },
+			confirmacao_expira: { $lt: date, $ne: null },
 		});
 
 		const dezMin = 10 * 60 * 1000;
@@ -32,21 +36,66 @@ export default class ImagemRepository {
 		id_finalidade: string,
 		caminho: string
 	) {
-		const imagem = await ImagemModel.findOne({
-			finalidade,
-			caminho_imagem: caminho,
-		});
+		let erro: Erro | any = undefined;
+		let imagem: any = undefined;
 
-		if (imagem) {
-			await imagem.updateOne({
+		if (!isValidObjectId(id_finalidade)) {
+			erro = {
+				codigo: 400,
+				erro: "id_finalidade é inválido",
+			};
+		}
+
+		let alvo: any = undefined;
+
+		if (finalidade === "farmacia") {
+			const { farmacia } = await FarmaciaRepository.findFarmaciaId(
+				id_finalidade
+			);
+
+			alvo = farmacia;
+		} else if (finalidade === "usuario") {
+			const usuario = await UsuarioRepository.findUsuarioId(id_finalidade);
+
+			alvo = usuario;
+		}
+
+		if (!alvo || alvo.imagem_url) {
+			erro = {
+				codigo: 400,
+				erro: "Não foi possível salvar imagem",
+			};
+		} else {
+			const imagemExiste = await ImagemModel.findOne({
+				finalidade,
 				id_finalidade,
 				confirmacao_expira: null,
 			});
 
-			await imagem.save();
+			if (imagemExiste) {
+				erro = {
+					codigo: 400,
+					erro: "Não foi possível salvar imagem",
+				};
+			} else {
+				imagem = await ImagemModel.findOne({
+					finalidade,
+					caminho_imagem: caminho,
+					confirmacao_expira: { $ne: null },
+				});
+
+				if (imagem) {
+					await imagem.updateOne({
+						id_finalidade,
+						confirmacao_expira: null,
+					});
+
+					await imagem.save();
+				}
+			}
 		}
 
-		return imagem;
+		return { imagem, erro };
 	}
 
 	static async removerImagem(

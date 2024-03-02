@@ -9,11 +9,15 @@ export default async function confirmarImagemService(
 	caminho: string,
 	arquivo: UploadedFile
 ) {
-	const imagem = await ImagemRepository.confirmarImagem(
+	const { imagem, erro: erroImagem } = await ImagemRepository.confirmarImagem(
 		finalidade,
 		id_finalidade,
 		caminho
 	);
+
+	if (erroImagem) {
+		throw erroImagem;
+	}
 
 	if (!imagem) {
 		throw {
@@ -22,10 +26,7 @@ export default async function confirmarImagemService(
 		} as Erro;
 	}
 
-	const caminhoImagem = path.join(
-		"files/imagens/",
-		imagem.caminho_imagem
-	);
+	const caminhoImagem = path.join("files/imagens/", imagem.caminho_imagem);
 
 	let erro: any = undefined;
 
