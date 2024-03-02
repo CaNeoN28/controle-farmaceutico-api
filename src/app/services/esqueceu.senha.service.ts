@@ -25,11 +25,9 @@ async function esqueceuSenhaService(email: string | undefined) {
 			};
 		}
 
-		const { email, id } = usuario;
+		const { nome_usuario, id } = usuario;
 		const expiraEm = 30 * 60;
-		const token = generateToken({ email, id }, expiraEm);
-
-		console.log(token);
+		const token = generateToken({ nome_usuario }, expiraEm);
 
 		await UsuarioRepository.selfUpdateUsuario(id, { token_recuperacao: token });
 
