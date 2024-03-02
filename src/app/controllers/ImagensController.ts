@@ -3,8 +3,22 @@ import { UploadedFile } from "express-fileupload";
 import { v4 as uuidv4 } from "uuid";
 import path from "path";
 import fileSystem from "fs";
+import criarImagemService from "../services/create.imagem.service";
 
 class ImagensControllers {
+	static CriarImagem: RequestHandler = async function (req: any, res, next) {
+		try {
+			const { finalidade = "" } = req.params as { finalidade?: string };
+			const arquivos = req.arquivos as UploadedFile[];
+
+			const relacao_arquivos = await criarImagemService(finalidade, arquivos)
+
+			res.status(200).send(relacao_arquivos);
+		} catch (err) {
+			next(err);
+		}
+	};
+
 	static EnviarImagem: RequestHandler = async function (req: any, res, next) {
 		try {
 			const arquivos = req.arquivos as UploadedFile[];

@@ -9,12 +9,12 @@ import PermitirExtensoesMiddleware from "../middlewares/files/PermitirExtensoesM
 const imagemRouter = Router();
 
 imagemRouter.post(
-	"/imagem",
+	"/:finalidade/imagem",
 	fileUpload({ createParentPath: true }),
 	VerificarArquivosMiddleware("imagem"),
 	VerificarTamanhoMiddleware,
 	PermitirExtensoesMiddleware([".jpg", ".png", ".jpeg"]),
-	ImagensControllers.EnviarImagem
+	ImagensControllers.CriarImagem
 );
 
 imagemRouter.use("/imagem", static_("files/images"));
