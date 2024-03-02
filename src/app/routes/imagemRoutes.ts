@@ -28,6 +28,10 @@ imagemRouter.put(
 
 imagemRouter.use("/imagem", static_("files/imagens"));
 
-imagemRouter.delete("/:finalidade/:id_finalidade/imagem/:caminho", ImagensControllers.RemoverImagem);
+imagemRouter.delete(
+	"/:finalidade/:id_finalidade/imagem/:caminho",
+	AuthenticationMiddleware,
+	ImagensControllers.RemoverImagem
+);
 
 export default imagemRouter;
