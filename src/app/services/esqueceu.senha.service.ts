@@ -1,8 +1,13 @@
 import UsuarioRepository from "../repositories/Usuario.repository";
 import enviarEmail from "../utils/enviarEmail";
 import { generateToken } from "../utils/jwt";
+import * as dotenv from "dotenv";
 
 async function esqueceuSenhaService(email: string | undefined) {
+	dotenv.config();
+
+	const FRONTEND_URL = process.env.FRONTEND_URL || "";
+
 	if (!email) {
 		throw {
 			codigo: 400,
@@ -24,14 +29,14 @@ async function esqueceuSenhaService(email: string | undefined) {
 		const expiraEm = 30 * 60;
 		const token = generateToken({ email, id }, expiraEm);
 
-		console.log(token)
+		console.log(token);
 
 		await UsuarioRepository.selfUpdateUsuario(id, { token_recuperacao: token });
 
 		await enviarEmail({
 			assunto: "Link para recuperação de senha",
 			para: email,
-			texto: `Token para recuperação: ${token}`,
+			texto: `Link para recuperação da senha ${FRONTEND_URL}/recuperar-senha?token=${token}`,
 		});
 	}
 }
