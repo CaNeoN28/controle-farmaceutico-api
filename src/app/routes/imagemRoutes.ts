@@ -26,8 +26,8 @@ imagemRouter.put(
 	ImagensControllers.ConfirmarEnvio
 );
 
-imagemRouter.use("/imagem", static_("files/images"));
+imagemRouter.use("/imagem", static_("files/imagens"));
 
-imagemRouter.delete("/imagem/:id", ImagensControllers.RemoverImagem);
+imagemRouter.delete("/:finalidade/:id_finalidade/imagem/:caminho", ImagensControllers.RemoverImagem);
 
 export default imagemRouter;

@@ -53,5 +53,19 @@ export default class ImagemRepository {
 		finalidade: string,
 		id_finalidade: string,
 		caminho: string
-	) {}
+	) {
+		const imagem = await ImagemModel.findOne({
+			finalidade,
+			id_finalidade,
+			caminho_imagem: caminho,
+		});
+
+		if (imagem) {
+			await imagem.deleteOne();
+
+			return true;
+		}
+
+		return false;
+	}
 }

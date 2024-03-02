@@ -23,11 +23,15 @@ export default async function confirmarImagemService(
 	}
 
 	const caminhoImagem = path.join(
-		`files/imagens/${finalidade}`,
+		"files/imagens/",
 		imagem.caminho_imagem
 	);
 
+	let erro: any = undefined;
+
 	arquivo.mv(caminhoImagem, (err) => {
-		throw { codigo: 500, erro: "Não foi possível salvar imagem" } as Erro;
+		erro = { codigo: 500, erro: "Não foi possível salvar imagem" };
 	});
+
+	if (erro) throw erro;
 }
