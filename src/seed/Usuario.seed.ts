@@ -52,7 +52,6 @@ export default async function usuarioSeed(
 			email: `${firstName.toLowerCase()}${lastName.toLowerCase()}${Math.floor(
 				Math.random() * 100
 			)}@gmail.com`,
-			imagem_url: ".jpg",
 			nome_completo: `${firstName} ${lastName}`,
 			nome_usuario: `${lastName}${Math.floor(Math.random() * 100)}`,
 			numero_registro: Math.floor(Math.random() * 100000),

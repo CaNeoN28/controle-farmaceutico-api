@@ -66,15 +66,15 @@ const EnderecoSchema = new mongoose.Schema(
 						{};
 
 					if (!dados.op) {
-						municipio = dados.municipio 
+						municipio = dados.municipio;
 						estado = dados.estado;
 					} else {
 						municipio = dados._update.$set.municipio;
 						estado = dados._update.$set.estado;
 					}
 
-					if(!municipio && !estado){
-						return true
+					if (!municipio && !estado) {
+						return true;
 					}
 
 					const valido = validarCidade(municipio!, estado!);
@@ -160,10 +160,24 @@ const Plantao = new mongoose.Schema(
 		entrada: {
 			type: Date,
 			required: [true, "Entrada é obrigatória"],
+			validate: {
+				validator: (v: string) => {
+					const data = new Date(v);
+					return !isNaN(Number(data));
+				},
+				message: "Entrada inválida",
+			},
 		},
 		saida: {
 			type: Date,
 			required: [true, "Saída é obrigatória"],
+			validate: {
+				validator: (v: string) => {
+					const data = new Date(v);
+					return !isNaN(Number(data));
+				},
+				message: "Saída inválida",
+			},
 		},
 	},
 	{ _id: false }
@@ -189,6 +203,7 @@ const FarmaciaSchema = new mongoose.Schema({
 	},
 	plantoes: {
 		type: [Plantao],
+		cast: "Plantões inválidos",
 		default: [],
 	},
 	horarios_servico: {

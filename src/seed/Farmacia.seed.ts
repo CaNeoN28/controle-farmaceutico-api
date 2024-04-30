@@ -37,8 +37,8 @@ export default async function farmaciasSeed(instancias: number) {
 				cep: Math.floor(Math.random() * 10000000 + 10000000),
 				estado: "Rondônia",
 				localizacao: {
-					x: -12 - Math.random(),
-					y: -60 - Math.random(),
+					x: -12.71 - Math.random()/100,
+					y: -60.14 - Math.random()/100,
 				},
 				logradouro: faker.address.streetName(),
 				municipio: "Vilhena",

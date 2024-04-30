@@ -1,3 +1,5 @@
+import { CastError } from "mongoose";
+
 function erroParaDicionario(tabela: string, erro: any) {
 	const mensagemErro = erro.message as string;
 	const errosValidacao = erro.errors;
@@ -10,6 +12,11 @@ function erroParaDicionario(tabela: string, erro: any) {
 		Object.keys(errosValidacao).map((k) => {
 			erros[k] = errosValidacao[k].message;
 		});
+	} else if (erro.name == "CastError"){
+		const {path, message} = erro as CastError
+
+		codigo = 400;
+		erros[path] = message
 	}
 
 	return { erros, codigo };

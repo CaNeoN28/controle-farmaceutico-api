@@ -4389,6 +4389,7 @@ const estados: {
 		"Xangri-lá",
 	],
 	Rondônia: [
+		"Residencial",
 		"Alta Floresta d'Oeste",
 		"Alto Alegre dos Parecis",
 		"Alto Paraíso",
