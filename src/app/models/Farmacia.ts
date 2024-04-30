@@ -159,6 +159,7 @@ const Plantao = new mongoose.Schema(
 	{
 		entrada: {
 			type: Date,
+			cast: "Entrada inválida",
 			required: [true, "Entrada é obrigatória"],
 			validate: {
 				validator: (v: string) => {
@@ -170,6 +171,7 @@ const Plantao = new mongoose.Schema(
 		},
 		saida: {
 			type: Date,
+			cast: "Entrada inválida",
 			required: [true, "Saída é obrigatória"],
 			validate: {
 				validator: (v: string) => {

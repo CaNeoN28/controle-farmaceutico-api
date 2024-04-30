@@ -40,7 +40,6 @@ describe("O modelo de farmácia", () => {
 				cnpj,
 				nome_fantasia: nome_fantasia,
 				"endereco.bairro": endereco_bairro,
-				"endereco.cep": endereco_cep,
 				"endereco.estado": endereco_estado,
 				"endereco.localizacao": endereco_localizacao,
 				"endereco.logradouro": endereco_logradouro,
@@ -52,7 +51,6 @@ describe("O modelo de farmácia", () => {
 				cnpj: cnpj.message,
 				nome_fantasia: nome_fantasia.message,
 				endereco_bairro: endereco_bairro.message,
-				endereco_cep: endereco_cep.message,
 				endereco_estado: endereco_estado.message,
 				endereco_localizacao: endereco_localizacao.message,
 				endereco_logradouro: endereco_logradouro.message,
@@ -69,7 +67,6 @@ describe("O modelo de farmácia", () => {
 			cnpj: "CNPJ é obrigatório",
 			nome_fantasia: "Nome fantasia é obrigatório",
 			endereco_bairro: "Bairro é obrigatório",
-			endereco_cep: "CEP é obrigatório",
 			endereco_estado: "Estado é obrigatório",
 			endereco_municipio: "Município é obrigatório",
 			endereco_localizacao: "Localização é obrigatório",
@@ -188,7 +185,12 @@ describe("O modelo de farmácia", () => {
 			const { errors } = farmacia.validateSync()!;
 
 			const errosPlantoes = Object.keys(errors).map(k => {
-				return errors[k]
+				const { message, value, path} = errors[k]
+				return {
+					message,
+					value,
+					path
+				}
 			})
 
 			return errosPlantoes
@@ -198,6 +200,6 @@ describe("O modelo de farmácia", () => {
 
 		const erros = validar();
 
-		expect(erros.length).toBe(2)
+		expect(erros.length).toBe(4)
 	});
 });
