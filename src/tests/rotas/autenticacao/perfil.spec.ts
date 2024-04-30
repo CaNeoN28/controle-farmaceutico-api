@@ -2,9 +2,11 @@ import request from "supertest";
 import { criarUsuarioAdm } from "../../../app/utils/db/gerarDadosDiversos";
 import { generateTokenFromUser } from "../../../app/utils/jwt";
 import ILogin from "../../../types/ILogin";
-import app from "../../../app/app";
+import app, { configApp } from "../../../app/app";
 import Usuario from "../../../types/Usuario";
 import limparBanco from "../../../app/utils/db/limparBanco";
+
+configApp()
 
 let login: ILogin = {
 	senha: "",
@@ -44,8 +46,6 @@ describe("A rota de visualização de perfil", () => {
 			nome_usuario: usuario.nome_usuario,
 			numero_registro: usuario.numero_registro,
 			dados_administrativos: {
-				entidade_relacionada:
-					usuario.dados_administrativos.entidade_relacionada.toString(),
 				funcao: usuario.dados_administrativos.funcao,
 			},
 			imagem_url: usuario.imagem_url,

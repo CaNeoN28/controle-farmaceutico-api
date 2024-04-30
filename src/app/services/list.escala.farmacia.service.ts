@@ -21,6 +21,13 @@ async function listPorEscalaFarmaciaService(params: Parametros) {
 
 	let dateTime = new Date(tempo);
 
+	if (isNaN(Number(dateTime))) {
+		throw {
+			codigo: 400,
+			erro: "Tempo informado inválido",
+		};
+	}
+
 	if (estado) {
 		filtros["endereco.estado"] = estado;
 	}
@@ -37,13 +44,6 @@ async function listPorEscalaFarmaciaService(params: Parametros) {
 	};
 
 	const { dados } = await FarmaciaRepository.findFarmacias(filtros, paginacao);
-
-	if (isNaN(Number(dateTime))) {
-		throw {
-			codigo: 400,
-			erro: "Tempo informado inválido",
-		};
-	}
 
 	let escala: {
 		[key: string]: any[];

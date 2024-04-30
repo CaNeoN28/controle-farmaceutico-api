@@ -1,11 +1,13 @@
 import request from "supertest";
-import app from "../../../app/app";
+import app, { configApp } from "../../../app/app";
 import { criarUsuarioAdm, criarUsuarioInativo } from "../../../app/utils/db/gerarDadosDiversos";
 import Usuario from "../../../types/Usuario";
 import ILogin from "../../../types/ILogin";
 import limparBanco from "../../../app/utils/db/limparBanco";
 import TokenData from "../../../types/TokenData";
 import { verificarToken } from "../../../app/utils/jwt";
+
+configApp()
 
 let administrador: ILogin = {
 	usuario: "",

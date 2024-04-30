@@ -1,8 +1,10 @@
 import request from "supertest";
 import { Types } from "mongoose";
-import app from "../../../app/app";
+import app, { configApp } from "../../../app/app";
 import Usuario from "../../../types/Usuario";
 import limparBanco from "../../../app/utils/db/limparBanco";
+
+configApp()
 
 let usuario: any = {}
 

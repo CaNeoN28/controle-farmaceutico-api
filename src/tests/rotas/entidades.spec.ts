@@ -1,6 +1,6 @@
 import request from "supertest";
 import { Types } from "mongoose";
-import app from "../../app/app";
+import app, { configApp } from "../../app/app";
 import Entidade from "../../types/Entidade";
 import { generateTokenFromUser } from "../../app/utils/jwt";
 import limparBanco from "../../app/utils/db/limparBanco";
@@ -8,7 +8,8 @@ import {
 	criarUsuario,
 	criarUsuarioAdm,
 } from "../../app/utils/db/gerarDadosDiversos";
-import jest from "jest"
+
+configApp()
 
 let usuario: any = undefined;
 let token = "";

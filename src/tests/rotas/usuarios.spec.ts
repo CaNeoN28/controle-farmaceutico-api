@@ -5,9 +5,11 @@ import {
 } from "../../app/utils/db/gerarDadosDiversos";
 import limparBanco from "../../app/utils/db/limparBanco";
 import { generateTokenFromUser } from "../../app/utils/jwt";
-import app from "../../app/app";
+import app, { configApp } from "../../app/app";
 import Usuario from "../../types/Usuario";
 import mongoose from "mongoose";
+
+configApp()
 
 let tokenAdm = "";
 let tokenGerente = "";
@@ -32,6 +34,8 @@ const usuario = {
 };
 
 beforeAll(async () => {
+	await limparBanco()
+
 	const { usuario: adm } = await criarUsuarioAdm();
 
 	usuarioAdm = {
@@ -74,7 +78,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-	limparBanco();
+	limparBanco()
 });
 
 describe("A rota de cadastro de usuários", () => {
@@ -215,7 +219,9 @@ describe("A rota de recuperação de usuário", () => {
 			nome_completo,
 			nome_usuario,
 			numero_registro,
-			dados_administrativos,
+			dados_administrativos: {
+				funcao: "USUARIO"
+			},
 		});
 
 		expect(resposta).not.toHaveProperty("senha");
@@ -280,9 +286,11 @@ describe("A rota de listagem de usuários", () => {
 			documentos_totais: 4,
 		});
 
-		expect(resposta.dados[3]).toMatchObject({
+		expect(resposta.dados[2]).toMatchObject({
 			cpf,
-			dados_administrativos,
+			dados_administrativos: {
+				funcao: "USUARIO"
+			},
 			email,
 			nome_completo,
 			nome_usuario,
@@ -308,7 +316,7 @@ describe("A rota de listagem de usuários", () => {
 		});
 	});
 
-	it("deve retornar um usuário administrador com base nos filtros", async () => {
+	it("deve retornar um usuário comum com base nos filtros", async () => {
 		const {
 			cpf,
 			email,
@@ -316,24 +324,26 @@ describe("A rota de listagem de usuários", () => {
 			nome_usuario,
 			numero_registro,
 			dados_administrativos,
-		} = usuarioAdm as Usuario;
+		} = usuarioBaixo as Usuario;
 
 		const resposta = await request(app)
 			.get("/usuarios")
-			.query("funcao=ADMINISTRADOR")
+			.query("funcao=USUARIO")
 			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
 			.expect(200)
 			.then((res) => res.body);
 
-		expect(resposta.documentos_totais).toBe(1);
+		expect(resposta.documentos_totais).toBe(2);
 		expect(resposta.dados[0]).toMatchObject({
 			cpf,
 			email,
 			nome_completo,
 			nome_usuario,
 			numero_registro,
-			dados_administrativos,
+			dados_administrativos: {
+				funcao: "USUARIO"
+			},
 		});
 	});
 

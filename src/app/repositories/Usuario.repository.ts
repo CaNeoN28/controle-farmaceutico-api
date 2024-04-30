@@ -49,6 +49,7 @@ class UsuarioRepository {
 
 		return usuario;
 	}
+	
 	static async findUsuarioId(id: any) {
 		if (!mongoose.isValidObjectId(id)) {
 			throw {

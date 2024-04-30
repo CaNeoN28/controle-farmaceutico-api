@@ -84,7 +84,6 @@ class AutenticacaoControllers {
 
 			res.status(200).send(`Token de recuperação enviado para ${email}`);
 		} catch (error) {
-			console.log(error);
 			next(error);
 		}
 	};

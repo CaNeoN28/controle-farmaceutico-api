@@ -30,7 +30,7 @@ async function createFarmaciaService(data: Farmacia) {
 		};
 
 		if (erros) erro.erro = { ...erros.erro };
-		if (errosDiasServico) erro.erro.horarios_servico = errosDiasServico;
+		if (errosDiasServico) erro.erro = {...erro.erro, ...errosDiasServico};
 		if (errosPlantoes.length > 0) erro.erro.plantoes = errosPlantoes;
 	}
 

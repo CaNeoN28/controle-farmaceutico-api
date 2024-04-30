@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
-import app from "../../../app/app";
+import app, { configApp } from "../../../app/app";
 import { generateTokenFromUser } from "../../../app/utils/jwt";
 import ILogin from "../../../types/ILogin";
 import request from "supertest";
 import { criarUsuario, criarUsuarioAdm, encontrarPorId } from "../../../app/utils/db/gerarDadosDiversos";
 import limparBanco from "../../../app/utils/db/limparBanco";
+
+configApp()
 
 let login: ILogin = {
 	usuario: "",

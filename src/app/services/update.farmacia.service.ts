@@ -28,12 +28,18 @@ async function updateFarmaciaService(id: string, data: any) {
 
 		if (erros || errosDiasServico || errosPlantoes.length > 0) {
 			erro = {
-				codigo: erros?.erro.codigo || 400,
+				codigo: erros?.codigo || 400,
 				erro: {},
 			};
 
-			if (erros) erro.erro = { ...erros.erro };
-			if (errosDiasServico) erro.erro.horarios_servico = errosDiasServico;
+			if (erros) {
+				if(erros.codigo == 404){
+					erro.erro =  erros.erro
+				} else {
+					erro.erro = { ...erros.erro }
+				}
+			};
+			if (errosDiasServico) erro.erro = { ...erro.erro, ...errosDiasServico };
 			if (errosPlantoes.length > 0) erro.erro.plantoes = errosPlantoes;
 		}
 

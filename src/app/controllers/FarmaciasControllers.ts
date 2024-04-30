@@ -65,24 +65,9 @@ class FarmaciaControllers {
 
 	static AtualizarFarmacia: RequestHandler = async function (req, res, next) {
 		const { id } = req.params;
-		const {
-			cnpj,
-			endereco,
-			horarios_servico,
-			nome_fantasia,
-			imagem_url,
-			plantoes,
-		}: Farmacia = req.body;
 
 		try {
-			const resposta = await updateFarmaciaService(id, {
-				cnpj,
-				endereco,
-				horarios_servico,
-				nome_fantasia,
-				imagem_url,
-				plantoes,
-			});
+			const resposta = await updateFarmaciaService(id, req.body);
 
 			res.status(200).send(resposta);
 		} catch (error) {
@@ -145,7 +130,6 @@ class FarmaciaControllers {
 
 			res.status(200).send(plantoes);
 		} catch (error) {
-			console.log(error);
 			next(error);
 		}
 	};
