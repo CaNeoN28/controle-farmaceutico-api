@@ -57,6 +57,7 @@ describe("A rota de visualização de perfil", () => {
 		const resposta = await request(app)
 			.get("/perfil")
 			.set("Accept", "application/json")
+			.set("Authorization", "Bearer tokeninvalido")
 			.expect(401)
 			.then((res) => res.text);
 

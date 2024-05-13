@@ -463,7 +463,7 @@ describe("A rota de listagem de farmácias por plantão", () => {
 	});
 });
 
-describe.skip("A rota de remoção de farmácia", () => {
+describe("A rota de remoção de farmácia", () => {
 	it("deve retornar erro no caso do ID ser inexistente", async () => {
 		const idFalso = new mongoose.Types.ObjectId();
 		const resposta = await request(app)

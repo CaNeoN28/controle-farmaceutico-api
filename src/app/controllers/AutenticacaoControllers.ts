@@ -43,14 +43,10 @@ class AutenticacaoControllers {
 		next
 	) {
 		const userData = req.user!;
+		
+		const usuario = await findUsuarioService(userData.id);
 
-		try {
-			const usuario = await findUsuarioService(userData.id);
-
-			res.status(200).send(usuario);
-		} catch (error: any) {
-			next(error);
-		}
+		res.status(200).send(usuario);
 	};
 
 	static AtualizarPerfil: RequestHandler = async function (
