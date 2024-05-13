@@ -34,16 +34,16 @@ const AuthenticationMiddleware: RequestHandler = async function (
 			} as Erro;
 		}
 
-		const usuario = await findUsuarioService(decoded.id);
+		try {
+			const usuario = await findUsuarioService(decoded.id);
 
-		if (!usuario) {
+			req.user = decoded;
+		} catch {
 			throw {
 				codigo: 401,
 				erro: respostaErro,
 			} as Erro;
 		}
-
-		req.user = decoded;
 	} catch (err: any) {
 		const { codigo, erro } = err as Erro;
 

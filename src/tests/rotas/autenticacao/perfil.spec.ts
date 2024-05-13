@@ -5,8 +5,9 @@ import ILogin from "../../../types/ILogin";
 import app, { configApp } from "../../../app/app";
 import Usuario from "../../../types/Usuario";
 import limparBanco from "../../../app/utils/db/limparBanco";
+import mongoose from "mongoose";
 
-configApp()
+configApp();
 
 let login: ILogin = {
 	senha: "",
@@ -16,14 +17,26 @@ let login: ILogin = {
 let usuario: any = {};
 
 let token = "";
+let token_falso = "";
 
 beforeAll(async () => {
 	const dados = await criarUsuarioAdm();
+	const usuario_falso = {
+		_id: new mongoose.Types.ObjectId(),
+		email: "email@email.com",
+		nome_usuario: "usuario",
+		numero_registro: "0",
+		dados_administrativos: {
+			entidade_relacionada: new mongoose.Types.ObjectId(),
+			funcao: "USUARIO"
+		}
+	};
 
 	login = dados.dadosLogin;
 	usuario = dados.usuario;
 
-	token = generateTokenFromUser(usuario) || ""
+	token = generateTokenFromUser(usuario) || "";
+	token_falso = generateTokenFromUser(usuario_falso) || "";
 });
 
 afterAll(async () => {
@@ -62,5 +75,16 @@ describe("A rota de visualização de perfil", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toBe("É necessário estar autenticado para usar esta rota");
+	});
+
+	it("deve retornar erro ao não existir usuário", async () => {
+		const resposta = await request(app)
+			.get("/perfil")
+			.set("Accept", "application/json")
+			.set("Authorization", `Bearer ${token_falso}`)
+			.expect(401)
+			.then((res) => res.text);
+
+		console.log(resposta);
 	});
 });
