@@ -1,4 +1,7 @@
 FROM node:latest
+
+COPY .env .
+
 ENV PORT 3030
 ENV DB_URL mongodb://controle-db:27017
 

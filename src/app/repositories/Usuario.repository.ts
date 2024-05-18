@@ -49,7 +49,7 @@ class UsuarioRepository {
 
 		return usuario;
 	}
-	
+
 	static async findUsuarioId(id: any) {
 		if (!mongoose.isValidObjectId(id)) {
 			throw {
@@ -326,7 +326,7 @@ class UsuarioRepository {
 	}
 	static async deleteUsuario(id: string, idGerenciador: string) {
 		let erro: Erro | undefined = undefined;
-		let usuario: any = undefined
+		let usuario: any = undefined;
 
 		if (!validarID<string>(id)) {
 			erro = {
@@ -358,8 +358,18 @@ class UsuarioRepository {
 			}
 		}
 
-		return {erro, usuario};
+		return { erro, usuario };
 	}
+	
+	static async adicionarTokenRecuperacao(
+		id: string,
+		token_recuperacao: string
+	) {
+		await UsuarioModel.findByIdAndUpdate(id, {
+			token_recuperacao,
+		});
+	}
+
 	static async verificarToken(nome_usuario: string) {
 		const usuario = await UsuarioModel.findOne({ nome_usuario });
 
