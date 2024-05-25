@@ -1,40 +1,67 @@
 # Plataforma de Controle de Plantão Farmacêutico 
 
-Bem vindo ao projeto da API da plataforma de controle farmacêutico, cujo objetivo principal é permitir o cadastro e exibição de plantões, mostrando ao usuário qual a farmácia aberta mais próxima.
+Bem vindo ao repositório de desenvolvimento da API da Plataforma de Controle de Plantão Farmacêutico. Este projeto visa disponibilizar uma plataforma onde seja possível cadastrar e visualizar farmácias, seus horários de serviço e suas escalas de plantão, além de mostrar ao usuário qual a farmácia mais próxima dele.
+
+Isto se trata da segunda parte de um sistema que envolve uma API e uma Aplicação Web (A Aplicação Web pode ser encontrada [aqui](https://github.com/CaNeoN28/controle-farmaceutico-frontend)).
 
 ## Como executar a API?
 
-### Build e execução do container
-Primeiramente é necessário a criação e execução de um container docker com o banco de dados. Para isso use os seguintes comandos no terminal:
+### Execução do banco de dados:
 
-Para o build da imagem:
+O primeiro passo para a execução da API é permitir que o Docker (disponível no [site da aplicação](https://www.docker.com)) crie um container com um banco de dados do MongoDB. Para isso é necessário montar e executar a imagem do banco. Para a montagem execute comando:
 ```
-docker build -f Dockerfile.db.api . -t controle-farmaceutico-db
-```
-
-Para execução do container:
-```
-docker run -p 27017:27017 controle-farmaceutico-db 
+docker build -f Dockerfile.db.api . -t controle-db
 ```
 
-### Execução da API
-Será necessário a criação de um arquivo .env (variáveis de ambiente) para configurar a API. O seguinte conteúdo será necessário:
-
+Então para a execução do container, é necessário definir configurações para determinar a rede do container, escolher a porta de execução e manter o container executando, o que pode ser feito utilizando o comando:
 ```
-DB_URL = mongodb://localhost:27017
-SECRET_KEY = dAQVusR39m2EzfNHpxAux15TYJUmVTs9
-PORT = 3030
-
-SMTP_SERVER = smtp.ethereal.email
-API_EMAIL =	gillian28@ethereal.email
-API_PASS = hF3XHtumF6esaWyHnq
+docker run -p 27017:27017 --name controle-db --network controle --restart unless-stopped controle-db 
 ```
 
-O email utilizado é um email do Ethereal para propósitos de teste envio de email, podendo ser substituído.
+### Configuração das variáveis de ambiente:
+Também é necessário a configuração de um arquivo .env na pasta do projeto. O arquivo contém varíaveis importantes para a execução do projeto, como o endereço do banco de dados, chave privada para criptografia, a porta de execução é configurações para o serviço de email. O seguinte conteúdo será usado neste arquivo:
 
-Depois da criação do arquivo, basta executar o comando:
+```
+DB_URL = Endereço do banco de dados
+FRONTEND_URL = Endereço do site da plataforma
+SECRET_KEY = Chave privada para criptografia
+PORT = Porta da aplicação
+
+SMTP_SERVER = Endereço do servidor SMTP
+API_EMAIL =	Endereço do email SMTP
+API_PASS = Senha do email SMTP
+```
+
+O endereço do site é utilizado na geração de emails de recuperação de senha. O serviço SMTP utilizado durante os testes foi o [ETHEREAL](https://ethereal.email), mas é possível utilizar outro servidor. A porta pode ser qualquer uma, mas foi utilizada a porta 3030 durante o ambiente de testes.
+
+### 1ª Opção - Execução como desenvolvedor:
+
+Para executar a API como um desenvolvedor, é necessário realizar a instalação de dependências e executar a aplicação por meio do [NodeJS](https://nodejs.org/en). A instalação de dependências é feita pelo comando:
+
+```
+npm install
+```
+
+Após a instalação, basta executar a aplicação com o comando:
+
 ```
 npm run dev
 ```
 
-Após isso a api estará executando no endereço http://localhost:3030/
+Após isso, a API estará disponível pelo endereço http://localhost:3030, se a porta selecionada for a 3030.
+
+### 2ª Opção - Montagem e execução do container da API:
+
+Para executar a aplicação usando um container do [Docker](https://www.docker.com), que executa com o mínimo de recursos para o funcionamento, é necessário montar uma imagem e executá-la com algumas configurações. Para montar a imagem com o nome controle-api é necessário executar o seguinte comando:
+
+```
+docker build -f Dockerfile.api -t controle-api
+```
+
+Com a imagem montada, basta executar o container, utilizando configurações para mantê-lo de pé, escolher a porta de execução, e definir a rede do docker. Para isto, use a seguinte linha de comando:
+
+```
+docker run -d -p 3030:3030 --name controle-api --network controle --restart unless-stopped controle-api
+```
+
+Depois disso, a API também estará disponível pelo endereço http://localhost:3030.
