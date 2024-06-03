@@ -36,7 +36,10 @@ async function esqueceuSenhaService(email: string | undefined) {
 			para: email,
 			template: "recoveryEmail",
 			contexto: {
-				recoveryLink: `${FRONTEND_URL}/recuperar-senha?token=${token}`
+				recoveryLink: `${FRONTEND_URL}/recuperar-senha?token=${token}`,
+				// appLogoUrl: `${FRONTEND_URL}/favicon.svg`,
+				appLogoUrl: "https://raw.githubusercontent.com/CaNeoN28/controle-farmaceutico-frontend/c8d753f175f9c485d2a5d726b78a07ec488bbf8d/public/favicon.svg",
+				usuario: nome_usuario
 			},
 		});
 	}

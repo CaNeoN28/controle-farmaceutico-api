@@ -1,36 +1,50 @@
 <html>
-  <head>
-      <title>Verify Your Email</title>  
-      <style type="text/css">
-        {{!-- your css goes here --}}
-      </style>
-  </head>
-  <body>
+	<head>
+		<title>E-mail de recuperação de senha</title>
+		<style type="text/css">
+			.main { display: flex; flex-direction: column; justify-content: center;
+			align-items: center; padding: 40px; gap: 80px; } .plataforma { display:
+			flex; gap: 16px; font-size: 32px; justify-content: center; align-items: center; } .container { display: flex;
+			flex-direction: column; align-items: center; justify-content: center;
+			border: 1px solid #2a9d8f; border-radius: 8px; padding: 40px; gap: 24px;
+			max-width: 800px; } .titulo { font-size: 28px; text-align: center; } .msg
+			{ display: flex; flex-direction: column; text-align: center; font-size:
+			18px; } .botao { text-decoration: none; padding: 16px; border-radius: 8px;
+			background-color: #2a9d8f; color: #fafafa; } .avisos{ display: flex;
+			flex-direction: column; align-items: center; text-align: center; color:
+			#7A7A7A; } .copiar{font-weight: bold;}
 
-    <div>
-          <img src="{{ appLogoUrl }}" alt="app_logo"/>
-          <div>App Title</div>
-      </div>	
+		</style>
+	</head>
+	<body>
+		<main class="main">
+			<div class="plataforma">
+				<img src="{{appLogoUrl}}" alt="app_logo" />
+				<div>Plataforma de controle farmacêutico</div>
+			</div>
 
-    <div><hr/></div>
-
-    <h2>Welcome {{ name }}</h2>
-
-    <p>Thanks for signing up. Please verify your email address.</p>
-
-    <div>
-      <a href="{{ verificationLink }}">
-        <button type="button">Verify</button>
-      </a>
-    </div>
-
-      <div>Button not working? Try pasting this link in to your browser:</div>
-
-      <div>
-          <a href="{{ verificationLink }}">{{ verificationLink }}</a>
-      </div>
-
-      <div><hr/></div>
-
-  </body>
+			<div class="container">
+				<span class="titulo">Email de recuperação de senha</span>
+				<div class="msg">
+					<span>
+						Uma solicitação de troca de senha para o usuário
+						<b>{{usuario}}</b>
+						foi realizada.
+					</span>
+					<span>
+						Clique no botão abaixo para ser redirecionado para a página de
+						recuperação:
+					</span>
+				</div>
+				<a href="{{recoveryLink}}" class="botao" target="_blank">
+					Recuperar senha
+				</a>
+				<div class="avisos">
+					<span>
+						Se você não solicitou a troca de senha, desconsidere este email.
+					</span>
+				</div>
+			</div>
+		</main>
+	</body>
 </html>

@@ -14,7 +14,9 @@ async function enviarEmail({
 	html?: string;
 	template?: "recoveryEmail";
 	contexto?: {
-		recoveryLink: string
+		recoveryLink: string;
+		usuario: string;
+		appLogoUrl: string;
 	};
 }) {
 	dotenv.config();
@@ -36,7 +38,7 @@ async function enviarEmail({
 				extname: ".handlebars",
 				partialsDir: "./src/templates/",
 				layoutsDir: "./src/templates/",
-				defaultLayout: "recoveryEmail"
+				defaultLayout: "recoveryEmail",
 			},
 			viewPath: "./src/templates/",
 			extName: ".handlebars",
