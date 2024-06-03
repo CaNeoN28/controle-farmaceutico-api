@@ -34,7 +34,10 @@ async function esqueceuSenhaService(email: string | undefined) {
 		await enviarEmail({
 			assunto: "Link para recuperação de senha",
 			para: email,
-			texto: `Link para recuperação da senha ${FRONTEND_URL}/recuperar-senha?token=${token}`,
+			template: "recoveryEmail",
+			contexto: {
+				recoveryLink: `${FRONTEND_URL}/recuperar-senha?token=${token}`
+			},
 		});
 	}
 }
