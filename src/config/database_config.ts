@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 import mongoose from "mongoose";
 
-async function ConnectDB() {
+async function ConnectDB(replaceDBName?: string) {
 	dotenv.config();
 
 	const { DB_URL= "mongodb://localhost:27017", DB_NAME = 'controle-farmaceutico' } = process.env;
@@ -9,7 +9,7 @@ async function ConnectDB() {
 	mongoose.set("strictQuery", true);
 
 	await mongoose
-		.connect(DB_URL, {dbName: DB_NAME})
+		.connect(DB_URL, {dbName: replaceDBName || DB_NAME})
 		.then((res) => {
 			console.log("Conexão com o banco de dados bem sucedida");
 		})

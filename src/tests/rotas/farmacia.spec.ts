@@ -46,14 +46,13 @@ const dadosFarmacia = new Farmacia({
 });
 
 beforeAll(async () => {
-	await limparBanco()
+	await limparBanco();
 	const { usuario: adm } = await criarUsuarioAdm();
 
 	tokenAdm = generateTokenFromUser(adm)!;
 });
 
-afterAll(async () => {
-});
+afterAll(async () => {});
 
 describe("A rota de cadastro de farmácias", () => {
 	it("deve cadastrar uma farmácia corretamente e retornar os dados cadastrados", async () => {
@@ -241,6 +240,7 @@ describe("A rota de listagem de farmácias", () => {
 			.set("Accept", "application/json")
 			.expect(200)
 			.then((res) => res.body);
+
 		const dados = resposta.dados;
 
 		expect(dados).toBeDefined();
@@ -395,7 +395,6 @@ describe("A rota de recuperação de farmácia próxima", () => {
 			.query("latitude=0")
 			.query("longitude=0")
 			.query("tempo=tempoinvalido")
-			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
 			.expect(400)
 			.then((res) => res.body);
@@ -410,7 +409,6 @@ describe("A rota de recuperação de farmácia próxima", () => {
 			.get("/farmacias/proximas")
 			.query("latitude=invalida")
 			.query("longitude=invalida")
-			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
 			.expect(400)
 			.then((res) => res.body);
@@ -427,7 +425,6 @@ describe("A rota de recuperação de farmácia próxima", () => {
 			.query("latitude=0")
 			.query("longitude=0")
 			.query(`tempo=${new Date("1999/10/10")}`)
-			.set("Authorization", `Bearer ${tokenAdm}`)
 			.set("Accept", "application/json")
 			.expect(404)
 			.then((res) => res.text);

@@ -11,7 +11,7 @@ class EntidadesControllers {
 	static EncontrarEntidadePorId: RequestHandler = async function (
 		req,
 		res,
-		next
+		next,
 	) {
 		const id = req.params.id as string;
 
@@ -75,21 +75,21 @@ class EntidadesControllers {
 				ativo,
 			});
 
-			return res.status(200).send(resposta)
+			return res.status(200).send(resposta);
 		} catch (error) {
 			next(error);
 		}
 	};
 
 	static RemoverEntidade: RequestHandler = async function (req, res, next) {
-		const {id} = req.params
+		const { id } = req.params;
 
 		try {
-			await deleteEntidadeService(id)
+			await deleteEntidadeService(id);
 
-			res.status(204).send()
+			res.status(204).send();
 		} catch (error) {
-			next (error)
+			next(error);
 		}
 	};
 }

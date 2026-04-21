@@ -28,8 +28,8 @@ beforeAll(async () => {
 		numero_registro: "0",
 		dados_administrativos: {
 			entidade_relacionada: new mongoose.Types.ObjectId(),
-			funcao: "USUARIO"
-		}
+			funcao: "USUARIO",
+		},
 	};
 
 	login = dados.dadosLogin;
@@ -84,7 +84,5 @@ describe("A rota de visualização de perfil", () => {
 			.set("Authorization", `Bearer ${token_falso}`)
 			.expect(401)
 			.then((res) => res.text);
-
-		console.log(resposta);
 	});
 });

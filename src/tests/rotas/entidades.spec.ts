@@ -9,7 +9,7 @@ import {
 	criarUsuarioAdm,
 } from "../../app/utils/db/gerarDadosDiversos";
 
-configApp()
+configApp("controle-farmaceutico-test");
 
 let usuario: any = undefined;
 let token = "";
@@ -18,7 +18,7 @@ const entidade = new Entidade({
 	estado: "Rondônia",
 	municipio: "Vilhena",
 	nome_entidade: "Ministério da Saúde",
-	ativo: true
+	ativo: true,
 });
 
 let usuarioBaixo: any = undefined;
@@ -36,7 +36,7 @@ beforeAll(async () => {
 		nome_completo: "Usuário Baixo",
 		nome_usuario: "usuariobaixo",
 		numero_registro: "0000",
-		senha: "12345678Asdf",
+		senha: "12345678Asdf..",
 		dados_administrativos: {
 			entidade_relacionada: new Types.ObjectId(),
 			funcao: "USUARIO",
@@ -89,7 +89,7 @@ describe("Rota de cadastro de entidades", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toEqual(
-			"É necessário estar autenticado para usar esta rota"
+			"É necessário estar autenticado para usar esta rota",
 		);
 	});
 
@@ -103,7 +103,7 @@ describe("Rota de cadastro de entidades", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toEqual(
-			"É necessário ser gerente ou superior para realizar esta ação"
+			"É necessário ser gerente ou superior para realizar esta ação",
 		);
 	});
 });
@@ -155,7 +155,7 @@ describe("Rota de listagem de entidades", () => {
 			pagina: 1,
 			limite: 10,
 			paginas_totais: 1,
-			documentos_totais: 1
+			documentos_totais: 1,
 		});
 		expect(resposta.dados[0]).toMatchObject(entidade);
 	});
@@ -171,7 +171,7 @@ describe("Rota de listagem de entidades", () => {
 			pagina: 2,
 			limite: 10,
 			paginas_totais: 1,
-			documentos_totais: 1
+			documentos_totais: 1,
 		});
 		expect(resposta.dados[0]).toBeUndefined();
 	});
@@ -187,9 +187,9 @@ describe("Rota de listagem de entidades", () => {
 
 		expect(resposta).toMatchObject({
 			pagina: "Pagina inválida",
-			limite: "Limite inválido"
+			limite: "Limite inválido",
 		});
-	})
+	});
 });
 
 describe("Rota para exibição de entidade", () => {
@@ -270,7 +270,7 @@ describe("Rota para atualização de entidade", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toEqual(
-			"É necessário estar autenticado para usar esta rota"
+			"É necessário estar autenticado para usar esta rota",
 		);
 	});
 
@@ -284,7 +284,7 @@ describe("Rota para atualização de entidade", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toEqual(
-			"É necessário ser gerente ou superior para realizar esta ação"
+			"É necessário ser gerente ou superior para realizar esta ação",
 		);
 	});
 });
@@ -331,7 +331,7 @@ describe("Rota para exclusão de entidade", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toEqual(
-			"É necessário estar autenticado para usar esta rota"
+			"É necessário estar autenticado para usar esta rota",
 		);
 	});
 
@@ -344,7 +344,7 @@ describe("Rota para exclusão de entidade", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toEqual(
-			"É necessário ser gerente ou superior para realizar esta ação"
+			"É necessário ser gerente ou superior para realizar esta ação",
 		);
 	});
 });
