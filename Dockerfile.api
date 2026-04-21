@@ -3,7 +3,7 @@ FROM node:latest
 COPY .env .
 
 ENV PORT 3030
-ENV DB_URL mongodb://controle-db:27017
+ENV DB_URL mongodb://controle-farmaceutico-db:27017
 
 COPY package.json package.json
 

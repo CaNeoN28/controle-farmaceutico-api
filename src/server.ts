@@ -4,7 +4,7 @@ import swaggerSetup from "./docs/head";
 
 async function start() {
 	dotenv.config();
-	const { PORT } = process.env;
+	const { PORT = 3030 } = process.env;
 
 	swaggerSetup(app);
 	configApp()

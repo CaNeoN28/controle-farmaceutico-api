@@ -3,4 +3,4 @@ coverage/
 files/
 build/
 
-.env
+*.env

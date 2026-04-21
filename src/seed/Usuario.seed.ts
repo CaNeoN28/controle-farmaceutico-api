@@ -31,7 +31,7 @@ export default async function usuarioSeed(
 		await adm.save();
 		idsUsuarios.push(adm.id);
 	} catch (err) {
-		console.log(err)
+		console.error(err)
 	}
 
 	for (let i = 0; i < instancias; i++) {

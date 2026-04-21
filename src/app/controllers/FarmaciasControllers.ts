@@ -12,7 +12,7 @@ class FarmaciaControllers {
 	static EncontrarFarmaciaPorId: RequestHandler = async function (
 		req,
 		res,
-		next
+		next,
 	) {
 		const { id } = req.params;
 
@@ -90,7 +90,7 @@ class FarmaciaControllers {
 	static EncontrarFarmaciasProximas: RequestHandler = async function (
 		req,
 		res,
-		next
+		next,
 	) {
 		const { municipio, estado, longitude, latitude, tempo, pagina, limite } =
 			req.query as any;
@@ -115,7 +115,7 @@ class FarmaciaControllers {
 	static ListarFarmaciaPorPlantao: RequestHandler = async function (
 		req,
 		res,
-		next
+		next,
 	) {
 		const { municipio, estado, tempo, pagina, limite } = req.query as any;
 
