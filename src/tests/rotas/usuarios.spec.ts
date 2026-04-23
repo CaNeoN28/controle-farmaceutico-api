@@ -9,7 +9,7 @@ import app, { configApp } from "../../app/app";
 import Usuario from "../../types/Usuario";
 import mongoose from "mongoose";
 
-configApp()
+configApp("controle-farmaceutico-test");
 
 let tokenAdm = "";
 let tokenGerente = "";
@@ -34,7 +34,7 @@ const usuario = {
 };
 
 beforeAll(async () => {
-	await limparBanco()
+	await limparBanco();
 
 	const { usuario: adm } = await criarUsuarioAdm();
 
@@ -78,7 +78,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-	limparBanco()
+	limparBanco();
 });
 
 describe("A rota de cadastro de usuários", () => {
@@ -190,7 +190,7 @@ describe("A rota de cadastro de usuários", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toBe(
-			"É necessário ser gerente ou superior para realizar esta ação"
+			"É necessário ser gerente ou superior para realizar esta ação",
 		);
 	});
 });
@@ -220,7 +220,7 @@ describe("A rota de recuperação de usuário", () => {
 			nome_usuario,
 			numero_registro,
 			dados_administrativos: {
-				funcao: "USUARIO"
+				funcao: "USUARIO",
 			},
 		});
 
@@ -289,7 +289,7 @@ describe("A rota de listagem de usuários", () => {
 		expect(resposta.dados[2]).toMatchObject({
 			cpf,
 			dados_administrativos: {
-				funcao: "USUARIO"
+				funcao: "USUARIO",
 			},
 			email,
 			nome_completo,
@@ -342,7 +342,7 @@ describe("A rota de listagem de usuários", () => {
 			nome_usuario,
 			numero_registro,
 			dados_administrativos: {
-				funcao: "USUARIO"
+				funcao: "USUARIO",
 			},
 		});
 	});
@@ -430,7 +430,7 @@ describe("A rota de atualização de usuários", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toBe(
-			"Não é possível alterar seus próprios dados usando esta rota"
+			"Não é possível alterar seus próprios dados usando esta rota",
 		);
 	});
 
@@ -446,7 +446,7 @@ describe("A rota de atualização de usuários", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toBe(
-			"Não é possível alterar os dados de um usuário de nível superior"
+			"Não é possível alterar os dados de um usuário de nível superior",
 		);
 	});
 
@@ -492,7 +492,7 @@ describe("A rota de atualização de usuários", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toBe(
-			"É necessário ser gerente ou superior para realizar esta ação"
+			"É necessário ser gerente ou superior para realizar esta ação",
 		);
 	});
 });
@@ -517,7 +517,7 @@ describe("A rota para deletar usuários", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toBe(
-			"É necessário ser gerente ou superior para realizar esta ação"
+			"É necessário ser gerente ou superior para realizar esta ação",
 		);
 	});
 
@@ -532,7 +532,7 @@ describe("A rota para deletar usuários", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toBe(
-			"Não é possível remover um usuário de nível superior"
+			"Não é possível remover um usuário de nível superior",
 		);
 	});
 

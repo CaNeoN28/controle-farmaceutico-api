@@ -6,8 +6,9 @@ import {
 import limparBanco from "../../../app/utils/db/limparBanco";
 import request from "supertest";
 import { generateToken } from "../../../app/utils/jwt";
+import UsuarioRepository from "../../../app/repositories/Usuario.repository";
 
-configApp()
+configApp("controle-farmaceutico-test");
 
 let email = "";
 let token = "";
@@ -18,10 +19,10 @@ beforeAll(async () => {
 
 	token = generateToken(
 		{
-			email: dados.email,
+			nome_usuario: dados.nome_usuario,
 			id: dados._id,
 		},
-		30 * 60
+		30 * 60,
 	);
 
 	email = dados.email;
@@ -69,7 +70,21 @@ describe("A rota esqueceu-senha", () => {
 	});
 });
 
-describe.skip("A rota de recuperação", () => {
+describe("A rota de recuperação", () => {
+	beforeAll(async () => {
+		await request(app)
+			.post("/esqueceu-senha")
+			.set("Accept", "application/json")
+			.send({
+				email,
+			})
+			.then((res) => res.text);
+
+		await UsuarioRepository.findUsuario({ email }).then((usuario) => {
+			token = usuario?.token_recuperacao || "";
+		});
+	});
+
 	it("deve realizar a alteração de senha do usuário", async () => {
 		const resposta = await request(app)
 			.put("/recuperar-senha/")
@@ -80,15 +95,14 @@ describe.skip("A rota de recuperação", () => {
 			})
 			.then((res) => res.text);
 
-		console.log(resposta)
-
 		expect(resposta).toBe("Senha alterada com sucesso");
 	});
 
 	it("deve validar a nova senha", async () => {
 		const resposta = await request(app)
-			.put(`/recuperar-senha/${token}`)
+			.put(`/recuperar-senha/`)
 			.set("Accept", "application/json")
+			.set("Authorization", token)
 			.send({
 				senha: "12345678",
 			})
@@ -100,8 +114,9 @@ describe.skip("A rota de recuperação", () => {
 
 	it("deve retornar erro ao informar token inválido", async () => {
 		const resposta = await request(app)
-			.put("/recuperar-senha/tokeninvalido")
+			.put("/recuperar-senha/")
 			.set("Accept", "application/json")
+			.set("Authorization", "tokeninvalido")
 			.send({
 				senha: "12345678Asdf.",
 			})
@@ -113,8 +128,9 @@ describe.skip("A rota de recuperação", () => {
 
 	it("deve retornar erro ao não informar senha", async () => {
 		const resposta = await request(app)
-			.put(`/recuperar-senha/${token}`)
+			.put(`/recuperar-senha/`)
 			.set("Accept", "application/json")
+			.set("Authorization", token)
 			.expect(400)
 			.then((res) => res.text);
 

@@ -4,7 +4,7 @@ import app, { configApp } from "../../../app/app";
 import Usuario from "../../../types/Usuario";
 import limparBanco from "../../../app/utils/db/limparBanco";
 
-configApp()
+configApp("controle-farmaceutico-test");
 
 let usuario: any = {}
 

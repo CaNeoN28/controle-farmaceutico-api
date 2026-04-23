@@ -7,7 +7,7 @@ import Usuario from "../../../types/Usuario";
 import limparBanco from "../../../app/utils/db/limparBanco";
 import mongoose from "mongoose";
 
-configApp();
+configApp("controle-farmaceutico-test");
 
 let login: ILogin = {
 	senha: "",

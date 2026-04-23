@@ -6,7 +6,7 @@ import request from "supertest";
 import { criarUsuario, criarUsuarioAdm, encontrarPorId } from "../../../app/utils/db/gerarDadosDiversos";
 import limparBanco from "../../../app/utils/db/limparBanco";
 
-configApp()
+configApp("controle-farmaceutico-test");
 
 let login: ILogin = {
 	usuario: "",
