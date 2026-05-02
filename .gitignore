@@ -1,6 +1,7 @@
+./files/
+
 node_modules/
 coverage/
-files/
 build/
 
 *.env
