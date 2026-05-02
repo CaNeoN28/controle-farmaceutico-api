@@ -9,7 +9,7 @@ import app, { configApp } from "../../app/app";
 import Usuario from "../../types/Usuario";
 import mongoose from "mongoose";
 
-configApp("controle-farmaceutico-test");
+configApp(true);
 
 let tokenAdm = "";
 let tokenGerente = "";

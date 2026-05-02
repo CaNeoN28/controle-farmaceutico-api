@@ -9,7 +9,7 @@ import {
 	criarUsuarioAdm,
 } from "../../app/utils/db/gerarDadosDiversos";
 
-configApp("controle-farmaceutico-test");
+configApp(true);
 
 let usuario: any = undefined;
 let token = "";

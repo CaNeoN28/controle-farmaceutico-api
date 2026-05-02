@@ -6,8 +6,8 @@ import ConnectDB from "../config/database_config";
 
 const app = express();
 
-function configApp(DB_NAME?: string) {
-	ConnectDB(DB_NAME)
+function configApp(test?: boolean) {
+	ConnectDB(test)
 
 	app.use(express.json());
 	app.use(cors());

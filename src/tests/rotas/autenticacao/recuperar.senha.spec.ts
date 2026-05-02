@@ -8,7 +8,7 @@ import request from "supertest";
 import { generateToken } from "../../../app/utils/jwt";
 import UsuarioRepository from "../../../app/repositories/Usuario.repository";
 
-configApp("controle-farmaceutico-test");
+configApp(true);
 
 let email = "";
 let token = "";
