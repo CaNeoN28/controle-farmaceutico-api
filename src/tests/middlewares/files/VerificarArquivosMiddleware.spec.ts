@@ -1,4 +1,4 @@
-import VerificarArquivosMiddleware from "../../app/middlewares/files/VerificarArquivosMiddleware";
+import VerificarArquivosMiddleware from "../../../app/middlewares/files/VerificarArquivosMiddleware";
 
 describe("VerificarArquivosMiddleware", () => {
 	it("deve passar para o próximo middleware quando arquivos estiverem presentes", async () => {

@@ -1,4 +1,4 @@
-import PermitirExtensoesMiddleware from "../../app/middlewares/files/PermitirExtensoesMiddleware";
+import PermitirExtensoesMiddleware from "../../../app/middlewares/files/PermitirExtensoesMiddleware";
 
 describe("PermitirExtensoesMiddleware", () => {
 	it("Deve permitir arquivos com extensões permitidas", async () => {

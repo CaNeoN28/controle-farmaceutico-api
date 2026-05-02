@@ -1,4 +1,4 @@
-import VerificarTamanhoMiddleware from "../../app/middlewares/files/VerificarTamanhoMiddleware";
+import VerificarTamanhoMiddleware from "../../../app/middlewares/files/VerificarTamanhoMiddleware";
 
 describe("VerificarTamanhoMiddleware", () => {
 	it("deve passar para o próximo middleware quando os arquivos estiverem dentro do limite", async () => {
