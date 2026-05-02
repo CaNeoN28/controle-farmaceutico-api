@@ -1,6 +1,6 @@
 import Erro from "../../types/Erro";
 import FarmaciaRepository from "../repositories/Farmacia.repository";
-import farmaciasAbertas from "../utils/farmaciasAbertas";
+import { farmaciasAbertas } from "../utils/farmaciasAbertas";
 import { extrairPaginacao } from "../utils/paginacao";
 import pontoMaisProximo from "../utils/pontoMaisProximo";
 
