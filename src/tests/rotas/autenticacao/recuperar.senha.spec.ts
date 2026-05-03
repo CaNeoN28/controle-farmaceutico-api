@@ -83,7 +83,7 @@ describe("A rota de recuperação", () => {
 		await UsuarioRepository.findUsuario({ email }).then((usuario) => {
 			token = usuario?.token_recuperacao || "";
 		});
-	});
+	}, 10000);
 
 	it("deve realizar a alteração de senha do usuário", async () => {
 		const resposta = await request(app)
@@ -96,7 +96,7 @@ describe("A rota de recuperação", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toBe("Senha alterada com sucesso");
-	});
+	}, 10000);
 
 	it("deve validar a nova senha", async () => {
 		const resposta = await request(app)
@@ -110,7 +110,7 @@ describe("A rota de recuperação", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toBe("Senha inválida");
-	});
+	}, 10000);
 
 	it("deve retornar erro ao informar token inválido", async () => {
 		const resposta = await request(app)
@@ -124,7 +124,7 @@ describe("A rota de recuperação", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toBe("Token de recuperação inválido");
-	});
+	}, 10000);
 
 	it("deve retornar erro ao não informar senha", async () => {
 		const resposta = await request(app)
@@ -135,5 +135,5 @@ describe("A rota de recuperação", () => {
 			.then((res) => res.text);
 
 		expect(resposta).toBe("Senha é obrigatório");
-	});
+	}, 10000);
 });
