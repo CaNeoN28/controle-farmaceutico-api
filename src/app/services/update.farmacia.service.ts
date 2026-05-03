@@ -2,7 +2,7 @@ import Erro from "../../types/Erro";
 import { IPlantao } from "../../types/Farmacia";
 import FarmaciaRepository from "../repositories/Farmacia.repository";
 import validarDiasServico from "../utils/validarHorarioServico";
-import validarPlantoes from "../utils/validarPlantoes";
+import { validarPlantoes } from "../utils/validarPlantoes";
 import { validarID } from "../utils/validators";
 
 async function updateFarmaciaService(id: string, data: any) {
@@ -23,7 +23,7 @@ async function updateFarmaciaService(id: string, data: any) {
 
 		const { erros, farmacia } = await FarmaciaRepository.updateFarmacia(
 			id,
-			data
+			data,
 		);
 
 		if (erros || errosDiasServico || errosPlantoes.length > 0) {
@@ -33,12 +33,12 @@ async function updateFarmaciaService(id: string, data: any) {
 			};
 
 			if (erros) {
-				if(erros.codigo == 404){
-					erro.erro =  erros.erro
+				if (erros.codigo == 404) {
+					erro.erro = erros.erro;
 				} else {
-					erro.erro = { ...erros.erro }
+					erro.erro = { ...erros.erro };
 				}
-			};
+			}
 			if (errosDiasServico) erro.erro = { ...erro.erro, ...errosDiasServico };
 			if (errosPlantoes.length > 0) erro.erro.plantoes = errosPlantoes;
 		}

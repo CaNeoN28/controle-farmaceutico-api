@@ -1,6 +1,6 @@
 import Farmacia, { HorariosServico } from "../../types/Farmacia";
 
-function encontrarDiaSemana(tempo: Date, horarios_servico: HorariosServico) {
+export function encontrarDiaSemana(tempo: Date, horarios_servico: HorariosServico) {
 	const dias_semana = [
 		"domingo",
 		"segunda_feira",
@@ -47,7 +47,7 @@ function encontrarDiaSemana(tempo: Date, horarios_servico: HorariosServico) {
 	return horario_servico;
 }
 
-function encontrarPlantao(
+export function encontrarPlantao(
 	tempo: Date,
 	plantoes?: { entrada: Date; saida: Date }[]
 ) {
@@ -62,7 +62,7 @@ function encontrarPlantao(
 	return plantao;
 }
 
-function farmaciasAbertas(
+export function farmaciasAbertas(
 	farmacias: (Farmacia & { id: string })[],
 	tempo: Date
 ) {
@@ -79,4 +79,3 @@ function farmaciasAbertas(
 	return farmacias;
 }
 
-export default farmaciasAbertas;

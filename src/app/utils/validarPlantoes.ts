@@ -1,6 +1,6 @@
 import { IPlantao } from "../../types/Farmacia";
 
-function validarPlantao(plantao: IPlantao) {
+export function validarPlantao(plantao: IPlantao) {
 	const { entrada, saida } = {
 		entrada: Number(new Date(plantao.entrada)),
 		saida: Number(new Date(plantao.saida)),
@@ -13,7 +13,7 @@ function validarPlantao(plantao: IPlantao) {
 	return true;
 }
 
-export default function validarPlantoes(plantoes: IPlantao[]) {
+export function validarPlantoes(plantoes: IPlantao[]) {
 	let erro: (IPlantao & { mensagem: string })[] = [];
 
 	plantoes.map(({ entrada, saida }) => {

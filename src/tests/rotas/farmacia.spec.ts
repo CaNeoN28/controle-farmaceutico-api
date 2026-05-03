@@ -6,7 +6,7 @@ import { generateTokenFromUser } from "../../app/utils/jwt";
 import Farmacia from "../../types/Farmacia";
 import request from "supertest";
 
-configApp();
+configApp(true);
 
 let tokenAdm = "";
 let idFarmacia = "";

@@ -2,7 +2,7 @@ import { HorariosServico } from "../../types/Farmacia";
 
 function validarHorarioMaiorMenor(
 	horario_entrada: string,
-	horario_saida: string
+	horario_saida: string,
 ) {
 	const [horaEntrada, minutoEntrada] = horario_entrada
 		.split(":")
@@ -52,12 +52,6 @@ function validarHorarioServico(horario: string) {
 }
 
 function validarDiasServico(diasServico: HorariosServico) {
-	let erro:
-		| {
-				[key: string]: string;
-		  }
-		| undefined = undefined;
-
 	const dias = Object.keys(diasServico).map((v) => {
 		const diaServico = diasServico[v as keyof HorariosServico];
 
@@ -69,41 +63,56 @@ function validarDiasServico(diasServico: HorariosServico) {
 			};
 	});
 
-	dias.map((dia) => {
-		const { horario_entrada, horario_saida } = dia!;
+	const erros = dias
+		.map((dia) => {
+			if (!dia) return;
 
-		const entradaValida = validarHorarioServico(horario_entrada);
-		const saidaValida = validarHorarioServico(horario_saida);
+			const { horario_entrada, horario_saida } = dia;
 
-		if (entradaValida && saidaValida) {
-			const validacaoMaiorMenor = validarHorarioMaiorMenor(
-				horario_entrada,
-				horario_saida
-			);
+			const entradaValida = validarHorarioServico(horario_entrada);
+			const saidaValida = validarHorarioServico(horario_saida);
 
-			if (!validacaoMaiorMenor) {
-				erro = {
-					[`horarios_servico.${dia?.dia_semana}.horario_entrada`]:
-						"Horário de entrada inválido",
-					[`horarios_servico.${dia?.dia_semana}.horario_saida`]:
-						"Horário de saída inválido",
-				};
+			if (entradaValida && saidaValida) {
+				const validacaoMaiorMenor = validarHorarioMaiorMenor(
+					horario_entrada,
+					horario_saida,
+				);
+
+				if (!validacaoMaiorMenor) {
+					return {
+						[`horarios_servico.${dia?.dia_semana}.horario_entrada`]:
+							"Horário de entrada inválido",
+						[`horarios_servico.${dia?.dia_semana}.horario_saida`]:
+							"Horário de saída inválido",
+					};
+				}
+			} else {
+				if (!entradaValida)
+					return {
+						[`horarios_servico.${dia?.dia_semana}.horario_entrada`]:
+							"Horário de entrada inválido",
+					};
+				if (!saidaValida)
+					return {
+						[`horarios_servico.${dia?.dia_semana}.horario_saida`]:
+							"Horário de saída inválido",
+					};
 			}
-		} else {
-			if (!entradaValida)
-				erro = {
-					[`horarios_servico.${dia?.dia_semana}.horario_entrada`]:
-						"Horário de entrada inválido",
-				};
-			if (!saidaValida)
-				erro = {
-					[`horarios_servico.${dia?.dia_semana}.horario_saida`]:
-						"Horário de saída inválido",
-				};
-		}
-	});
+		})
+		.filter((v) => v);
 
-	return erro;
+	if (erros.length > 0) {
+		const erro = erros.reduce((acc, curr) => {
+			return {
+				...acc,
+				...curr,
+			};
+		});
+
+		return erro;
+	}
+
+	return undefined;
 }
 
 export default validarDiasServico;

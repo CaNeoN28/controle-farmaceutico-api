@@ -7,7 +7,7 @@ import Usuario from "../../../types/Usuario";
 import limparBanco from "../../../app/utils/db/limparBanco";
 import mongoose from "mongoose";
 
-configApp();
+configApp(true);
 
 let login: ILogin = {
 	senha: "",

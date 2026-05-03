@@ -7,7 +7,7 @@ import limparBanco from "../../../app/utils/db/limparBanco";
 import TokenData from "../../../types/TokenData";
 import { verificarToken } from "../../../app/utils/jwt";
 
-configApp()
+configApp(true);
 
 let administrador: ILogin = {
 	usuario: "",
