@@ -28,11 +28,14 @@ export default async function criarImagemService(
 		relacao_arquivos[nome_arquivo] = nome_completo;
 	});
 
-	Object.keys(relacao_arquivos).map(async (k) => {
-		const nome_arquivo = relacao_arquivos[k]
+	await Promise.all(
+		Object.keys(relacao_arquivos).map(async (k) => {
+			const nome_arquivo = relacao_arquivos[k];
 
-		await ImagemRepository.criarImagem(finalidade, nome_arquivo)
-	})
+			await ImagemRepository.criarImagem(finalidade, nome_arquivo);
+		}),
+	);
 
 	return relacao_arquivos;
 }
+
